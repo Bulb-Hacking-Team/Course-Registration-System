@@ -6,6 +6,11 @@
 #include <string>
 #include <iomanip>
 
+#pragma pack(1)
+
+#define DELIMIT_TXT 	   '\n'
+#define PATH_DATA		   "D:/Vector A/KHTN/Nam 1/HKII/Ky Thuat Lap Trinh/LT/Do An Cuoi Ky/Quay Video/2/Commit Strategy/Vuong/data/output/"
+
 using namespace std;
 
 struct Account

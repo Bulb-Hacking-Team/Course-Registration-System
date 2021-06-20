@@ -21,6 +21,131 @@ int getChoice(const int& minValue, const int& maxValue)
 	return choice;
 }
 
+void loadStaff(ifstream& fin, Staff& s)
+{
+	getline(fin, s.info.acc.username);
+	getline(fin, s.info.acc.password);
+	getline(fin, s.info.fullName);
+	fin >> s.info.gender;
+}
+
+bool loadListStaffs(const string& filePath, Staff*& listStaffs, int& countStaff)
+{
+	ifstream fin(filePath);
+
+	if (!fin.is_open())
+		return false;
+
+	fin >> countStaff;
+	fin.ignore();
+	listStaffs = new Staff[countStaff];
+
+	for (int i = 0; i < countStaff; i++)
+	{
+		loadStaff(fin, listStaffs[i]);
+		fin.ignore();
+	}
+
+	fin.close();
+	return true;
+}
+
+bool checkStaff(Staff& s)
+{
+	string staffFilePath;
+	Staff* staffList = nullptr;
+	int countStaff;
+	bool flag = false;
+
+	staffFilePath = PATH_DATA;
+	staffFilePath += "Staff.txt";
+	if (loadListStaffs(staffFilePath, staffList, countStaff))
+	{
+		for (int i = 0; i < countStaff; i++)
+		{
+			if (staffList[i].info.acc.username == s.info.acc.username)
+				if (staffList[i].info.acc.password == s.info.acc.password)
+				{
+					s = staffList[i];
+					flag = true;
+					break;
+				}
+		}
+
+		delete[] staffList;
+	}
+
+	return flag;
+}
+
+
+
+
+bool checkStudentForLogin(Student& st)
+{
+	string classPath, * className, listClassPath = "";
+	Student* studentList = nullptr;
+	int countStudent = 0, number_of_classes;
+	bool flag = false;
+
+	listClassPath = PATH_DATA;
+	listClassPath += "Class.txt";
+	if (loadListClassName(listClassPath, className, number_of_classes))
+	{
+		for (int i = 0; i < number_of_classes; i++)
+		{
+			classPath = createClassDirectoryWithFileName(className[i]);
+
+			if (loadStudentList(classPath, studentList, countStudent))
+			{
+				for (int j = 0; j < countStudent; j++)
+				{
+					if (studentList[j].id == st.info.acc.username)
+						if (studentList[j].info.acc.password == st.info.acc.password)
+						{
+							st = studentList[j];
+							flag = true;
+							break;
+						}
+				}
+
+				delete[] studentList;
+			}
+
+			if (flag)
+				break;
+		}
+
+		delete[] className;
+	}
+
+	return flag;
+}
+bool login(short role, Staff& s, Student& st)
+{
+	Account log;
+	void* info = nullptr;
+	cout << "Login. Please enter these information." << endl;
+	cout << "Username: ";
+	getline(cin, log.username);
+	cout << "Password (8 <= length <= 40): ";
+	getline(cin, log.password);
+
+	s.info.acc = log;
+	st.info.acc = log;
+
+	if (checkStaff(s) == true && role == 1) 
+	{
+		return true;
+	}
+	else if (checkStudentForLogin(st) && role == 2) 
+	{
+		return true;
+	}
+
+	return false;
+}
+
 void showMenu()
 {
 	short role;
@@ -60,7 +185,23 @@ void showMenu()
 			cout << "\nBan la: ";
 			cin >> role;
 			cin.ignore();	
-
+			if (login(role, s, st)) {
+				switch (role)
+				{
+				case 1:
+					showMenuOfStaff(s);
+					break;
+				case 2:
+					showMenuOfStudent();
+					break;
+				default:
+					cout << "Can't find account" << endl;
+					break;
+				}
+			}
+			else {
+				cout << "\nFAILED";
+			}
 		case 2:
 			system("pause");
 			exit(0);
@@ -96,7 +237,7 @@ void showMenuOfStudent()
 
 }
 
-void showMenuOfStaff()
+void showMenuOfStaff(Staff& staff)
 {
 	system("cls");
 	cout << "|------------------------------------------------|" << endl;
