@@ -1,17 +1,73 @@
 #include "menu.h"
 
+int getChoice(const int& minValue, const int& maxValue)
+{
+	int choice = 0;
+	bool check;
+
+	do
+	{
+		check = true;
+
+		cout << "Enter your choice: ";
+		cin >> choice;
+
+		if (choice < minValue || maxValue < choice) {
+			check = false;
+			cout << "Invalid!!. Please enter again." << endl;
+		}
+	} while (check == false);
+
+	return choice;
+}
+
 void showMenu()
 {
-	system("cls");
-	cout << "|------------------------|" << endl;
-	cout << "|        MAIN MENU       |" << endl;
-	cout << "|------------------------|" << endl;
-	cout << "| No |      Option       |" << endl;
-	cout << "|------------------------|" << endl;
-	cout << "| 1  | Log in            |" << endl;
-	cout << "|------------------------|" << endl;
-	cout << "| 2  | Exit              |" << endl;
-	cout << "|------------------------|" << endl;
+	short role;
+	int choice;
+	Staff s;
+	Student st;
+	void* info = nullptr;
+
+	while (true)
+	{
+		system("cls");
+		cout << "|------------------------|" << endl;
+		cout << "|        MAIN MENU       |" << endl;
+		cout << "|------------------------|" << endl;
+		cout << "| No |      Option       |" << endl;
+		cout << "|------------------------|" << endl;
+		cout << "| 1  | Log in            |" << endl;
+		cout << "|------------------------|" << endl;
+		cout << "| 2  | Exit              |" << endl;
+		cout << "|------------------------|" << endl;
+		
+		choice = getChoice(1, 2);
+		switch (choice)
+		{
+		case 1:
+			system("cls");
+			cin.ignore();
+			cout << "|------------------------|" << endl;
+			cout << "|          Role          |" << endl;
+			cout << "|------------------------|" << endl;
+			cout << "| No |      Option       |" << endl;
+			cout << "|------------------------|" << endl;
+			cout << "| 1  | Staff             |" << endl;
+			cout << "|------------------------|" << endl;
+			cout << "| 2  | Student           |" << endl;
+			cout << "|------------------------|" << endl;
+			cout << "\nBan la: ";
+			cin >> role;
+			cin.ignore();	
+
+		case 2:
+			system("pause");
+			exit(0);
+		}
+
+		system("pause");
+	}
 }
 
 void showMenuOfStudent()
@@ -68,3 +124,4 @@ void showMenuOfStaff()
 	cout << "|------------------------------------------------|" << endl;
 
 }
+
