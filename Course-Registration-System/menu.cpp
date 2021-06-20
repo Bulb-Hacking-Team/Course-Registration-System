@@ -77,7 +77,39 @@ bool checkStaff(Staff& s)
 
 	return flag;
 }
+bool checkAcademicYearAndSemester(string academicYear, string semester)
+{
+	string filePath = PATH_DATA;
+	string* listAcademicYears = nullptr, * listSemesters = nullptr;
+	int countAcademicYear = 0;
 
+	filePath += "SchoolYear.txt";
+
+	if (loadAcademicYearsAndSemester(filePath, listAcademicYears, listSemesters, countAcademicYear))
+	{
+		for (int i = 0; i < countAcademicYear; i++)
+			if (isEqualAcademicYears(&academicYear, &listAcademicYears[i]))
+				for (int j = 0; j < countAcademicYear; j++)
+				{
+					int nSemester = 0;
+					string* semesters = StringToArrayString(listSemesters[j], ',', nSemester);
+
+					for (int k = 0; k < nSemester; k++)
+						if (semester == semesters[k])
+						{
+							delete[] semesters;
+							return true;
+						}
+
+					delete[] semesters;
+				}
+
+		delete[] listSemesters;
+		delete[] listAcademicYears;
+	}
+
+	return false;
+}
 
 
 
@@ -192,7 +224,7 @@ void showMenu()
 					showMenuOfStaff(s);
 					break;
 				case 2:
-					showMenuOfStudent();
+					showMenuOfStudent(st);
 					break;
 				default:
 					cout << "Can't find account" << endl;
@@ -200,7 +232,7 @@ void showMenu()
 				}
 			}
 			else {
-				cout << "\nFAILED";
+				cout << "\nFAILED! ";
 			}
 		case 2:
 			system("pause");
@@ -211,32 +243,66 @@ void showMenu()
 	}
 }
 
-void showMenuOfStudent()
+void showMenuOfStudent(Student& st)
 {
+	int choice;
 	system("cls");
+	while (true)
+	{
+		system("cls");
 
-	cout << "|--------------------------------------|" << endl;
-	cout << "|                STUDENT               |" << endl;
-	cout << "|--------------------------------------|" << endl;
-	cout << "| No |             Option              |" << endl;
-	cout << "|--------------------------------------|" << endl;
-	cout << "| 1  | Enroll                          |" << endl;
-	cout << "|--------------------------------------|" << endl;
-	cout << "| 2  | View enrolling result           |" << endl;
-	cout << "|--------------------------------------|" << endl;
-	cout << "| 3  | Remove course                   |" << endl;
-	cout << "|--------------------------------------|" << endl;
-	cout << "| 4  | View his/her scores of a course |" << endl;
-	cout << "|--------------------------------------|" << endl;
-	cout << "| 5  | View profile info               |" << endl;
-	cout << "|--------------------------------------|" << endl;
-	cout << "| 6  | Change password                 |" << endl;
-	cout << "|--------------------------------------|" << endl;
-	cout << "| 7  | Log out                         |" << endl;
-	cout << "|--------------------------------------|" << endl;
+		cout << "|--------------------------------------|" << endl;
+		cout << "|                STUDENT               |" << endl;
+		cout << "|--------------------------------------|" << endl;
+		cout << "| No |             Option              |" << endl;
+		cout << "|--------------------------------------|" << endl;
+		cout << "| 1  | Enroll                          |" << endl;
+		cout << "|--------------------------------------|" << endl;
+		cout << "| 2  | View enrolling result           |" << endl;
+		cout << "|--------------------------------------|" << endl;
+		cout << "| 3  | Remove course                   |" << endl;
+		cout << "|--------------------------------------|" << endl;
+		cout << "| 4  | View his/her scores of a course |" << endl;
+		cout << "|--------------------------------------|" << endl;
+		cout << "| 5  | View profile info               |" << endl;
+		cout << "|--------------------------------------|" << endl;
+		cout << "| 6  | Change password                 |" << endl;
+		cout << "|--------------------------------------|" << endl;
+		cout << "| 7  | Log out                         |" << endl;
+		cout << "|--------------------------------------|" << endl;
 
+		choice = getChoice(1, 7);
+
+		system("cls");
+
+		switch (choice)
+		{
+		case 1:
+
+			break;
+		case 2:
+
+			break;
+		case 3:
+
+			break;
+		case 4:
+
+			break;
+		case 5:
+
+			break;
+		case 6:	
+
+			break;
+		case 7:
+			showMenu();
+			return;
+		}
+
+		system("pause");
+	}
 }
-
 void showMenuOfStaff(Staff& staff)
 {
 	system("cls");

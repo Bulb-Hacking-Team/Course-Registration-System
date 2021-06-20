@@ -142,6 +142,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="lecturer.cpp" />
+    <ClCompile Include="general.cpp" />
     <ClCompile Include="staff.cpp" />
     <ClCompile Include="student.cpp" />
   </ItemGroup>

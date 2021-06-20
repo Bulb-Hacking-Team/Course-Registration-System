@@ -6,7 +6,7 @@
 #include "student.h"
 
 void showMenu();
-void showMenuOfStudent();
+void showMenuOfStudent(Student& st);
 void showMenuOfStaff(Staff& staff);
 int getChoice(const int& minValue, const int& maxValue);
 

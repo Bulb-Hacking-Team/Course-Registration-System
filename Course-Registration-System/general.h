@@ -8,6 +8,7 @@
 
 #pragma pack(1)
 
+#define MAX_SIZE 		   100
 #define DELIMIT_TXT 	   '\n'
 #define PATH_DATA		   "D:/Vector A/KHTN/Nam 1/HKII/Ky Thuat Lap Trinh/LT/Do An Cuoi Ky/Quay Video/2/Commit Strategy/Vuong/data/output/"
 
@@ -37,4 +38,7 @@ struct Student
 	bool status;
 };
 
+
+bool isEqualString(void* str1, void* str2);
+string* StringToArrayString(const string& str, const char& delim, int& numOfElements);
 #endif
