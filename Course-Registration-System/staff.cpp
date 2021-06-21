@@ -83,3 +83,24 @@ void viewAcademicYearsAndSemester()
 		cout << "Can not open file." << endl;
 }
 
+void showListClassName(string*& listClassName, const int& countClassName)
+{
+	cout << "List of classes:" << endl;
+
+	cout << "|" << setfill('-') << setw(19) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	cout << "| " << setw(4) << left << "No" << " | " << setw(10) << "Class name" << " |" << endl;
+
+	cout << "|" << setfill('-') << setw(19) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	for (int i = 0; i < countClassName; i++)
+	{
+		cout << "| " << setw(4) << left << i + 1
+			<< " | " << setw(10) << left << listClassName[i] << " |" << endl;
+
+		cout << "|" << setfill('-') << setw(19) << "-" << "|" << endl;
+		cout << setfill(' ');
+	}
+}

@@ -96,3 +96,50 @@ Schedule* getScheduleOfStudent(const string& academicYear, const string& semeste
 	delete[] temp;
 	return listSchedule;
 }
+void releaseListStudents(void* listStudents, const int& countStudent)
+{
+	Student* arr = (Student*)listStudents;
+	delete[] arr;
+}
+void copyStudent(void* st1, void* st2)
+{
+	*(Student*)st1 = *(Student*)st2;
+}
+void* allocListStudents(const int& countStudent)
+{
+	Student* arr = new Student[countStudent];
+	return arr;
+}
+void saveStudent(ofstream& fout, const Student& st)
+{
+	fout << st.id << endl << st.info.acc.password << endl;
+	fout << st.info.fullName << endl << st.dateOfBirth << endl;
+	fout << st.ClassName << endl << st.info.gender << endl << st.status << endl;
+}
+bool saveStudentList(const string& filePath, Student* listStudents, const int& countStudent)
+{
+	ofstream fout(filePath);
+	int idx = 0, nStudents = 0;
+
+	if (!fout.is_open())
+		return false;
+
+	// sort student list with ascending id.
+	sortArray(listStudents, countStudent, sizeof(Student), ascendingStudentId);
+	//	sortArray_1(listStudents, countStudent);
+	for (int i = 0; i < countStudent; i++)
+		if (listStudents[i].status)
+			nStudents++;
+
+	fout << nStudents << endl;
+	for (int i = 0; i < nStudents; i++, idx++)
+	{
+		if (listStudents[idx].status)
+			saveStudent(fout, listStudents[idx]);
+		else
+			i--;
+	}
+
+	fout.close();
+	return true;
+}

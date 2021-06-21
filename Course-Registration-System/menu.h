@@ -17,4 +17,6 @@ bool checkStudentForLogin(Student& st);
 void getInputAcademicYearAndSemester(string& academicYear, string& semester);
 bool login(short role, Staff& s, Student& st);
 
+void viewSchedule2(const string& academicYear, const string& semester, const Student& st);
+
 #endif

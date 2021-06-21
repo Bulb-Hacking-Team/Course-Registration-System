@@ -16,6 +16,7 @@
 
 using namespace std;
 
+enum DayOfWeek { SUNDAY = 1, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY };
 struct Account
 {
 	string username, password;
@@ -97,9 +98,19 @@ struct AttendanceList
 
 bool isEqualString(void* str1, void* str2);
 string* StringToArrayString(const string& str, const char& delim, int& numOfElements);
+string convertWeekdayNumberToString(const int& dayOfWeek);
 bool loadListClassName(const string& filename, string*& listClassName, int& countClassName);
 int findValue(void* arr, const int& n, const int& sizeItem, void* key, bool (*cmp)(void*, void*));
 void releaseAttendanceList(AttendanceList& attendList);
 void releaseStudentCourseInformation(StudentCourseInformation*& listInfo, const int& countStudent);
+
+string getInputClassName();
+void showListClassName(string*& listClassName, const int& countClassName);
+
+void* pushBackArray(void* arr, int& numOfElements, const int& sizeItem, void* val,
+	void* (*alloc)(const int&), void (*copyElement)(void*, void*), void (*release)(void*, const int&));
+
+bool saveStudentList(const string& filePath, Student* listStudents, const int& countStudent);
+void sortArray(void* arr, const int& n, const int& sizeItem, bool (*cmp)(void*, void*));
 
 #endif

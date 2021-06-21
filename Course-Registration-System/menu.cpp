@@ -175,7 +175,69 @@ bool checkStudentForLogin(Student& st)
 
 	return flag;
 }
+void addNewStudent2(Student st)
+{
+	string filePathStudent, ClassName;
+	Student* listStudents = nullptr, newStudent;
+	int countStudent(0);
 
+	ClassName = getInputClassName();
+	filePathStudent = createClassDirectoryWithFileName(ClassName);
+
+	if (!loadStudentList(filePathStudent, listStudents, countStudent))
+	{
+		cout << "Can not open student file." << endl;
+		return;
+	}
+
+	newStudent = st;
+	listStudents = (Student*)pushBackArray(listStudents, countStudent, sizeof(Student),
+		&newStudent, allocListStudents, copyStudent, releaseListStudents);
+
+	if (saveStudentList(filePathStudent, listStudents, countStudent))
+		cout << "Enroll successfully." << endl;
+	else
+		cout << "Fail!!!" << endl;
+
+	delete[] listStudents;
+}
+void viewSchedule2(const string& academicYear, const string& semester, const Student& st)
+{
+	cout << "|" << setfill('-') << setw(129) << "-" << "|" << endl;
+	cout << setfill(' ');
+	fstream f;
+	string filePath = "";
+	filePath += st.id;
+	cout << "| " << setw(5) << left << "  No" << " | " << setw(50) << left << "Course name" << " | "
+		<< setw(15) << left << "Course ID" << " | " << setw(10) << left << "Class name" << " | "
+		<< setw(4) << left << "Room" << " | " << setw(12) << left << "   Day" << " | "
+		<< setw(13) << left << "    Time" << " |" << endl;
+
+	cout << "|" << setfill('-') << setw(129) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	int count = 0;
+	Schedule* listSchedule = getScheduleOfStudent(academicYear, semester, st, count);
+
+	if (listSchedule != nullptr) {
+		for (int i = 0; i < count; i++) {
+			string dayString = convertWeekdayNumberToString(listSchedule[i].dayOfWeek);
+
+			cout << "| " << setw(3) << right << i + 1 << "   | " << setw(50) << left << listSchedule[i].courseName
+				<< " | " << setw(15) << left << listSchedule[i].courseId << " |   " << setw(8) << left << listSchedule[i].ClassName
+				<< " | " << setw(4) << left << listSchedule[i].room << " |  " << setw(11) << left << dayString
+				<< " | " << setw(2) << right << listSchedule[i].startTime.hour << ":" << setw(2) << left << listSchedule[i].startTime.minute
+				<< " - " << setw(2) << right << listSchedule[i].endTime.hour << ":" << setw(2) << left << listSchedule[i].endTime.minute
+				<< " |" << endl;
+
+			cout << "|" << setfill('-') << setw(129) << "-" << "|" << endl;
+			cout << setfill(' ');
+		}
+		getChoice(1, count);
+		addNewStudent2(st);
+		delete[] listSchedule;
+	}
+}
 bool login(short role, Staff& s, Student& st)
 {
 	Account log;
@@ -268,9 +330,10 @@ void showMenu()
 
 void showMenuOfStudent(Student& st)
 {
+	string academicYear, semester;
 	int choice;
 	system("cls");
-	
+	getInputAcademicYearAndSemester(academicYear, semester);
 	while (true)
 	{
 		system("cls");
@@ -301,6 +364,8 @@ void showMenuOfStudent(Student& st)
 		switch (choice)
 		{
 		case 1:
+			cin.ignore();
+			viewSchedule2(academicYear, semester, st);
 			break;
 		case 2:
 

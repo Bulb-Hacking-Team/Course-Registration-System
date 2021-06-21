@@ -45,3 +45,79 @@ int findValue(void* arr, const int& n, const int& sizeItem, void* key, bool (*cm
 
 	return NOT_FOUND;
 }
+string convertWeekdayNumberToString(const int& dayOfWeek)
+{
+	switch (dayOfWeek)
+	{
+	case MONDAY:
+		return "MONDAY";
+	case TUESDAY:
+		return "TUESDAY";
+	case WEDNESDAY:
+		return "WEDNESDAY";
+	case THURSDAY:
+		return "THURSDAY";
+	case FRIDAY:
+		return "FRIDAY";
+	case SATURDAY:
+		return "SATURDAY";
+	case SUNDAY:
+		return "SUNDAY";
+	default:
+		return "";
+	}
+}
+string getInputClassName()
+{
+	string* listClassName = nullptr;
+	string filePath = PATH_DATA, result;
+	int countClassName = 0, choice;
+
+	if (!loadListClassName(filePath + "Class.txt", listClassName, countClassName))
+		return "";
+
+	showListClassName(listClassName, countClassName);
+
+	choice = getChoice(1, countClassName);
+	result = listClassName[choice - 1];
+
+	delete[] listClassName;
+	return result;
+}
+void* pushBackArray(void* arr, int& numOfElements, const int& sizeItem, void* val, void* (*alloc)(const int&), void (*copyElement)(void*, void*), void (*release)(void*, const int&))
+{
+	void* newArray = resizeArray(arr, numOfElements, numOfElements + 1, sizeItem, alloc, copyElement, release);
+	int distance = (numOfElements - 1) * sizeItem;
+
+	copyElement((char*)newArray + distance, val);
+
+	return newArray;
+}
+void sortArray(void* arr, const int& n, const int& sizeItem, bool (*cmp)(void*, void*))
+{
+	char* data_i, * data_pos, * data_j, * temp;
+	temp = new char[sizeItem];
+
+	for (int i = 0; i < n - 1; i++)
+	{
+		data_i = (char*)arr + (i * sizeItem);
+		data_pos = data_i;
+
+		for (int j = i + 1; j < n; j++)
+		{
+			data_j = (char*)arr + (j * sizeItem);
+
+			if (cmp(data_pos, data_j))
+				data_pos = data_j;
+		}
+
+		// Swap the value of two variables.
+		if (data_pos != data_i) {
+			memmove_s(temp, sizeItem, data_i, sizeItem);
+			memmove_s(data_i, sizeItem, data_pos, sizeItem);
+			memmove_s(data_pos, sizeItem, temp, sizeItem);
+		}
+	}
+
+	delete[] temp;
+}

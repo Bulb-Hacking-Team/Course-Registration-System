@@ -10,4 +10,6 @@ void loadAttendanceList(ifstream& fin, AttendanceList& listAttends);
 bool loadStudentCourseInformationList(const string& filePath, StudentCourseInformation*& listInfo, int& countStudent);
 void releaseStudentCourseInformationList(void* listInfo, const int& countStudent);
 
+void saveStudent(ofstream& fout, const Student& st);
+
 #endif
