@@ -140,3 +140,15 @@ void sortArray(void* arr, const int& n, const int& sizeItem, bool (*cmp)(void*, 
 
 	delete[] temp;
 }
+string toString(const Date& dt, const char& delim)
+{
+	string m, d;
+
+	m = to_string(dt.month);
+	m = (m.length() == 2) ? (m) : ("0" + m);
+
+	d = to_string(dt.day);
+	d = (d.length() == 2) ? (d) : ("0" + d);
+
+	return to_string(dt.year) + delim + m + delim + d;
+}

@@ -149,3 +149,64 @@ void releaseStudentCourseInformationList(void* listInfo, const int& countStudent
 		releaseStudentCourseInformation(arr, countStudent);
 	}
 }
+bool getInputCourseFromSemester(const string& academicYear, const string& semester, string& ClassName,
+	Course& course, Course*& listCourses, int& countCourse)
+{
+	string filePath;
+	int choice = 0;
+
+	ClassName = getInputClassName();
+	filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, "Schedule", "txt");
+
+	if (!loadListCourses(filePath, listCourses, countCourse))
+		return false;
+
+	showListCourses(listCourses, countCourse, ClassName);
+	choice = getChoice(1, countCourse);
+	course = listCourses[choice - 1];
+
+	return true;
+}
+bool saveListCourses(const string& filePath, Course* listCourses, const int& countCourse)
+{
+	ofstream fout(filePath);
+	int idx = 0;
+
+	if (!fout.is_open())
+		return false;
+
+	fout << countCourse << endl;
+	for (int i = 0; i < countCourse; i++, idx++)
+	{
+		if (listCourses[idx].status)
+			saveCourse(fout, listCourses[idx]);
+		else
+			i--;
+	}
+
+	fout.close();
+	return true;
+}
+void saveCourse(ofstream& fout, Course& course)
+{
+	Lecturer& lec = course.lecturer;
+
+	fout << course.courseId << endl << course.courseName << endl << course.ClassName << endl;
+	fout << course.NumberOfCredits << endl;
+	fout << lec.info.acc.username << endl << lec.info.fullName << endl << lec.degree << endl << lec.info.gender << endl;
+	fout << toString(course.startDate, ' ') << endl;
+	fout << toString(course.endDate, ' ') << endl;
+	fout << course.dayOfWeek << endl;
+	fout << course.startTime.hour << " " << course.startTime.minute << endl;
+	fout << course.endTime.hour << " " << course.endTime.minute << endl;
+	fout << course.room << endl << course.status << endl;
+}
+bool isEqualCourseId(void* val1, void* val2)
+{
+	Course* course1, * course2;
+
+	course1 = (Course*)val1;
+	course2 = (Course*)val2;
+
+	return (course1->courseId == course2->courseId);
+}

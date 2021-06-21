@@ -104,3 +104,70 @@ void showListClassName(string*& listClassName, const int& countClassName)
 		cout << setfill(' ');
 	}
 }
+void removeCourse(const string& academicYear, const string& semester)
+{
+	string ClassName, filePath;
+	Course* listCourses = nullptr;
+	Course key;
+	int countCourse, idx, isRemove;
+
+	if (getInputCourseFromSemester(academicYear, semester, ClassName, key, listCourses, countCourse))
+	{
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, "Schedule", "txt");
+		idx = findValue(listCourses, countCourse, sizeof(Course), &key, isEqualCourseId);
+
+		if (idx != NOT_FOUND)
+		{
+			cout << "==> Do you want to delete this course? (Yes: 1, No: 0)" << endl;
+			isRemove = getChoice(0, 1);
+
+			if (isRemove)
+			{
+				listCourses[idx].status = false;
+				if (saveListCourses(filePath, listCourses, countCourse - 1))
+					cout << "==> Remove successfully." << endl;
+				else
+					cout << "==> Remove failed." << endl;
+			}
+		}
+		else
+			cout << "This course was not found." << endl;
+
+		delete[] listCourses;
+	}
+}
+void showListCourses(Course* listCourses, const int& countCourse, const string& ClassName)
+{
+	cout << "Courses of class " << ClassName << ":\n" << endl;
+
+	if (countCourse != 0)
+	{
+		int idx = 0;
+
+		cout << "|" << setfill('-') << setw(116) << "-" << "|" << endl;
+		cout << setfill(' ');
+
+		cout << "| " << setw(5) << left << " No" << " | " << setw(50) << left << "Course name" << " | "
+			<< setw(15) << left << "Course ID" << " | " << setw(35) << left << "Full name" << " |" << endl;
+
+		cout << "|" << setfill('-') << setw(116) << "-" << "|" << endl;
+		cout << setfill(' ');
+
+		for (int i = 0; i < countCourse; i++, idx++)
+		{
+			if (listCourses[idx].status)
+			{
+				cout << "| " << setw(3) << right << idx + 1 << "   | " << setw(50) << left << listCourses[i].courseName
+					<< " | " << setw(15) << left << listCourses[i].courseId << " | "
+					<< setw(35) << left << listCourses[i].lecturer.info.fullName << " |" << endl;
+
+				cout << "|" << setfill('-') << setw(116) << "-" << "|" << endl;
+				cout << setfill(' ');
+			}
+			else
+				i--;
+		}
+	}
+	else
+		cout << "There are no courses available." << endl;
+}

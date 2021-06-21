@@ -11,5 +11,12 @@ bool loadStudentCourseInformationList(const string& filePath, StudentCourseInfor
 void releaseStudentCourseInformationList(void* listInfo, const int& countStudent);
 
 void saveStudent(ofstream& fout, const Student& st);
+bool getInputCourseFromSemester(const string& academicYear, const string& semester, string& ClassName,
+	Course& course, Course*& listCourses, int& countCourse);
+
+bool saveListCourses(const string& filePath, Course* listCourses, const int& countCourse);
+void saveCourse(ofstream& fout, Course& course);
+
+bool isEqualCourseId(void* val1, void* val2);
 
 #endif

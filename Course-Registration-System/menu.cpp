@@ -372,7 +372,7 @@ void showMenuOfStudent(Student& st)
 			viewSchedule(academicYear, semester, st);
 			break;
 		case 3:
-
+			removeCourse(academicYear, semester);
 			break;
 		case 4:
 
