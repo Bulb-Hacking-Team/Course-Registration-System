@@ -7,7 +7,6 @@
 void showMenu();
 void showMenuOfStudent(Student& st);
 void showMenuOfStaff(Staff& staff);
-int getChoice(const int& minValue, const int& maxValue);
 
 void loadStaff(ifstream& fin, Staff& s);
 bool loadListStaffs(const string& filePath, Staff*& listStaffs, int& countStaff);

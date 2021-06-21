@@ -79,7 +79,13 @@ struct Course
 	int dayOfWeek;
 	bool status;
 };
-
+struct AttendanceList
+{
+	Date* dateList;
+	Time startTime, endTime;
+	int countDate;
+	bool* status;
+};
 struct StudentCourseInformation
 {
 	Student st;
@@ -88,13 +94,7 @@ struct StudentCourseInformation
 	bool status;
 };
 
-struct AttendanceList 
-{
-	Date* dateList;
-	Time startTime, endTime;
-	int countDate;
-	bool* status;
-};
+int getChoice(const int& minValue, const int& maxValue);
 
 bool isEqualString(void* str1, void* str2);
 string* StringToArrayString(const string& str, const char& delim, int& numOfElements);
@@ -109,6 +109,10 @@ void showListClassName(string*& listClassName, const int& countClassName);
 
 void* pushBackArray(void* arr, int& numOfElements, const int& sizeItem, void* val,
 	void* (*alloc)(const int&), void (*copyElement)(void*, void*), void (*release)(void*, const int&));
+
+void* resizeArray(void* arr, int& oldSize, const int& newSize, const int& sizeItem,
+	void* (*alloc)(const int&), void (*copyElement)(void*, void*), void (*release)(void*, const int&));
+
 
 bool saveStudentList(const string& filePath, Student* listStudents, const int& countStudent);
 void sortArray(void* arr, const int& n, const int& sizeItem, bool (*cmp)(void*, void*));

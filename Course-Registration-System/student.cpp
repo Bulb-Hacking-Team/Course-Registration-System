@@ -39,6 +39,16 @@ bool loadStudentList(const string& filePath, Student*& listStudents, int& countS
 	return true;
 }
 
+bool isEqualStudentIdFromCourse(void* val1, void* val2)
+{
+	StudentCourseInformation* value1, * value2;
+
+	value1 = (StudentCourseInformation*)val1;
+	value2 = (StudentCourseInformation*)val2;
+
+	return (value1->st.id == value2->st.id);
+}
+
 Schedule* getScheduleOfStudent(const string& academicYear, const string& semester, const Student& st, int& count) {
 	string filename = PATH_DATA;
 	string* listClassName;
@@ -116,6 +126,12 @@ void saveStudent(ofstream& fout, const Student& st)
 	fout << st.info.fullName << endl << st.dateOfBirth << endl;
 	fout << st.ClassName << endl << st.info.gender << endl << st.status << endl;
 }
+
+bool ascendingStudentId(void* Name1, void* Name2)
+{
+	return (*(string*)Name1 > * (string*)Name2);
+}
+
 bool saveStudentList(const string& filePath, Student* listStudents, const int& countStudent)
 {
 	ofstream fout(filePath);
@@ -142,4 +158,39 @@ bool saveStudentList(const string& filePath, Student* listStudents, const int& c
 
 	fout.close();
 	return true;
+}
+
+void viewSchedule(const string& academicYear, const string& semester, const Student& st)
+{
+	cout << "|" << setfill('-') << setw(129) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	cout << "| " << setw(5) << left << "  No" << " | " << setw(50) << left << "Course name" << " | "
+		<< setw(15) << left << "Course ID" << " | " << setw(10) << left << "Class name" << " | "
+		<< setw(4) << left << "Room" << " | " << setw(12) << left << "   Day" << " | "
+		<< setw(13) << left << "    Time" << " |" << endl;
+
+	cout << "|" << setfill('-') << setw(129) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	int count = 0;
+	Schedule* listSchedule = getScheduleOfStudent(academicYear, semester, st, count);
+
+	if (listSchedule != nullptr) {
+		for (int i = 0; i < count; i++) {
+			string dayString = convertWeekdayNumberToString(listSchedule[i].dayOfWeek);
+
+			cout << "| " << setw(3) << right << i + 1 << "   | " << setw(50) << left << listSchedule[i].courseName
+				<< " | " << setw(15) << left << listSchedule[i].courseId << " |   " << setw(8) << left << listSchedule[i].ClassName
+				<< " | " << setw(4) << left << listSchedule[i].room << " |  " << setw(11) << left << dayString
+				<< " | " << setw(2) << right << listSchedule[i].startTime.hour << ":" << setw(2) << left << listSchedule[i].startTime.minute
+				<< " - " << setw(2) << right << listSchedule[i].endTime.hour << ":" << setw(2) << left << listSchedule[i].endTime.minute
+				<< " |" << endl;
+
+			cout << "|" << setfill('-') << setw(129) << "-" << "|" << endl;
+			cout << setfill(' ');
+		}
+
+		delete[] listSchedule;
+	}
 }

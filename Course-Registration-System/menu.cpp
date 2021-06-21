@@ -368,7 +368,8 @@ void showMenuOfStudent(Student& st)
 			viewSchedule2(academicYear, semester, st);
 			break;
 		case 2:
-
+			cin.ignore();
+			viewSchedule(academicYear, semester, st);
 			break;
 		case 3:
 

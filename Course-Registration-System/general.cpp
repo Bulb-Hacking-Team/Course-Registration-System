@@ -93,6 +93,25 @@ void* pushBackArray(void* arr, int& numOfElements, const int& sizeItem, void* va
 
 	return newArray;
 }
+
+void* resizeArray(void* arr, int& oldSize, const int& newSize, const int& sizeItem,
+	void* (*alloc)(const int&), void (*copyElement)(void*, void*), void (*release)(void*, const int&))
+{
+	void* newArray = alloc(newSize);
+	int sz = min(oldSize, newSize), distance;
+
+	for (int i = 0; i < sz; i++)
+	{
+		distance = i * sizeItem;
+		copyElement((char*)newArray + distance, (char*)arr + distance);
+	}
+
+	release(arr, oldSize);
+	oldSize = newSize;
+
+	return newArray;
+}
+
 void sortArray(void* arr, const int& n, const int& sizeItem, bool (*cmp)(void*, void*))
 {
 	char* data_i, * data_pos, * data_j, * temp;
