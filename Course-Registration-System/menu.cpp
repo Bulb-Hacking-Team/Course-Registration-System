@@ -110,7 +110,28 @@ bool checkAcademicYearAndSemester(string academicYear, string semester)
 
 	return false;
 }
+void getInputAcademicYearAndSemester(string& academicYear, string& semester)
+{
+	bool flag;
 
+	viewAcademicYearsAndSemester();
+
+	do {
+		flag = true;
+
+		cout << "\nEnter academic year: ";
+		getline(cin, academicYear);
+		cout << "Enter semester: ";
+		getline(cin, semester);
+
+		if (!checkAcademicYearAndSemester(academicYear, semester))
+		{
+			flag = false;
+			cout << "The academic year and semester are invalid or do not exist." << endl;
+		}
+
+	} while (!flag);
+}
 
 
 bool checkStudentForLogin(Student& st)
@@ -247,10 +268,10 @@ void showMenuOfStudent(Student& st)
 {
 	int choice;
 	system("cls");
+	
 	while (true)
 	{
 		system("cls");
-
 		cout << "|--------------------------------------|" << endl;
 		cout << "|                STUDENT               |" << endl;
 		cout << "|--------------------------------------|" << endl;

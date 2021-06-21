@@ -17,5 +17,6 @@ bool loadListStaffs(const string& filePath, Staff*& listStaffs, int& countStaff)
 
 void loadStudentFromTxt(ifstream& fin, Student& st);
 bool checkStudentForLogin(Student& st);
+void getInputAcademicYearAndSemester(string& academicYear, string& semester);
 bool login(short role, Staff& s, Student& st);
 #endif

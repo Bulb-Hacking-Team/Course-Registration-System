@@ -50,3 +50,35 @@ bool loadAcademicYearsAndSemester(const string& filePath, string*& listAcademicY
 	fin.close();
 	return true;
 }
+void viewAcademicYearsAndSemester() 
+{
+	string filePath(PATH_DATA);
+	string* listAcademicYears = nullptr, * listSemesters = nullptr;
+	int countAcademicYears = 0;
+
+	filePath += "SchoolYear.txt";
+
+	if (loadAcademicYearsAndSemester(filePath, listAcademicYears, listSemesters, countAcademicYears)) {
+		cout << "|" << setfill('-') << setw(43) << "-" << "|" << endl;
+		cout << setfill(' ');
+
+		cout << "| " << setw(4) << left << "No" << " | " << setw(16) << left << "Academic Years" << " | "
+			<< setw(15) << left << "Semesters" << " |" << endl;
+
+		cout << "|" << setfill('-') << setw(43) << "-" << "|" << endl;
+		cout << setfill(' ');
+
+		for (int i = 0; i < countAcademicYears; i++) {
+			cout << "| " << setw(4) << left << i + 1 << " | " << setw(16) << left << listAcademicYears[i]
+				<< " | " << setw(15) << left << listSemesters[i] << " |" << endl;
+
+			cout << "|" << setfill('-') << setw(43) << "-" << "|" << endl;
+			cout << setfill(' ');
+		}
+
+		delete[] listSemesters;
+		delete[] listAcademicYears;
+	}
+	else
+		cout << "Can not open file." << endl;
+}
