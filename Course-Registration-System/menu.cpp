@@ -1,5 +1,5 @@
 #include "menu.h"
-
+#include"Staff.h"
 int getChoice(const int& minValue, const int& maxValue)
 {
 	int choice = 0;
@@ -375,7 +375,7 @@ void showMenuOfStudent(Student& st)
 			removeCourse(academicYear, semester);
 			break;
 		case 4:
-
+			viewScores(academicYear, semester, st);
 			break;
 		case 5:
 

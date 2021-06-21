@@ -1,17 +1,22 @@
-#ifndef GENERAL_INFORMATION_H_
-#define GENERAL_INFORMATION_H_
 #pragma once
+
 
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <iomanip>
+#include <algorithm>
+#include <ctime>
 
 #pragma pack(1)
 
 #define NOT_FOUND		   -1
+#define MAX_PWD_SIZE	   40
+#define MIN_PWD_SIZE 	   8
 #define MAX_SIZE 		   100
 #define DELIMIT_TXT 	   '\n'
+#define DELIMIT_CSV 	   ','
+#define DEFAULT_PASSWORD   "12345678"
 #define PATH_DATA		   "D:/Vector A/KHTN/Nam 1/HKII/Ky Thuat Lap Trinh/LT/Do An Cuoi Ky/Quay Video/2/Commit Strategy/Vuong/data/output/"
 
 using namespace std;
@@ -120,5 +125,5 @@ bool saveStudentList(const string& filePath, Student* listStudents, const int& c
 void sortArray(void* arr, const int& n, const int& sizeItem, bool (*cmp)(void*, void*));
 
 void showListCourses(Course* listCourses, const int& countCourse, const string& ClassName);
+void viewScoreboardOfStudent(const Student& st, const Scoreboard& score);
 
-#endif

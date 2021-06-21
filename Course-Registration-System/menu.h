@@ -1,5 +1,4 @@
-#ifndef MENU_H_
-#define MENU_H_
+#pragma once
 #include "staff.h"
 #include "leturer.h"
 #include "student.h"
@@ -18,4 +17,3 @@ bool login(short role, Staff& s, Student& st);
 
 void viewSchedule2(const string& academicYear, const string& semester, const Student& st);
 
-#endif

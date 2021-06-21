@@ -1,5 +1,3 @@
-#ifndef LECTURER_H_
-#define LECTURER_H_
+#pragma once
 #include "student.h"
 
-#endif
