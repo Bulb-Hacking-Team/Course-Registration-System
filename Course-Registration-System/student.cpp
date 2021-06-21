@@ -38,3 +38,61 @@ bool loadStudentList(const string& filePath, Student*& listStudents, int& countS
 	fin.close();
 	return true;
 }
+
+Schedule* getScheduleOfStudent(const string& academicYear, const string& semester, const Student& st, int& count) {
+	string filename = PATH_DATA;
+	string* listClassName;
+	int countClassName, countCourse, countStudent;
+	Course* listCourses;
+	StudentCourseInformation* listInfo, key;
+	Schedule* temp = new Schedule[MAX_SIZE], * listSchedule = nullptr;
+
+	filename += "Class.txt";
+	count = 0;
+
+	if (loadListClassName(filename, listClassName, countClassName))
+	{
+		key.st = st;
+
+		for (int i = 0; i < countClassName; i++)
+		{
+			string courseFilePath = createCourseDirectoryWithFileName(academicYear, semester, listClassName[i], "Schedule", "txt");
+			if (loadListCourses(courseFilePath, listCourses, countCourse))
+			{
+
+				for (int j = 0; j < countCourse; j++)
+				{
+
+					string filePath = createCourseDirectoryWithFileName(academicYear, semester, listClassName[i], listCourses[j].courseId, "txt");
+					if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+					{
+						int idx = findValue(listInfo, countStudent, sizeof(StudentCourseInformation), &key, isEqualStudentIdFromCourse);
+
+						if (idx != NOT_FOUND)
+						{
+							temp[count].courseId = listCourses[j].courseId;
+							temp[count].courseName = listCourses[j].courseName;
+							temp[count].ClassName = listClassName[i];
+							temp[count].dayOfWeek = listCourses[j].dayOfWeek;
+							temp[count].room = listCourses[j].room;
+							temp[count].startTime = listCourses[j].startTime;
+							temp[count].endTime = listCourses[j].endTime;
+							count++;
+						}
+						releaseStudentCourseInformationList(listInfo, countStudent);
+					}
+				}
+				delete[] listCourses;
+			}
+		}
+		delete[] listClassName;
+
+
+		listSchedule = new Schedule[count];
+		for (int i = 0; i < count; i++)
+			listSchedule[i] = temp[i];
+	}
+
+	delete[] temp;
+	return listSchedule;
+}

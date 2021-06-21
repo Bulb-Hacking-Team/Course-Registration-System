@@ -31,3 +31,17 @@ string* StringToArrayString(const string& str, const char& delim, int& numOfElem
 	delete[] temp;
 	return arrString;
 }
+
+int findValue(void* arr, const int& n, const int& sizeItem, void* key, bool (*cmp)(void*, void*))
+{
+	if (arr != nullptr)
+	{
+		char* temp = (char*)arr;
+
+		for (int i = 0; i < n; i++, temp += sizeItem)
+			if (cmp(temp, key))
+				return i;
+	}
+
+	return NOT_FOUND;
+}

@@ -77,6 +77,7 @@ bool checkStaff(Staff& s)
 
 	return flag;
 }
+
 bool checkAcademicYearAndSemester(string academicYear, string semester)
 {
 	string filePath = PATH_DATA;
@@ -110,6 +111,7 @@ bool checkAcademicYearAndSemester(string academicYear, string semester)
 
 	return false;
 }
+
 void getInputAcademicYearAndSemester(string& academicYear, string& semester)
 {
 	bool flag;
@@ -132,7 +134,6 @@ void getInputAcademicYearAndSemester(string& academicYear, string& semester)
 
 	} while (!flag);
 }
-
 
 bool checkStudentForLogin(Student& st)
 {
@@ -174,6 +175,7 @@ bool checkStudentForLogin(Student& st)
 
 	return flag;
 }
+
 bool login(short role, Staff& s, Student& st)
 {
 	Account log;
@@ -299,7 +301,6 @@ void showMenuOfStudent(Student& st)
 		switch (choice)
 		{
 		case 1:
-
 			break;
 		case 2:
 
