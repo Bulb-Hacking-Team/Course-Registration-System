@@ -21,6 +21,7 @@
 
 using namespace std;
 
+enum Gender { MALE, FEMALE };
 enum DayOfWeek { SUNDAY = 1, MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY };
 struct Account
 {
