@@ -210,3 +210,10 @@ bool isEqualCourseId(void* val1, void* val2)
 
 	return (course1->courseId == course2->courseId);
 }
+void viewScoreboardOfStudent(const Student& st, const Scoreboard& score)
+{
+	cout << " | " << setw(12) << left << st.id << " | " << setw(35) << left << st.info.fullName;
+	cout << " | " << setw(6) << right << score.midterm << "     | " << setw(6) << right << score._final
+		<< "     | " << setw(6) << right << score.bonus << "     | " << setw(6) << right << score.total
+		<< "     |" << endl;
+}

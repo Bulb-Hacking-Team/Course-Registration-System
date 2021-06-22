@@ -1,5 +1,4 @@
-#ifndef STAFF_H_
-#define STAFF_H_
+#pragma once
 #include "leturer.h"
 
 bool isEqualAcademicYears(void* year1, void* year2);
@@ -9,4 +8,3 @@ void viewAcademicYearsAndSemester();
 
 void removeCourse(const string& academicYear, const string& semester);
 
-#endif

@@ -1,6 +1,6 @@
-#ifndef COURSE_H_
-#define COURSE_H_
+#pragma once
 #include "general.h"
+
 string createCourseDirectoryWithFileName(const string& academicYear, const string& semester, const string& ClassName, const string& argLast, const string& FileExtension);
 void loadCourse(ifstream& fin, Course& course);
 bool loadListCourses(const string& filePath, Course*& listCourses, int& countCourse);
@@ -18,5 +18,3 @@ bool saveListCourses(const string& filePath, Course* listCourses, const int& cou
 void saveCourse(ofstream& fout, Course& course);
 
 bool isEqualCourseId(void* val1, void* val2);
-
-#endif

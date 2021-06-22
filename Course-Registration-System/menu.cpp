@@ -1,5 +1,5 @@
 #include "menu.h"
-
+#include"Staff.h"
 int getChoice(const int& minValue, const int& maxValue)
 {
 	int choice = 0;
@@ -20,7 +20,30 @@ int getChoice(const int& minValue, const int& maxValue)
 
 	return choice;
 }
+void changePassword(Account& acc)
+{
+	string newPassword[2], curPassword;
 
+	cout << "Password length: 8 <= length <= 40" << endl;
+
+	cout << "Enter current password: ";
+	curPassword = getInputPassword();
+
+	cout << "Enter new password: ";
+	newPassword[0] = getInputPassword();
+
+	cout << "Enter new password again: ";
+	newPassword[1] = getInputPassword();
+
+	if (acc.password == curPassword) {
+		if (newPassword[0] == newPassword[1]) {
+			acc.password = newPassword[0];
+			cout << "==> Password was successfully changed." << endl;
+		}
+		else cout << "The two new passwords are not the same." << endl;
+	}
+	else cout << "The current password is incorrect." << endl;
+}
 void loadStaff(ifstream& fin, Staff& s)
 {
 	getline(fin, s.info.acc.username);
@@ -238,6 +261,21 @@ void viewSchedule2(const string& academicYear, const string& semester, const Stu
 		delete[] listSchedule;
 	}
 }
+
+void viewGeneralInfo(GeneralInformation info)
+{
+	cout << "\n- Full name: " << info.fullName << endl;
+	cout << "- Gender: " << ((info.gender == MALE) ? ("Male") : ("Female")) << endl;
+}
+
+void viewStudentInfo(Student st)
+{
+	viewGeneralInfo(st.info);
+	cout << "- Student ID: " << st.id << endl;
+	cout << "- Date of birth: " << st.dateOfBirth << endl;
+	cout << "- Status: " << ((st.status) ? ("Available") : ("Expelled")) << endl << endl;
+}
+
 bool login(short role, Staff& s, Student& st)
 {
 	Account log;
@@ -330,13 +368,18 @@ void showMenu()
 
 void showMenuOfStudent(Student& st)
 {
-	string academicYear, semester;
-	int choice;
+	string academicYear, semester, filePath;
+	Student* listStudents = nullptr;
+	int choice, countStudent = 0;
+
+	filePath = createClassDirectoryWithFileName(st.ClassName);
+
 	system("cls");
 	getInputAcademicYearAndSemester(academicYear, semester);
 	while (true)
 	{
 		system("cls");
+
 		cout << "|--------------------------------------|" << endl;
 		cout << "|                STUDENT               |" << endl;
 		cout << "|--------------------------------------|" << endl;
@@ -375,19 +418,27 @@ void showMenuOfStudent(Student& st)
 			removeCourse(academicYear, semester);
 			break;
 		case 4:
-
+			viewScores(academicYear, semester, st);
 			break;
 		case 5:
-
+			viewStudentInfo(st);
 			break;
-		case 6:	
+		case 6:
+			cin.ignore();
+			changePassword(st.info.acc);
+			if (loadStudentList(filePath, listStudents, countStudent)) {
+				int idx = findValue(listStudents, countStudent, sizeof(Student), &st, isEqualStudentId);
+				listStudents[idx].info.acc.password = st.info.acc.password;
 
+				saveStudentList(filePath, listStudents, countStudent);
+				delete[] listStudents;
+				listStudents = nullptr;
+			}
 			break;
 		case 7:
 			showMenu();
 			return;
 		}
-
 		system("pause");
 	}
 }

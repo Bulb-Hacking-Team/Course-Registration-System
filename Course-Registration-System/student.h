@@ -1,5 +1,4 @@
-#ifndef STUDENT_H_
-#define STUDENT_H_
+#pragma once
 #include "course.h"
 
 string createClassDirectoryWithFileName(const string& ClassName);
@@ -14,5 +13,9 @@ void releaseListStudents(void* listStudents, const int& countStudent);
 void copyStudent(void* st1, void* st2);
 void* allocListStudents(const int& countStudent);
 void viewSchedule(const string& academicYear, const string& semester, const Student& st);
+bool isEqualStudentId(void* st1, void* st2);
 
-#endif
+bool checkStudentOfCourse(const string& academicYear, const string& semester, const Course& c, const Student& st);
+void viewScores(const string& academicYear, const string& semester, const Student& st);
+bool getInputCourseOfStudent(const string& academicYear, const string& semester, Course& course, const Student& st);
+
