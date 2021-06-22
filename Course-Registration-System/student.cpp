@@ -159,7 +159,15 @@ bool saveStudentList(const string& filePath, Student* listStudents, const int& c
 	fout.close();
 	return true;
 }
+bool isEqualStudentId(void* st1, void* st2)
+{
+	Student* value1, * value2;
 
+	value1 = (Student*)st1;
+	value2 = (Student*)st2;
+
+	return (value1->id == value2->id);
+}
 void viewSchedule(const string& academicYear, const string& semester, const Student& st)
 {
 	cout << "|" << setfill('-') << setw(129) << "-" << "|" << endl;
@@ -193,4 +201,129 @@ void viewSchedule(const string& academicYear, const string& semester, const Stud
 
 		delete[] listSchedule;
 	}
+}
+bool checkStudentOfCourse(const string& academicYear, const string& semester, const Course& c, const Student& st) {
+	string filePath = createCourseDirectoryWithFileName(academicYear, semester, c.ClassName, c.courseId, "txt");
+	StudentCourseInformation* listInfo = nullptr, key;
+	int countStudent = 0;
+	bool res = false;
+
+	key.st = st;
+
+	if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+	{
+		int idx = findValue(listInfo, countStudent, sizeof(StudentCourseInformation), &key, isEqualStudentIdFromCourse);
+
+		if (idx != NOT_FOUND)
+			res = true;
+		releaseStudentCourseInformationList(listInfo, countStudent);
+	}
+
+	return res;
+}
+void viewScores(const string& academicYear, const string& semester, const Student& st)
+{
+	Course course;
+	StudentCourseInformation* listInfo, key;
+	int countStudent = 0;
+
+	if (getInputCourseOfStudent(academicYear, semester, course, st))
+	{
+		string filePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, course.courseId, "txt");
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			key.st = st;
+			int idx = findValue(listInfo, countStudent, sizeof(StudentCourseInformation), &key, isEqualStudentIdFromCourse);
+
+			cout << "|" << setfill('-') << setw(146) << "-" << "|" << endl;
+			cout << setfill(' ');
+
+			cout << "| " << setw(27) << left << "Course name"
+				<< " | " << setw(9) << left << "Course ID"
+				<< " | " << setw(12) << left << "ID"
+				<< " | " << setw(35) << left << "Full name"
+				<< " | " << setw(10) << left << "Midterm"
+				<< " | " << setw(10) << left << "Final"
+				<< " | " << setw(10) << left << "Bonus"
+				<< " | " << setw(10) << left << "Total" << " |" << endl;
+
+			cout << "|" << setfill('-') << setw(146) << "-" << "|" << endl;
+			cout << setfill(' ');
+
+			cout << "| " << setw(27) << left << course.courseName
+				<< " | " << setw(9) << left << course.courseId;
+			viewScoreboardOfStudent(listInfo[idx].st, listInfo[idx].scoreList);
+
+			cout << "|" << setfill('-') << setw(146) << "-" << "|" << endl;
+			cout << setfill(' ');
+
+			releaseStudentCourseInformationList(listInfo, countStudent);
+		}
+		else
+			cout << "Can't open student file." << endl;
+	}
+	else
+		cout << "Can't open class file (or there are no course for this student)" << endl;
+}
+bool getInputCourseOfStudent(const string& academicYear, const string& semester, Course& course, const Student& st) {
+	string filename = PATH_DATA;
+	string* listClassName;
+	Course* listCourses, * tempCourse = nullptr;
+	StudentCourseInformation key;
+	int countClassName, countCourse, count = 0;
+	bool res = false;
+
+	filename += "Class.txt";
+	if (loadListClassName(filename, listClassName, countClassName))
+	{
+		tempCourse = new Course[MAX_SIZE];
+		key.st = st;
+
+		for (int i = 0; i < countClassName; i++)
+		{
+			string courseFilePath = createCourseDirectoryWithFileName(academicYear, semester, listClassName[i], "Schedule", "txt");
+
+			if (loadListCourses(courseFilePath, listCourses, countCourse))
+			{
+				for (int j = 0; j < countCourse; j++)
+					if (checkStudentOfCourse(academicYear, semester, listCourses[i], st))
+						tempCourse[count++] = listCourses[j];
+
+				delete[] listCourses;
+			}
+			else
+				break;
+		}
+
+		if (count != 0)
+		{
+			cout << "|" << setfill('-') << setw(77) << "-" << "|" << endl;
+			cout << setfill(' ');
+
+			cout << "| " << setw(4) << left << "No" << " | " << setw(12) << left << "Class name"
+				<< " | " << setw(35) << left << "Course name" << " | " << setw(15) << left << "Course ID" << " |" << endl;
+
+			cout << "|" << setfill('-') << setw(77) << "-" << "|" << endl;
+			cout << setfill(' ');
+
+			for (int i = 0; i < count; i++) {
+				cout << "| " << setw(4) << left << i + 1 << " | " << setw(12) << left << tempCourse[i].ClassName
+					<< " | " << setw(35) << left << tempCourse[i].courseName
+					<< " | " << setw(15) << left << tempCourse[i].courseId << " |" << endl;
+
+				cout << "|" << setfill('-') << setw(77) << "-" << "|" << endl;
+				cout << setfill(' ');
+			}
+
+			int choice = getChoice(1, count);
+			course = tempCourse[choice - 1];
+
+			res = true;
+		}
+
+		delete[] tempCourse;
+		delete[] listClassName;
+	}
+
+	return res;
 }
