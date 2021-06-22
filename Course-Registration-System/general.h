@@ -101,6 +101,7 @@ struct StudentCourseInformation
 };
 
 int getChoice(const int& minValue, const int& maxValue);
+string getInputPassword();
 
 bool isEqualString(void* str1, void* str2);
 string toString(const Date& dt, const char& delim = '-');

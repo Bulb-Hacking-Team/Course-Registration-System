@@ -159,7 +159,15 @@ bool saveStudentList(const string& filePath, Student* listStudents, const int& c
 	fout.close();
 	return true;
 }
+bool isEqualStudentId(void* st1, void* st2)
+{
+	Student* value1, * value2;
 
+	value1 = (Student*)st1;
+	value2 = (Student*)st2;
+
+	return (value1->id == value2->id);
+}
 void viewSchedule(const string& academicYear, const string& semester, const Student& st)
 {
 	cout << "|" << setfill('-') << setw(129) << "-" << "|" << endl;

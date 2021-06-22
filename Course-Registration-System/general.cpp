@@ -152,3 +152,20 @@ string toString(const Date& dt, const char& delim)
 
 	return to_string(dt.year) + delim + m + delim + d;
 }
+string getInputPassword() {
+	string password;
+	bool flag;
+
+	do {
+		flag = true;
+		getline(cin, password);
+
+		if (password.length() < 8 || password.length() > 40 || checkPassword(password) == false) {
+			cout << "Password lenght is invalid or contains spaces." << endl;
+			flag = false;
+			cout << "Enter again: ";
+		}
+	} while (!flag);
+
+	return password;
+}
