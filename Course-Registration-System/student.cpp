@@ -48,7 +48,65 @@ bool isEqualStudentIdFromCourse(void* val1, void* val2)
 
 	return (value1->st.id == value2->st.id);
 }
+void importStudentListFromCsv(const string& filePath)
+{
+	ifstream fin(filePath);
 
+	if (!fin.is_open())
+	{
+		cout << "Can not open file." << endl;
+		return;
+	}
+
+	Student* listStudents = new Student[MAX_SIZE];
+	int ignoreData, countStudent = 0;
+	string ignoreLine;
+
+	getline(fin, ignoreLine); // ignore the first line.
+
+	while (!fin.eof())
+	{
+		fin >> ignoreData;
+		fin.ignore();
+
+		loadStudentFromCsv(fin, listStudents[countStudent]);
+		createAccountStudent(listStudents[countStudent]);
+		countStudent++;
+	}
+
+	fin.close();
+
+	string filePathToSaveData = createClassDirectoryWithFileName(listStudents[0].ClassName);
+
+	if (saveStudentList(filePathToSaveData, listStudents, countStudent))
+		cout << "==> Import successfully!!" << endl;
+	else
+		cout << "==> Import failed." << endl;
+
+	delete[] listStudents;
+}
+void createAccountStudent(Student& st)
+{
+	st.info.acc.username = st.id;
+
+	for (const char& ch : st.dateOfBirth)
+		if (ch != '-')
+			st.info.acc.password += ch;
+}
+
+void loadStudentFromCsv(ifstream& fin, Student& st)
+{
+	string gender;
+
+	getline(fin, st.id, DELIMIT_CSV);
+	getline(fin, st.info.fullName, DELIMIT_CSV);
+	getline(fin, st.dateOfBirth, DELIMIT_CSV);
+	getline(fin, st.ClassName, DELIMIT_CSV);
+	getline(fin, gender);
+
+	st.info.gender = (gender == "Male") ? (MALE) : (FEMALE);
+	st.status = true;
+}
 Schedule* getScheduleOfStudent(const string& academicYear, const string& semester, const Student& st, int& count) {
 	string filename = PATH_DATA;
 	string* listClassName;

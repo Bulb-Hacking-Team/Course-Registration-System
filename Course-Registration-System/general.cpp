@@ -93,7 +93,18 @@ void* pushBackArray(void* arr, int& numOfElements, const int& sizeItem, void* va
 
 	return newArray;
 }
+void copyString(void* str1, void* str2) {
+	*(string*)str1 = *(string*)str2;
+}
+void* allocArrayString(const int& sz)
+{
+	string* arrString = nullptr;
 
+	if (sz > 0)
+		arrString = new string[sz];
+
+	return arrString;
+}
 void* resizeArray(void* arr, int& oldSize, const int& newSize, const int& sizeItem,
 	void* (*alloc)(const int&), void (*copyElement)(void*, void*), void (*release)(void*, const int&))
 {
@@ -151,6 +162,27 @@ string toString(const Date& dt, const char& delim)
 	d = (d.length() == 2) ? (d) : ("0" + d);
 
 	return to_string(dt.year) + delim + m + delim + d;
+}
+void releaseArrayString(void* arrString, const int& sz) {
+	if (arrString != nullptr)
+		delete[](string*)arrString;
+}
+bool saveListClassName(const string& filename, string* listClassName, const int& countClassName)
+{
+	ofstream fout(filename);
+
+	if (!fout.is_open())
+		return false;
+
+	if (countClassName > 1)
+		sortArray(listClassName, countClassName, sizeof(string), ascendingClassName);
+
+	fout << countClassName << endl;
+	for (int i = 0; i < countClassName; i++)
+		fout << listClassName[i] << endl;
+
+	fout.close();
+	return true;
 }
 string getInputPassword() {
 	string password;

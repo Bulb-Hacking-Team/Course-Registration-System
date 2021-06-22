@@ -445,8 +445,12 @@ void showMenuOfStudent(Student& st)
 
 void showMenuOfClass()
 {
+	int choice;
+
 	system("cls");
 
+	while (true)
+	{
 		cout << "|-------------------------------------------------|" << endl;
 		cout << "|                      CLASS                      |" << endl;
 		cout << "|-------------------------------------------------|" << endl;
@@ -464,8 +468,36 @@ void showMenuOfClass()
 		cout << "|-------------------------------------------------|" << endl;
 		cout << "| 6  | Return to previous menu                    |" << endl;
 		cout << "|-------------------------------------------------|" << endl;
-}
 
+		choice = getChoice(1, 6);
+
+		system("cls");
+
+		switch (choice)
+		{
+		case 1:
+			cin.ignore();
+			importClass();
+			break;
+		case 2:
+			
+			break;
+		case 3:
+			
+			break;
+		case 4:
+			
+			break;
+		case 5:
+			
+			break;
+		case 6:
+			return;
+		}
+		system("pause");
+		system("cls");
+	}
+}
 void showMenuOfStaff(Staff& staff)
 {
 	system("cls");

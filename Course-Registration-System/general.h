@@ -123,10 +123,15 @@ void* pushBackArray(void* arr, int& numOfElements, const int& sizeItem, void* va
 void* resizeArray(void* arr, int& oldSize, const int& newSize, const int& sizeItem,
 	void* (*alloc)(const int&), void (*copyElement)(void*, void*), void (*release)(void*, const int&));
 
+void copyString(void* str1, void* str2);
+void releaseArrayString(void* arrString, const int& sz);
+bool saveListClassName(const string& filename, string* listClassName, const int& countClassName);
 
 bool saveStudentList(const string& filePath, Student* listStudents, const int& countStudent);
 void sortArray(void* arr, const int& n, const int& sizeItem, bool (*cmp)(void*, void*));
-
+bool checkElementInArray(void* arr, const int& numOfElements, const int& sizeItem,
+	void* key, bool (*cmp)(void*, void*));
 void showListCourses(Course* listCourses, const int& countCourse, const string& ClassName);
 void viewScoreboardOfStudent(const Student& st, const Scoreboard& score);
+void* allocArrayString(const int& sz);
 

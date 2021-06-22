@@ -25,6 +25,58 @@ bool isEqualAcademicYears(void* year1, void* year2)
 {
 	return isEqualString(year1, year2);
 }
+bool checkElementInArray(void* arr, const int& numOfElements, const int& sizeItem,
+	void* key, bool (*cmp)(void*, void*))
+{
+	if (arr == nullptr)
+		return false;
+
+	int index = findValue(arr, numOfElements, sizeItem, key, cmp);
+	return (index != NOT_FOUND);
+}
+bool addClassName(string ClassName)
+{
+	string filePath = PATH_DATA;
+	string* listClassName = nullptr;
+	int countClassName = 0;
+	bool flag = true;
+
+	filePath += "Class.txt";
+
+	if (loadListClassName(filePath, listClassName, countClassName))
+	{
+		if (!checkElementInArray(listClassName, countClassName, sizeof(string), &ClassName, isEqualString))
+		{
+			listClassName = (string*)pushBackArray(listClassName, countClassName, sizeof(string),
+				&ClassName, allocArrayString, copyString, releaseArrayString);
+
+			flag = saveListClassName(filePath, listClassName, countClassName);
+		}
+		else flag = false;
+
+		delete[] listClassName;
+	}
+	else flag = false;
+
+	return flag;
+}
+void importClass()
+{
+	string ClassName, filePath;
+
+	cout << "==> Enter class: ";
+	getline(cin, ClassName);
+	if (!addClassName(ClassName))
+	{
+		cout << "Add class name failed or this class already exists." << endl;
+		return;
+	}
+
+	cout << "==> Path of the csv file: ";
+	getline(cin, filePath);
+
+	importStudentListFromCsv(filePath);
+}
 bool loadAcademicYearsAndSemester(const string& filePath, string*& listAcademicYears, string*& listSemesters, int& countAcademicYears)
 {
 	ifstream fin(filePath);
