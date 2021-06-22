@@ -442,32 +442,91 @@ void showMenuOfStudent(Student& st)
 		system("pause");
 	}
 }
+
+void showMenuOfClass()
+{
+	system("cls");
+
+		cout << "|-------------------------------------------------|" << endl;
+		cout << "|                      CLASS                      |" << endl;
+		cout << "|-------------------------------------------------|" << endl;
+		cout << "| No |                   Option                   |" << endl;
+		cout << "|-------------------------------------------------|" << endl;
+		cout << "| 1  | Import students of a class from a csv file |" << endl;
+		cout << "|-------------------------------------------------|" << endl;
+		cout << "| 2  | Add a new student to a class               |" << endl;
+		cout << "|-------------------------------------------------|" << endl;
+		cout << "| 3  | Create Class                               |" << endl;
+		cout << "|-------------------------------------------------|" << endl;
+		cout << "| 4  | View list of students in a class           |" << endl;
+		cout << "|-------------------------------------------------|" << endl;
+		cout << "| 5  | View list of classes                       |" << endl;
+		cout << "|-------------------------------------------------|" << endl;
+		cout << "| 6  | Return to previous menu                    |" << endl;
+		cout << "|-------------------------------------------------|" << endl;
+}
+
 void showMenuOfStaff(Staff& staff)
 {
 	system("cls");
-	cout << "|------------------------------------------------|" << endl;
-	cout << "|                     STAFF                      |" << endl;
-	cout << "|------------------------------------------------|" << endl;
-	cout << "| No |      Option                               |" << endl;
-	cout << "|------------------------------------------------|" << endl;
-	cout << "| 1  | Class                                     |" << endl;
-	cout << "|------------------------------------------------|" << endl;
-	cout << "| 2  | Create academic year and semester         |" << endl;
-	cout << "|------------------------------------------------|" << endl;
-	cout << "| 3  | Enter existing academic year and semester |" << endl;
-	cout << "|------------------------------------------------|" << endl;
-	cout << "| 4  | Scoreboards                               |" << endl;
-	cout << "|------------------------------------------------|" << endl;
-	cout << "| 5  | Attendance list                           |" << endl;
-	cout << "|------------------------------------------------|" << endl;
-	cout << "| 6  | For input of lecturer                     |" << endl;
-	cout << "|------------------------------------------------|" << endl;
-	cout << "| 7  | View profile info                         |" << endl;
-	cout << "|------------------------------------------------|" << endl;
-	cout << "| 8  | Change password                           |" << endl;
-	cout << "|------------------------------------------------|" << endl;
-	cout << "| 9  | Log out                                   |" << endl;
-	cout << "|------------------------------------------------|" << endl;
 
+
+	int choice, countStaff = 0, idx;
+	
+	while (true)
+	{
+		system("cls");
+		cout << "|------------------------------------------------|" << endl;
+		cout << "|                     STAFF                      |" << endl;
+		cout << "|------------------------------------------------|" << endl;
+		cout << "| No |      Option                               |" << endl;
+		cout << "|------------------------------------------------|" << endl;
+		cout << "| 1  | Class                                     |" << endl;
+		cout << "|------------------------------------------------|" << endl;
+		cout << "| 2  | Create academic year and semester         |" << endl;
+		cout << "|------------------------------------------------|" << endl;
+		cout << "| 3  | Enter existing academic year and semester |" << endl;
+		cout << "|------------------------------------------------|" << endl;
+		cout << "| 4  | Scoreboards                               |" << endl;
+		cout << "|------------------------------------------------|" << endl;
+		cout << "| 5  | Attendance list                           |" << endl;
+		cout << "|------------------------------------------------|" << endl;
+		cout << "| 6  | For input of lecturer                     |" << endl;
+		cout << "|------------------------------------------------|" << endl;
+		cout << "| 7  | View profile info                         |" << endl;
+		cout << "|------------------------------------------------|" << endl;
+		cout << "| 8  | Change password                           |" << endl;
+		cout << "|------------------------------------------------|" << endl;
+		cout << "| 9  | Log out                                   |" << endl;
+		cout << "|------------------------------------------------|" << endl;
+
+		choice = getChoice(1, 9);
+
+		system("cls");
+
+		switch (choice)
+		{
+		case 1:
+			showMenuOfClass();
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		case 4:
+			break;
+		case 5:
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			break;
+		case 9:
+			showMenu();
+			return;
+		}
+	}
 }
 

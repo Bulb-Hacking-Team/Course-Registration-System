@@ -19,4 +19,5 @@ void changePassword(Account& acc);
 void viewSchedule2(const string& academicYear, const string& semester, const Student& st);
 void viewGeneralInfo(GeneralInformation info);
 void viewStudentInfo(Student st);
+void showMenuOfClass();
 
