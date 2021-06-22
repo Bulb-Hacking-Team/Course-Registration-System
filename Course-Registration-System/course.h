@@ -18,5 +18,3 @@ bool saveListCourses(const string& filePath, Course* listCourses, const int& cou
 void saveCourse(ofstream& fout, Course& course);
 
 bool isEqualCourseId(void* val1, void* val2);
-
-#endif
