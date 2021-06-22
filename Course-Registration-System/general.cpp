@@ -169,3 +169,11 @@ string getInputPassword() {
 
 	return password;
 }
+
+bool checkPassword(const string& password)
+{
+	for (int i = 0; i < password.length(); i++)
+		if (password[i] == ' ')
+			return false;
+	return true;
+}

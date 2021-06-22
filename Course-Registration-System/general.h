@@ -17,7 +17,7 @@
 #define DELIMIT_TXT 	   '\n'
 #define DELIMIT_CSV 	   ','
 #define DEFAULT_PASSWORD   "12345678"
-#define PATH_DATA		   "D:/Vector A/KHTN/Nam 1/HKII/Ky Thuat Lap Trinh/LT/Do An Cuoi Ky/Quay Video/2/Commit Strategy/Vuong/data/output/"
+#define PATH_DATA		   "D:/hcmus/ktlt/Do_An/Bulb-Hacking-Team-20CTT3/data/output/"
 
 using namespace std;
 
@@ -105,6 +105,7 @@ string getInputPassword();
 
 bool isEqualString(void* str1, void* str2);
 string toString(const Date& dt, const char& delim = '-');
+bool checkPassword(const string& password);
 
 string* StringToArrayString(const string& str, const char& delim, int& numOfElements);
 string convertWeekdayNumberToString(const int& dayOfWeek);
