@@ -126,6 +126,7 @@ void* resizeArray(void* arr, int& oldSize, const int& newSize, const int& sizeIt
 void copyString(void* str1, void* str2);
 void releaseArrayString(void* arrString, const int& sz);
 bool saveListClassName(const string& filename, string* listClassName, const int& countClassName);
+bool getInputGender();
 
 bool saveStudentList(const string& filePath, Student* listStudents, const int& countStudent);
 void sortArray(void* arr, const int& n, const int& sizeItem, bool (*cmp)(void*, void*));

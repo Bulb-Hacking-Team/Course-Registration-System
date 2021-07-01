@@ -480,7 +480,7 @@ void showMenuOfClass()
 			importClass();
 			break;
 		case 2:
-			
+			addNewStudent();
 			break;
 		case 3:
 			

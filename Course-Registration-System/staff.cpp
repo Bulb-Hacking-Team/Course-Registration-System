@@ -77,6 +77,50 @@ void importClass()
 
 	importStudentListFromCsv(filePath);
 }
+void addNewStudent()
+{
+	string filePathStudent, ClassName;
+	Student* listStudents = nullptr, newStudent;
+	int countStudent(0);
+
+	ClassName = getInputClassName();
+	filePathStudent = createClassDirectoryWithFileName(ClassName);
+
+	if (!loadStudentList(filePathStudent, listStudents, countStudent))
+	{
+		cout << "Can not open student file." << endl;
+		return;
+	}
+
+	cin.ignore();
+	cout << "Enter new student's information: " << endl;
+	cout << "ID: ";
+	getline(cin, newStudent.id);
+	cout << "Full name: ";
+	getline(cin, newStudent.info.fullName);
+	cout << "Date of birth (yyyy-mm-dd): ";
+	getline(cin, newStudent.dateOfBirth);
+	cout << "Gender (Male or Female): ";
+	newStudent.info.gender = getInputGender();
+
+	newStudent.status = true;
+	newStudent.ClassName = ClassName;
+	createAccountStudent(newStudent);
+
+	if (!checkStudent(newStudent)) {
+		listStudents = (Student*)pushBackArray(listStudents, countStudent, sizeof(Student),
+			&newStudent, allocListStudents, copyStudent, releaseListStudents);
+
+		if (saveStudentList(filePathStudent, listStudents, countStudent))
+			cout << "Add new student successfully." << endl;
+		else
+			cout << "Can not open student file." << endl;
+	}
+	else
+		cout << "This student is already on the list." << endl;
+
+	delete[] listStudents;
+}
 bool loadAcademicYearsAndSemester(const string& filePath, string*& listAcademicYears, string*& listSemesters, int& countAcademicYears)
 {
 	ifstream fin(filePath);

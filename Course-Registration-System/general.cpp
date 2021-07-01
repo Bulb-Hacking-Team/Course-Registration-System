@@ -167,6 +167,30 @@ void releaseArrayString(void* arrString, const int& sz) {
 	if (arrString != nullptr)
 		delete[](string*)arrString;
 }
+bool getInputGender()
+{
+	bool gen = FEMALE, flag;
+	string s;
+
+	do
+	{
+		flag = true;
+
+		getline(cin, s);
+		for (int i = 0; i < s.length(); i++)
+			s[i] = tolower(s[i]);
+
+		if (s != "male" && s != "female") {
+			flag = false;
+			cout << "Invalid!!. Please enter again." << endl;
+		}
+	} while (!flag);
+
+	if (s == "male")
+		gen = MALE;
+
+	return gen;
+}
 bool saveListClassName(const string& filename, string* listClassName, const int& countClassName)
 {
 	ofstream fout(filename);

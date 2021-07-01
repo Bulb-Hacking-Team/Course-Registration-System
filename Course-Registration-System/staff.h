@@ -10,3 +10,4 @@ void removeCourse(const string& academicYear, const string& semester);
 
 void importClass();
 bool addClassName(string ClassName);
+void addNewStudent();

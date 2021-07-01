@@ -385,3 +385,35 @@ bool getInputCourseOfStudent(const string& academicYear, const string& semester,
 
 	return res;
 }
+bool checkStudent(Student st)
+{
+	string classPath, * className, listClassPath = "";
+	Student* studentList = nullptr;
+	int countStudent = 0, number_of_classes;
+	bool flag = false;
+
+	listClassPath = PATH_DATA;
+	listClassPath += "Class.txt";
+	if (loadListClassName(listClassPath, className, number_of_classes))
+	{
+		for (int i = 0; i < number_of_classes; i++)
+		{
+			classPath = createClassDirectoryWithFileName(className[i]);
+
+			if (loadStudentList(classPath, studentList, countStudent))
+			{
+				if (checkElementInArray(studentList, countStudent, sizeof(Student), &st, isEqualStudentId))
+					flag = true;
+
+				delete[] studentList;
+			}
+
+			if (flag)
+				break;
+		}
+
+		delete[] className;
+	}
+
+	return flag;
+}

@@ -17,6 +17,7 @@ bool isEqualStudentId(void* st1, void* st2);
 void importStudentListFromCsv(const string& filePath);
 void loadStudentFromCsv(ifstream& fin, Student& st);
 void createAccountStudent(Student& st);
+bool checkStudent(Student st);
 
 bool checkStudentOfCourse(const string& academicYear, const string& semester, const Course& c, const Student& st);
 void viewScores(const string& academicYear, const string& semester, const Student& st);
