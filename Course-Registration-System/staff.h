@@ -7,6 +7,7 @@ bool loadAcademicYearsAndSemester(const string& filePath, string*& listAcademicY
 void viewAcademicYearsAndSemester();
 
 void removeCourse(const string& academicYear, const string& semester);
+void viewClassList();
 
 void importClass();
 bool addClassName(string ClassName);

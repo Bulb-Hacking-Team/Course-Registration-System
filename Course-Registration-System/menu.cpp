@@ -489,7 +489,7 @@ void showMenuOfClass()
 			viewStudentsOfClass();
 			break;
 		case 5:
-			
+			viewClassList();
 			break;
 		case 6:
 			return;

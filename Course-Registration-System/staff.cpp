@@ -92,7 +92,23 @@ void importClass()
 
 	importStudentListFromCsv(filePath);
 }
+void viewClassList()
+{
+	string* listClassName = nullptr;
+	string filePath = PATH_DATA;
+	int countClassName = 0;
 
+	filePath += "Class.txt";
+
+	if (!loadListClassName(filePath, listClassName, countClassName))
+	{
+		cout << "Can not open class file." << endl;
+		return;
+	}
+
+	showListClassName(listClassName, countClassName);
+	delete[] listClassName;
+}
 void createClass() {
 	ifstream f;
 	string s = PATH_DATA;
