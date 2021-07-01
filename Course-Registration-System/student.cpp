@@ -107,6 +107,42 @@ void loadStudentFromCsv(ifstream& fin, Student& st)
 	st.info.gender = (gender == "Male") ? (MALE) : (FEMALE);
 	st.status = true;
 }
+
+void viewStudent(const Student& st)
+{
+
+	cout << "| " << setw(12) << left << st.id << " | " << setw(35) << left << st.info.fullName
+		<< " | " << setw(10) << left << ((st.info.gender == MALE) ? ("MALE") : ("FEMALE"))
+		<< " | " << setw(15) << left << st.dateOfBirth
+		<< " | " << setw(12) << left << st.ClassName << " |" << endl;
+}
+
+void viewStudentList(Student* listStudents, const int& countStudent)
+{
+	cout << "|" << setfill('-') << setw(105) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	cout << "| " << setw(4) << left << "No" << " | " << setw(12) << left << "ID"
+		<< " | " << setw(35) << left << "Full name"
+		<< " | " << setw(10) << left << "Gender"
+		<< " | " << setw(15) << left << "Date Of Birth"
+		<< " | " << setw(12) << left << "ClassName" << " |" << endl;
+
+	cout << "|" << setfill('-') << setw(105) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	for (int i = 0; i < countStudent; i++)
+	{
+		cout << "| " << setw(4) << left << i + 1 << " ";
+		viewStudent(listStudents[i]);
+
+		cout << "|" << setfill('-') << setw(105) << "-" << "|" << endl;
+		cout << setfill(' ');
+	}
+
+}
+
+
 Schedule* getScheduleOfStudent(const string& academicYear, const string& semester, const Student& st, int& count) {
 	string filename = PATH_DATA;
 	string* listClassName;

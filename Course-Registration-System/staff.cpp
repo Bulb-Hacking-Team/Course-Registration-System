@@ -34,6 +34,21 @@ bool checkElementInArray(void* arr, const int& numOfElements, const int& sizeIte
 	int index = findValue(arr, numOfElements, sizeItem, key, cmp);
 	return (index != NOT_FOUND);
 }
+
+void viewStudentsOfClass()
+{
+	string filePath = PATH_DATA, ClassName;
+	Student* listStudents = nullptr;
+	int countStudent = 0;
+
+	ClassName = getInputClassName();
+	filePath = createClassDirectoryWithFileName(ClassName);
+	loadStudentList(filePath, listStudents, countStudent);
+	viewStudentList(listStudents, countStudent);
+
+	delete[] listStudents;
+}
+
 bool addClassName(string ClassName)
 {
 	string filePath = PATH_DATA;

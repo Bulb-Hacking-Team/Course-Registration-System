@@ -486,7 +486,7 @@ void showMenuOfClass()
 			createClass();
 			break;
 		case 4:
-			
+			viewStudentsOfClass();
 			break;
 		case 5:
 			

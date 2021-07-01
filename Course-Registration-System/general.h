@@ -137,4 +137,5 @@ bool checkElementInArray(void* arr, const int& numOfElements, const int& sizeIte
 void showListCourses(Course* listCourses, const int& countCourse, const string& ClassName);
 void viewScoreboardOfStudent(const Student& st, const Scoreboard& score);
 void* allocArrayString(const int& sz);
+void viewStudent(const Student& st);
 
