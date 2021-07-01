@@ -77,6 +77,39 @@ void importClass()
 
 	importStudentListFromCsv(filePath);
 }
+
+void createClass() {
+	ifstream f;
+	string s = PATH_DATA;
+	s += "Class.txt";
+	f.open(s, ios::in);
+	int countClass;
+	int n;
+	cout << "\nHOW MANY: ";
+	cin >> n;
+	f >> countClass;
+	string* ClassRoom = new string[countClass + n];
+	for (int i = 0; i < countClass; i++) {
+		f >> ClassRoom[i];
+	}
+	f.close();
+
+	cin.ignore();
+	for (int i = 0; i < n; i++) {
+		string NameClass;
+		cout << "\nClass[" << i + 1 << "]: ";
+		getline(cin, ClassRoom[countClass++]);
+	}
+	ofstream fout;
+	fout.open(s, ios::out);
+	fout << countClass << endl;
+	for (int i = 0; i < countClass; i++) {
+		fout << ClassRoom[i] << endl;
+	}
+	fout.close();
+
+}
+
 void addNewStudent()
 {
 	string filePathStudent, ClassName;

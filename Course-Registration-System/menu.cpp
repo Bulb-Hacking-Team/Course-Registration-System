@@ -483,7 +483,7 @@ void showMenuOfClass()
 			addNewStudent();
 			break;
 		case 3:
-			
+			createClass();
 			break;
 		case 4:
 			
