@@ -130,6 +130,8 @@ bool getInputGender();
 
 bool saveStudentList(const string& filePath, Student* listStudents, const int& countStudent);
 void sortArray(void* arr, const int& n, const int& sizeItem, bool (*cmp)(void*, void*));
+bool ascendingClassName(void* ClassName1, void* ClassName2);
+
 bool checkElementInArray(void* arr, const int& numOfElements, const int& sizeItem,
 	void* key, bool (*cmp)(void*, void*));
 void showListCourses(Course* listCourses, const int& countCourse, const string& ClassName);

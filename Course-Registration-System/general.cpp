@@ -191,6 +191,12 @@ bool getInputGender()
 
 	return gen;
 }
+
+bool ascendingClassName(void* ClassName1, void* ClassName2)
+{
+	return (*(string*)ClassName1 > * (string*)ClassName2);
+}
+
 bool saveListClassName(const string& filename, string* listClassName, const int& countClassName)
 {
 	ofstream fout(filename);
