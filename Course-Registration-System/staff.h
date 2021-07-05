@@ -20,5 +20,13 @@ bool addClassName(string ClassName);
 void addNewStudent();
 void createClass();
 void viewStudentsOfClass();
+
 void editCourseID(Course& course, const string academicYear, const string semester);
+void editCourseName(Course& course);
+void editCourseLecturer(Course& course);
+void editDate(Course& course);
+void editDayOfWeek(Course& course);
+void editTime(Course& course);
+void editRoom(Course& course);
+void editAnExistingCourse(const string& academicYear, const string& semester);
 
