@@ -187,6 +187,31 @@ bool saveListCourses(const string& filePath, Course* listCourses, const int& cou
 	fout.close();
 	return true;
 }
+
+void showListScoreboardsOfCourse(StudentCourseInformation*& listInfo, const int& countStudent)
+{
+	cout << "|" << setfill('-') << setw(112) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	cout << "| " << setw(5) << left << " No"
+		<< " | " << setw(12) << left << "Student ID" << " | " << setw(35) << left << "Full name"
+		<< " | " << setw(10) << left << "  Midterm" << " | " << setw(10) << left << "  Final"
+		<< " | " << setw(10) << left << "  Bonus" << " | " << setw(10) << left << "  Total" << " |" << endl;
+
+	cout << "|" << setfill('-') << setw(112) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	for (int i = 0; i < countStudent; i++)
+	{
+		cout << "| " << setw(3) << right << i + 1 << "  ";
+		viewScoreboardOfStudent(listInfo[i].st, listInfo[i].scoreList);
+
+		cout << "|" << setfill('-') << setw(112) << "-" << "|" << endl;
+		cout << setfill(' ');
+	}
+}
+
+
 void saveCourse(ofstream& fout, Course& course)
 {
 	Lecturer& lec = course.lecturer;
