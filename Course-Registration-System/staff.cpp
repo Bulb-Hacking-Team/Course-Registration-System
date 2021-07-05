@@ -68,6 +68,40 @@ bool addAcademicYearsAndSemester(string& academicYears, string& semester)
 
 	return result;
 }
+void editCourseID(Course& course, const string academicYear, const string semester)
+{
+	int check;
+
+	cout << "\nCurrent course ID: " << course.courseId << endl;
+	cout << "==> Do you want to edit this course's ID? (Yes: 1, No: 0)" << endl;
+	check = getChoice(0, 1);
+
+	if (check)
+	{
+		string newID;
+
+		cout << "\nEnter new course ID: ";
+		cin.ignore();
+		newID = getInputCourseID();
+
+		string currentFilePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, course.courseId, "txt");
+		string newFilePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, newID, "txt");
+		StudentCourseInformation* listInfo = nullptr;
+		int countStudent = 0;
+
+		if (currentFilePath != newFilePath) {
+			if (loadStudentCourseInformationList(currentFilePath, listInfo, countStudent))
+			{
+				if (saveStudentCourseInformationList(newFilePath, listInfo, countStudent))
+					course.courseId = newID;
+				else
+					cout << "Can't open student file." << endl;
+			}
+			else
+				cout << "Can't open student file." << endl;
+		}
+	}
+}
 bool saveAcademicYearsAndSemester(const string& filePath, string* listAcademicYears, string* listSemesters, const int& countAcademicYears)
 {
 	ofstream fout(filePath);
