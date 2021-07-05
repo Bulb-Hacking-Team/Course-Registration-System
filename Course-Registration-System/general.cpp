@@ -58,6 +58,23 @@ int findValue(void* arr, const int& n, const int& sizeItem, void* key, bool (*cm
 
 	return NOT_FOUND;
 }
+
+bool isLeapYear(const int& year)
+{
+	return ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0));
+}
+
+
+int getDayInMonth(const int& year, const int& month)
+{
+	int dayInMonth[] = { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+	if (isLeapYear(year))
+		dayInMonth[1] = 29;
+
+	return dayInMonth[month - 1];
+}
+
 string convertWeekdayNumberToString(const int& dayOfWeek)
 {
 	switch (dayOfWeek)
