@@ -116,6 +116,9 @@ void releaseStudentCourseInformation(StudentCourseInformation*& listInfo, const 
 
 string getInputClassName();
 void showListClassName(string*& listClassName, const int& countClassName);
+int findValue_AcademicYear(string* listAcademicYear, int countAY, string academicYear);
+bool ascendingString(void* str1, void* str2);
+string ArrayStringToString(string*& arrString, const int& numOfElements, const char& delim);
 
 void* pushBackArray(void* arr, int& numOfElements, const int& sizeItem, void* val,
 	void* (*alloc)(const int&), void (*copyElement)(void*, void*), void (*release)(void*, const int&));

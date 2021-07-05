@@ -21,9 +21,105 @@ bool loadListClassName(const string& filename, string*& listClassName, int& coun
 	fin.close();
 	return true;
 }
+
+bool ascendingSemester(void* semester1, void* semester2)
+{
+	return ascendingString(semester1, semester2);
+}
+
 bool isEqualAcademicYears(void* year1, void* year2)
 {
 	return isEqualString(year1, year2);
+}
+bool addAcademicYearsAndSemester(string& academicYears, string& semester)
+{
+	string* listAcademicYears = nullptr, * listSemesters = nullptr;
+	string filePath = PATH_DATA;
+	int countAcademicYears = 0;
+	bool result = false;
+
+	filePath += "SchoolYear.txt";
+	if (loadAcademicYearsAndSemester(filePath, listAcademicYears, listSemesters, countAcademicYears))
+	{
+		int idx = findValue_AcademicYear(listAcademicYears, countAcademicYears, academicYears);
+		if (idx == NOT_FOUND)
+		{
+			int count = countAcademicYears;
+
+			listAcademicYears = (string*)pushBackArray(listAcademicYears, countAcademicYears, sizeof(string),
+				&academicYears, allocArrayString, copyString, releaseArrayString);
+
+			listSemesters = (string*)pushBackArray(listSemesters, count, sizeof(string), &semester,
+				allocArrayString, copyString, releaseArrayString);
+
+			result = true;
+		}
+		else if (listSemesters[idx].find(semester) == string::npos)
+		{
+			listSemesters[idx] += "," + semester;
+			result = true;
+		}
+
+		saveAcademicYearsAndSemester(filePath, listAcademicYears, listSemesters, countAcademicYears);
+
+		delete[] listSemesters;
+		delete[] listAcademicYears;
+	}
+
+	return result;
+}
+bool saveAcademicYearsAndSemester(const string& filePath, string* listAcademicYears, string* listSemesters, const int& countAcademicYears)
+{
+	ofstream fout(filePath);
+
+	if (!fout.is_open())
+		return false;
+
+	for (int i = 0; i < countAcademicYears - 1; i++)
+		for (int j = i + 1; j < countAcademicYears; j++)
+			if (listAcademicYears[i] > listAcademicYears[j])
+			{
+				swap(listAcademicYears[i], listAcademicYears[j]);
+				swap(listSemesters[i], listSemesters[j]);
+			}
+
+	for (int i = 0; i < countAcademicYears; i++)
+	{
+		int n;
+
+		string* temp = StringToArrayString(listSemesters[i], ',', n);
+		sortArray(temp, n, sizeof(string), ascendingSemester);
+		listSemesters[i] = ArrayStringToString(temp, n, ',');
+
+		delete[] temp;
+	}
+
+	fout << countAcademicYears << endl;
+	for (int i = 0; i < countAcademicYears; i++)
+	{
+		fout << listAcademicYears[i] << endl;
+		fout << listSemesters[i] << endl;
+	}
+
+	fout.close();
+	return true;
+}
+void createAcademicYearsAndSemester()
+{
+	string academicYears, semester;
+
+	cout << "Enter academic years: ";
+	getline(cin, academicYears);
+
+	cout << "Enter semester: ";
+	getline(cin, semester);
+
+	if (addAcademicYearsAndSemester(academicYears, semester))
+		cout << "Successful." << endl;
+	else
+		cout << "Failed (This school year already exists)." << endl;
+
+	system("pause");
 }
 bool checkElementInArray(void* arr, const int& numOfElements, const int& sizeItem,
 	void* key, bool (*cmp)(void*, void*))

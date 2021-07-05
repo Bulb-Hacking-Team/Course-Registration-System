@@ -9,6 +9,7 @@ void showMenuOfStaff(Staff& staff);
 
 void loadStaff(ifstream& fin, Staff& s);
 bool loadListStaffs(const string& filePath, Staff*& listStaffs, int& countStaff);
+void showMenuOfCourse(const string& academicYear, const string& semester);
 
 void loadStudentFromTxt(ifstream& fin, Student& st);
 bool checkStudentForLogin(Student& st);

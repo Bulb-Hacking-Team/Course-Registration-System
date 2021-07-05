@@ -498,12 +498,74 @@ void showMenuOfClass()
 		system("cls");
 	}
 }
+void showMenuOfCourse(const string& academicYear, const string& semester)
+{
+	int choice;
+
+	while (true)
+	{
+		system("cls");
+
+		cout << "|-------------------------------------------------------------------|" << endl;
+		cout << "|                               COURSE                              |" << endl;
+		cout << "|-------------------------------------------------------------------|" << endl;
+		cout << "| No |                          Option                              |" << endl;
+		cout << "|-------------------------------------------------------------------|" << endl;
+		cout << "| 1  | Create / view academic years, and semesters                  |" << endl;
+		cout << "|-------------------------------------------------------------------|" << endl;
+		cout << "| 2  | Add a new course                                             |" << endl;
+		cout << "|-------------------------------------------------------------------|" << endl;
+		cout << "| 3  | Update course                                                |" << endl;
+		cout << "|-------------------------------------------------------------------|" << endl;
+		cout << "| 4  | Remove a course                                              |" << endl;
+		cout << "|-------------------------------------------------------------------|" << endl;
+		cout << "| 5  | View list of courses in the current semester                 |" << endl;
+		cout << "|-------------------------------------------------------------------|" << endl;
+		cout << "| 6  | View list of students of a course                            |" << endl;
+		cout << "|-------------------------------------------------------------------|" << endl;
+		cout << "| 7  | Return to previous menu                                      |" << endl;
+		cout << "|-------------------------------------------------------------------|" << endl;
+
+		choice = getChoice(1, 8);
+
+		system("cls");
+
+		switch (choice)
+		{
+		case 1:
+			
+			break;
+		case 2:
+			
+			break;
+		case 3:
+			
+			break;
+		case 4:
+			
+			break;
+		case 5:
+			
+			break;
+		case 6:
+			
+			break;
+		case 7:
+			return;
+		}
+
+		system("pause");
+	}
+}
 void showMenuOfStaff(Staff& staff)
 {
 	system("cls");
-
-
+	Lecturer lec;
+	string academicYear, semester, filePath = PATH_DATA;
+	Staff* listStaffs = nullptr;
 	int choice, countStaff = 0, idx;
+
+	filePath += "Staff.txt";
 	
 	while (true)
 	{
@@ -542,6 +604,9 @@ void showMenuOfStaff(Staff& staff)
 			showMenuOfClass();
 			break;
 		case 2:
+			cin.ignore();
+			createAcademicYearsAndSemester();
+			showMenuOfCourse(academicYear, semester);
 			break;
 		case 3:
 			break;

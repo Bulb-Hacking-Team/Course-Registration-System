@@ -10,6 +10,12 @@ void removeCourse(const string& academicYear, const string& semester);
 void viewClassList();
 
 void importClass();
+bool ascendingSemester(void* semester1, void* semester2);
+
+void createAcademicYearsAndSemester();
+bool addAcademicYearsAndSemester(string& academicYears, string& semester);
+bool saveAcademicYearsAndSemester(const string& filePath, string* listAcademicYears, string* listSemesters,
+	const int& countAcademicYears);
 bool addClassName(string ClassName);
 void addNewStudent();
 void createClass();

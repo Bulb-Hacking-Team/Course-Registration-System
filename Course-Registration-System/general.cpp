@@ -31,7 +31,20 @@ string* StringToArrayString(const string& str, const char& delim, int& numOfElem
 	delete[] temp;
 	return arrString;
 }
-
+bool ascendingString(void* str1, void* str2)
+{
+	return (*(string*)str1 > *(string*)str2);
+}
+int findValue_AcademicYear(string* listAcademicYear, int countAY, string academicYear) {
+	for (int i = 0; i < countAY; i++)
+	{
+		if (listAcademicYear[i] == academicYear)
+		{
+			return i;
+		}
+	}
+	return NOT_FOUND;
+}
 int findValue(void* arr, const int& n, const int& sizeItem, void* key, bool (*cmp)(void*, void*))
 {
 	if (arr != nullptr)
@@ -166,6 +179,15 @@ string toString(const Date& dt, const char& delim)
 void releaseArrayString(void* arrString, const int& sz) {
 	if (arrString != nullptr)
 		delete[](string*)arrString;
+}
+string ArrayStringToString(string*& arrString, const int& numOfElements, const char& delim)
+{
+	string str = "";
+	for (int i = 0; i < numOfElements; i++)
+		str += arrString[i] + delim;
+
+	str.pop_back();
+	return str;
 }
 bool getInputGender()
 {
