@@ -188,6 +188,22 @@ bool saveListCourses(const string& filePath, Course* listCourses, const int& cou
 	return true;
 }
 
+void showAttendaceListOfCourse(StudentCourseInformation*& listInfo, const int& countStudent) {
+	int len = 59 + (15 * listInfo[0].attendList.countDate);
+	string status;
+
+	cout << "| " << setw(4) << left << "No" << " | " << setw(12) << "Student ID"
+		<< " | " << setw(35) << "Full name" << endl;
+
+	for (int i = 0; i < countStudent; i++)
+	{
+		cout << "| " << setw(4) << left << i + 1
+			<< " | " << setw(12) << left << listInfo[i].st.id
+			<< " | " << setw(35) << left << listInfo[i].st.info.fullName << endl;
+	}
+}
+
+
 void showListScoreboardsOfCourse(StudentCourseInformation*& listInfo, const int& countStudent)
 {
 	cout << "|" << setfill('-') << setw(112) << "-" << "|" << endl;
