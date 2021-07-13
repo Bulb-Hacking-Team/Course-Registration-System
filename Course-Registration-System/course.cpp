@@ -258,3 +258,35 @@ void viewScoreboardOfStudent(const Student& st, const Scoreboard& score)
 		<< "     | " << setw(6) << right << score.bonus << "     | " << setw(6) << right << score.total
 		<< "     |" << endl;
 }
+
+bool saveStudentCourseInformationList(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent)
+{
+	ofstream fout(filePath);
+	int  nStudent = 0;
+
+	if (!fout.is_open())
+		return false;
+
+	for (int i = 0; i < countStudent; i++)
+		if (listInfo[i].status)
+			nStudent++;
+
+	fout << nStudent << endl;
+	fout << listInfo[0].attendList.countDate << endl;
+
+	sortArray(listInfo, countStudent, sizeof(StudentCourseInformation), ascendingStudentIdOfCourse);
+
+	for (int i = 0; i < countStudent; i++)
+	{
+		if (listInfo[i].status)
+		{
+			fout << listInfo[i].st.id << endl << listInfo[i].st.info.fullName << endl << listInfo[i].st.ClassName << endl;
+			saveScoreboard(fout, listInfo[i].scoreList);
+			//saveAttendanceList(fout, listInfo[i].attendList);
+			fout << listInfo[i].status << endl;
+		}
+	}
+
+	fout.close();
+	return true;
+}
