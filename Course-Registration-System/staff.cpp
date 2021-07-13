@@ -342,6 +342,35 @@ bool saveAcademicYearsAndSemester(const string& filePath, string* listAcademicYe
 	fout.close();
 	return true;
 }
+void ExportScoreboardToCsv(const string& academicYear, const string& semester)
+{
+	string ClassName, filePath, destFilePath(PATH_DATA);
+	Course course, * listCourses = nullptr;
+	StudentCourseInformation* listInfo = nullptr;
+	int countStudent = 0, countCourse = 0;
+
+	if (getInputCourseFromSemester(academicYear, semester, ClassName, course, listCourses, countCourse))
+	{
+		delete[] listCourses;
+
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, course.courseId, "txt");
+
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			destFilePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName,
+				course.courseId + "-Scoreboard", "csv");
+
+			if (saveListScoreboardsToCsv(destFilePath, listInfo, countStudent))
+				cout << "Export successfully" << endl;
+			else
+				cout << "Export failed" << endl;
+
+			releaseStudentCourseInformation(listInfo, countStudent);
+		}
+		else
+			cout << "Can not open course file" << endl;
+	}
+}
 void createAcademicYearsAndSemester()
 {
 	string academicYears, semester;
