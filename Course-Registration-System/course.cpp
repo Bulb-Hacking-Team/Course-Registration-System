@@ -259,6 +259,22 @@ void viewScoreboardOfStudent(const Student& st, const Scoreboard& score)
 		<< "     |" << endl;
 }
 
+bool ascendingStudentIdOfCourse(void* val1, void* val2)
+{
+	StudentCourseInformation* st1 = (StudentCourseInformation*)val1;
+	StudentCourseInformation* st2 = (StudentCourseInformation*)val2;
+
+	return ascendingString(&st1->st.id, &st2->st.id);
+}
+
+void saveScoreboard(ofstream& fout, const Scoreboard& scoreboard)
+{
+	fout << scoreboard.midterm << endl
+		<< scoreboard._final << endl
+		<< scoreboard.bonus << endl
+		<< scoreboard.total << endl;
+}
+
 bool saveStudentCourseInformationList(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent)
 {
 	ofstream fout(filePath);

@@ -22,3 +22,6 @@ void showListScoreboardsOfCourse(StudentCourseInformation*& listInfo, const int&
 void showAttendaceListOfCourse(StudentCourseInformation*& listInfo, const int& countStudent);
 
 bool saveStudentCourseInformationList(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent);
+
+bool ascendingStudentIdOfCourse(void* val1, void* val2);
+void saveScoreboard(ofstream& fout, const Scoreboard& scoreboard);
