@@ -75,6 +75,31 @@ int getDayInMonth(const int& year, const int& month)
 	return dayInMonth[month - 1];
 }
 
+Date nextWeek(const Date& dt)
+{
+	Date result;
+	int maxDay = getDayInMonth(dt.year, dt.month);
+
+	result.day = dt.day + 7;
+	result.month = dt.month;
+	result.year = dt.year;
+
+	if (result.day > maxDay)
+	{
+		result.day = result.day - maxDay;
+		result.month++;
+
+		if (result.month > 12)
+		{
+			result.year++;
+			result.month = 1;
+		}
+	}
+
+	return result;
+}
+
+
 string convertWeekdayNumberToString(const int& dayOfWeek)
 {
 	switch (dayOfWeek)

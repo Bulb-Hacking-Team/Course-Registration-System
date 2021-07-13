@@ -105,6 +105,7 @@ string getInputPassword();
 
 bool isLeapYear(const int& year);
 int getDayInMonth(const int& year, const int& month);
+Date nextWeek(const Date& dt);
 
 bool isEqualString(void* str1, void* str2);
 string toString(const Date& dt, const char& delim = '-');
