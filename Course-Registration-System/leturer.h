@@ -18,3 +18,5 @@ void loadLecturer(ifstream& fin, Lecturer& lec);
 void saveLecturer(ofstream& fout, const Lecturer& lec);
 
 bool saveListLecturers(const string& filePath, Lecturer*& listLecturers, int& countLecturer);
+
+void importScoreboardsOfCourse(const string& academicYear, const string& semester, const Lecturer& lec);

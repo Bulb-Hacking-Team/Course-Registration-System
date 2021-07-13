@@ -17,7 +17,41 @@ void* allocListLecturers(const int& countLecturer)
 	Lecturer* arr = new Lecturer[countLecturer];
 	return arr;
 }
+void importScoreboardsOfCourse(const string& academicYear, const string& semester, const Lecturer& lec)
+{
+	string filePath, filePathToOutputData;
+	Course course;
 
+	if (getInputCourseOfLecturer(academicYear, semester, course, lec))
+	{
+		StudentCourseInformation* listInfo = nullptr, * currentListInfo = nullptr;
+		int countStudent = 0, countCurrentStudent = 0;
+
+		cout << "Path of the csv file: ";
+		cin.ignore();
+		getline(cin, filePath);
+
+		if (loadListScoreboardFromCsv(filePath, listInfo, countStudent))
+		{
+			filePathToOutputData = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, course.courseId, "txt");
+
+			if (loadStudentCourseInformationList(filePathToOutputData, currentListInfo, countCurrentStudent))
+			{
+				for (int i = 0; i < countCurrentStudent; i++)
+					currentListInfo[i].scoreList = listInfo[i].scoreList;
+
+				if (saveStudentCourseInformationList(filePathToOutputData, currentListInfo, countCurrentStudent))
+					cout << "Import successful." << endl;
+				else
+					cout << "Import failed." << endl;
+
+				releaseStudentCourseInformation(currentListInfo, countCurrentStudent);
+			}
+
+			delete[] listInfo;
+		}
+	}
+}
 bool getInputCourseOfLecturer(const string& academicYear, const string& semester, Course& course, Lecturer lec)
 {
 	string path = PATH_DATA, courseFilePath;
