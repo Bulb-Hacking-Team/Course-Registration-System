@@ -11,7 +11,65 @@ bool isEqualLecturer(void* val1, void* val2)
 
 	return false;
 }
+void editAttendance(const string& academicYear, const string& semester, const Lecturer& lec)
+{
+	string filePath;
+	StudentCourseInformation* listInfo = nullptr;
+	Course course;
+	Student* listStudents = nullptr, st;
+	int countStudent = 0;
 
+	if (getInputCourseOfLecturer(academicYear, semester, course, lec))
+	{
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, course.courseId, "txt");
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			viewStudentListFromCourse(listInfo, countStudent);
+			cout << "Enter a number between 1 and " << countStudent << " or 0 if no student are selected." << endl;
+			int idx = getChoice(0, countStudent) - 1;
+
+			if (idx != NOT_FOUND)
+			{
+				bool flag;
+				do
+				{
+					system("cls");
+					cout << "\nAttendance list of " << listInfo[idx].st.info.fullName
+						<< " (" << listInfo[idx].st.id << "):" << endl;
+					viewAttendanceListStudent(listInfo[idx].attendList);
+
+					cout << "Do you want to edit attendances?(0/1)" << endl;
+					flag = getChoice(0, 1);
+
+					if (flag)
+					{
+						int choice;
+						cout << "Enter the number corresponding to the date:" << endl;
+						choice = getChoice(1, listInfo[idx].attendList.countDate);
+
+						bool confirm;
+						cout << "Do you want to change the status of this date?(0/1)" << endl;
+						confirm = getChoice(0, 1);
+
+						if (confirm)
+						{
+							listInfo[idx].attendList.status[choice - 1] = !listInfo[idx].attendList.status[choice - 1];
+							cout << "Change check in status successfully!" << endl;
+
+							system("pause");
+						}
+					}
+				} while (flag);
+
+				saveStudentCourseInformationList(filePath, listInfo, countStudent);
+			}
+
+			releaseStudentCourseInformation(listInfo, countStudent);
+		}
+		else
+			cout << "Can not open course file" << endl;
+	}
+}
 void* allocListLecturers(const int& countLecturer)
 {
 	Lecturer* arr = new Lecturer[countLecturer];
