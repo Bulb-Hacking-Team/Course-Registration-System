@@ -18,6 +18,14 @@ void loadStudentFromTxt(ifstream& fin, Student& st)
 
 	st.info.acc.username = st.id;
 }
+void sortArray_1(Student* listInfo, int countStudent) {
+	for (int i = 0; i < countStudent - 1; i++)
+		for (int j = i + 1; j < countStudent; j++) {
+			if (strcmp(listInfo[i].id.c_str(), listInfo[j].id.c_str()) == 1) {
+				swap(listInfo[i], listInfo[j]);
+			}
+		}
+}
 bool loadStudentList(const string& filePath, Student*& listStudents, int& countStudent)
 {
 	ifstream fin(filePath);
