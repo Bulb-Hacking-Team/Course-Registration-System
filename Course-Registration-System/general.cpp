@@ -99,6 +99,22 @@ Date nextWeek(const Date& dt)
 	return result;
 }
 
+int convertWeekdayStringToNumber(const string& dayOfWeek)
+{
+	if (dayOfWeek == "MON")
+		return MONDAY;
+	else if (dayOfWeek == "TUE")
+		return TUESDAY;
+	else if (dayOfWeek == "WED")
+		return WEDNESDAY;
+	else if (dayOfWeek == "THU")
+		return THURSDAY;
+	else if (dayOfWeek == "FRI")
+		return FRIDAY;
+	else if (dayOfWeek == "SAT")
+		return SATURDAY;
+	return SUNDAY;
+}
 
 string convertWeekdayNumberToString(const int& dayOfWeek)
 {
