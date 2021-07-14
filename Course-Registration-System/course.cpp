@@ -57,6 +57,19 @@ bool loadListCourses(const string& filePath, Course*& listCourses, int& countCou
 	return true;
 }
 
+void initAttendanceList(AttendanceList& listAttends, const Course& course)
+{
+	listAttends.countDate = calcNumberOfWeeks(course);
+	listAttends.dateList = new Date[listAttends.countDate];
+	listAttends.status = new bool[listAttends.countDate]{ false };
+	listAttends.startTime = course.startTime;
+	listAttends.endTime = course.endTime;
+
+	listAttends.dateList[0] = course.startDate;
+	for (int i = 1; i < listAttends.countDate; i++)
+		listAttends.dateList[i] = nextWeek(listAttends.dateList[i - 1]);
+}
+
 void initAttendanceList(AttendanceList& listAttends, const int& numberOfWeeks)
 {
 	listAttends.countDate = numberOfWeeks;
