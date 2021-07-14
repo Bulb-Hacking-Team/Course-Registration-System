@@ -11,6 +11,58 @@ bool isEqualLecturer(void* val1, void* val2)
 
 	return false;
 }
+void editGradeStudent(const string& academicYear, const string& semester, const Lecturer& lec)
+{
+	string filePath;
+	StudentCourseInformation* listInfo = nullptr;
+	Student st;
+	Course course;
+	Scoreboard newScoreboard;
+	int countStudent = 0;
+
+	if (getInputCourseOfLecturer(academicYear, semester, course, lec))
+	{
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, course.courseId, "txt");
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			viewStudentListFromCourse(listInfo, countStudent);
+			cout << "Enter a number between 1 and " << countStudent << " or 0 if no student are selected." << endl;
+			int idx = getChoice(0, countStudent) - 1;
+
+			if (idx != NOT_FOUND)
+			{
+				cout << "Do you want to edit score?(0/1)" << endl;
+				bool flag = getChoice(0, 1);
+
+				if (flag) {
+					char delim;
+
+					cout << "\n |" << setfill('-') << setw(104) << "-" << "|" << endl;
+					cout << setfill(' ');
+					viewScoreboardOfStudent(listInfo[idx].st, listInfo[idx].scoreList);
+					cout << " |" << setfill('-') << setw(104) << "-" << "|\n" << endl;
+					cout << setfill(' ');
+
+					cout << "Enter a new scoreboard (midterm, final, bonus, total separated by commas): ";
+					cin >> newScoreboard.midterm >> delim >> newScoreboard._final >> delim >> newScoreboard.bonus >> delim >> newScoreboard.total;
+
+					listInfo[idx].scoreList = newScoreboard;
+
+					if (saveStudentCourseInformationList(filePath, listInfo, countStudent))
+						cout << "Scoreboard has been updated." << endl;
+					else
+						cout << "Update scoreboard failed." << endl;
+
+					system("pause");
+				}
+			}
+
+			releaseStudentCourseInformation(listInfo, countStudent);
+		}
+		else
+			cout << "Can not open course file" << endl;
+	}
+}
 void editAttendance(const string& academicYear, const string& semester, const Lecturer& lec)
 {
 	string filePath;
