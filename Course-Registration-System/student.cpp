@@ -18,6 +18,10 @@ void loadStudentFromTxt(ifstream& fin, Student& st)
 
 	st.info.acc.username = st.id;
 }
+bool ascendingStudentId(void* Name1, void* Name2)
+{
+	return (*(string*)Name1 > *(string*)Name2);
+}
 bool loadStudentList(const string& filePath, Student*& listStudents, int& countStudent)
 {
 	ifstream fin(filePath);

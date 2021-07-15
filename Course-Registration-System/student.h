@@ -19,6 +19,7 @@ void loadStudentFromCsv(ifstream& fin, Student& st);
 void createAccountStudent(Student& st);
 bool checkStudent(Student st);
 
+bool ascendingStudentId(void* st1, void* st2);
 bool checkStudentOfCourse(const string& academicYear, const string& semester, const Course& c, const Student& st);
 void viewScores(const string& academicYear, const string& semester, const Student& st);
 bool getInputCourseOfStudent(const string& academicYear, const string& semester, Course& course, const Student& st);
