@@ -119,6 +119,9 @@ int findValue(void* arr, const int& n, const int& sizeItem, void* key, bool (*cm
 void releaseAttendanceList(AttendanceList& attendList);
 void releaseStudentCourseInformation(StudentCourseInformation*& listInfo, const int& countStudent);
 
+int compareTwoDates(const Date& dt1, const Date& dt2);
+int calcNumberOfWeeks(const Course& course);
+
 string getInputClassName();
 void showListClassName(string*& listClassName, const int& countClassName);
 int findValue_AcademicYear(string* listAcademicYear, int countAY, string academicYear);

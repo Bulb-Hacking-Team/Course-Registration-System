@@ -138,6 +138,40 @@ string convertWeekdayNumberToString(const int& dayOfWeek)
 		return "";
 	}
 }
+
+int calcNumberOfWeeks(const Course& course)
+{
+	Date startDate = course.startDate;
+	int count = 0;
+
+	while (compareTwoDates(startDate, course.endDate) >= 0)
+	{
+		startDate = nextWeek(startDate);
+		count++;
+	}
+
+	return count;
+}
+
+int compareTwoDates(const Date& dt1, const Date& dt2) {
+	int result = -1;
+
+	if (dt2.year > dt1.year)
+		result = 1;
+	else if (dt2.year == dt1.year) {
+		if (dt2.month > dt1.month)
+			result = 1;
+		else if (dt2.month == dt1.month) {
+			if (dt2.day > dt1.day)
+				result = 1;
+			else if (dt2.day == dt1.day)
+				result = 0;
+		}
+	}
+
+	return result;
+}
+
 string getInputClassName()
 {
 	string* listClassName = nullptr;
