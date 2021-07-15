@@ -9,6 +9,8 @@ void* allocListLecturers(const int& countLecturer);
 
 void copyLecturer(void* lec1, void* lec2);
 
+void viewListCourses(const string& academicYear, const string& semester, Lecturer& lec);
+
 void releaseListlecturers(void* listLecturers, const int& countLecturer);
 
 bool loadListLecturers(const string& filePath, Lecturer*& listLecturers, int& countLecturer);

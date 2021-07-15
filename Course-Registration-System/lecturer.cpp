@@ -63,6 +63,65 @@ void editGradeStudent(const string& academicYear, const string& semester, const 
 			cout << "Can not open course file" << endl;
 	}
 }
+void viewListCourses(const string& academicYear, const string& semester, Lecturer& lec)
+{
+	string filePath, filePathOfClassName = PATH_DATA;
+	string* listClassName = nullptr;
+	Course* listCourses = nullptr;
+	int countCourse = 0, countClassName = 0;
+
+	filePathOfClassName += "Class.txt";
+	if (loadListClassName(filePathOfClassName, listClassName, countClassName)) {
+		for (int i = 0; i < countClassName; i++) {
+			filePath = createCourseDirectoryWithFileName(academicYear, semester, listClassName[i], "Schedule", "txt");
+
+			if (loadListCourses(filePath, listCourses, countCourse))
+			{
+				cout << "\nCourses of class " << listClassName[i] << ":\n" << endl;
+
+				if (countCourse != 0)
+				{
+					int idx = 0;
+
+					cout << "|" << setfill('-') << setw(121) << "-" << "|" << endl;
+					cout << setfill(' ');
+
+					cout << "| " << setw(10) << left << " Credits" << " | " << setw(50) << left << "Course name" << " | "
+						<< setw(15) << left << "Course ID" << " | " << setw(35) << left << "Full name" << " |" << endl;
+
+					cout << "|" << setfill('-') << setw(121) << "-" << "|" << endl;
+					cout << setfill(' ');
+
+					for (int i = 0; i < countCourse; i++, idx++)
+					{
+						if (isEqualLecturer(&lec, &listCourses[i].lecturer))
+						{
+							cout << "| " << setw(3) << right << listCourses[i].NumberOfCredits
+								<< "   | " << setw(50) << left << listCourses[i].courseName
+								<< " | " << setw(15) << left << listCourses[i].courseId << " | "
+								<< setw(35) << left << listCourses[i].lecturer.info.fullName << " |" << endl;
+
+							cout << "|" << setfill('-') << setw(121) << "-" << "|" << endl;
+							cout << setfill(' ');
+						}
+					}
+				}
+				else {
+					cout << "\nClass " << listClassName[i] << " does not have a course of lecturer "
+						<< lec.info.fullName << endl;
+				}
+
+				delete[] listCourses;
+			}
+			else
+				cout << "\nCan not open course file of class " << listClassName[i] << "." << endl;
+		}
+
+		delete[] listClassName;
+	}
+	else
+		cout << "Can not open file containing list of class names." << endl;
+}
 void editAttendance(const string& academicYear, const string& semester, const Lecturer& lec)
 {
 	string filePath;
