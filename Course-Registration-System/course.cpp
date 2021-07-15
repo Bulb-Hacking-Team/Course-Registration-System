@@ -97,6 +97,14 @@ void loadScoreboard(ifstream& fin, Scoreboard& scoreboard, const string& FileExt
 	fin >> scoreboard.total;
 }
 
+void initScoreboard(Scoreboard& score, const double& midterm, const double& _final, const double& bonus, const double& total)
+{
+	score.midterm = midterm;
+	score._final = _final;
+	score.bonus = bonus;
+	score.total = total;
+}
+
 void loadAttendanceList(ifstream& fin, AttendanceList& listAttends)
 {
 	for (int i = 0; i < listAttends.countDate; i++)
