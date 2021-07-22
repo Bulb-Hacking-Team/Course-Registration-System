@@ -122,6 +122,28 @@ void viewListCourses(const string& academicYear, const string& semester, Lecture
 	else
 		cout << "Can not open file containing list of class names." << endl;
 }
+void viewAttendanceListOfCourseForLecturer(const string& academicYear,
+	const string& semester, Lecturer& lec)
+{
+	string filePath;
+	Course course;
+	StudentCourseInformation* listInfo = nullptr;
+	int countStudent = 0;
+
+	if (getInputCourseOfLecturer(academicYear, semester, course, lec))
+	{
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, course.courseId, "txt");
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			cout << "Attendance list of class " << course.ClassName << " (Course ID: " << course.courseId << "): \n" << endl;
+			showAttendaceListOfCourse(listInfo, countStudent);
+
+			releaseStudentCourseInformation(listInfo, countStudent);
+		}
+		else
+			cout << "Can not open course file" << endl;
+	}
+}
 void editAttendance(const string& academicYear, const string& semester, const Lecturer& lec)
 {
 	string filePath;
