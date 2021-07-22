@@ -19,6 +19,7 @@ bool getInputCourseFromSemester(const string& academicYear, const string& semest
 
 void initScoreboard(Scoreboard& score, const double& midterm = 0, const double& _final = 0, const double& bonus = 0, const double& total = 0);
 
+void* allocListCourses(const int& countCourse);
 bool saveListCourses(const string& filePath, Course* listCourses, const int& countCourse);
 void saveCourse(ofstream& fout, Course& course);
 

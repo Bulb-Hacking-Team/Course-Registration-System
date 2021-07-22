@@ -188,6 +188,13 @@ bool getInputCourseFromSemester(const string& academicYear, const string& semest
 
 	return true;
 }
+
+void* allocListCourses(const int& countCourse)
+{
+	Course* arr = new Course[countCourse];
+	return arr;
+}
+
 bool saveListCourses(const string& filePath, Course* listCourses, const int& countCourse)
 {
 	ofstream fout(filePath);
