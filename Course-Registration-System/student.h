@@ -24,4 +24,5 @@ bool checkStudentOfCourse(const string& academicYear, const string& semester, co
 void viewScores(const string& academicYear, const string& semester, const Student& st);
 bool getInputCourseOfStudent(const string& academicYear, const string& semester, Course& course, const Student& st);
 void viewStudentList(Student* listStudents, const int& countStudent);
+void viewStudentListFromCourse(StudentCourseInformation* listInfo, const int& countStudent);
 

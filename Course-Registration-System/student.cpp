@@ -18,6 +18,29 @@ void loadStudentFromTxt(ifstream& fin, Student& st)
 
 	st.info.acc.username = st.id;
 }
+void viewStudentListFromCourse(StudentCourseInformation* listInfo, const int& countStudent)
+{
+	cout << "|" << setfill('-') << setw(74) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	cout << "| " << setw(4) << left << "No" << " | " << setw(12) << left << "ID"
+		<< " | " << setw(35) << left << "Full name"
+		<< " | " << setw(12) << left << "ClassName" << " |" << endl;
+
+	cout << "|" << setfill('-') << setw(74) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	for (int i = 0; i < countStudent; i++)
+	{
+		cout << "| " << setw(4) << left << i + 1
+			<< " | " << setw(12) << left << listInfo[i].st.id
+			<< " | " << setw(35) << left << listInfo[i].st.info.fullName
+			<< " | " << setw(12) << left << listInfo[i].st.ClassName << " |" << endl;
+
+		cout << "|" << setfill('-') << setw(74) << "-" << "|" << endl;
+		cout << setfill(' ');
+	}
+}
 bool ascendingStudentId(void* Name1, void* Name2)
 {
 	return (*(string*)Name1 > *(string*)Name2);
