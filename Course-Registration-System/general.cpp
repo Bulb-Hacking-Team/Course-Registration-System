@@ -189,6 +189,20 @@ string getInputClassName()
 	delete[] listClassName;
 	return result;
 }
+
+void getCurrentDateAndTime(Date& dt, Time& t)
+{
+	time_t realTime = time(nullptr);
+
+	tm* dateAndTime = new tm;
+	localtime_s(dateAndTime, &realTime);
+
+	dt = { dateAndTime->tm_mday, dateAndTime->tm_mon + 1, dateAndTime->tm_year + 1900 };
+	t = { dateAndTime->tm_hour, dateAndTime->tm_min };
+	cout << dt.day << " " << dt.month << " " << dt.year << " " << t.hour << " " << t.minute;
+	delete dateAndTime;
+}
+
 void* pushBackArray(void* arr, int& numOfElements, const int& sizeItem, void* val, void* (*alloc)(const int&), void (*copyElement)(void*, void*), void (*release)(void*, const int&))
 {
 	void* newArray = resizeArray(arr, numOfElements, numOfElements + 1, sizeItem, alloc, copyElement, release);
@@ -198,7 +212,20 @@ void* pushBackArray(void* arr, int& numOfElements, const int& sizeItem, void* va
 
 	return newArray;
 }
-void copyString(void* str1, void* str2) {
+
+string getInputCourseID()
+{
+	string s;
+	getline(cin, s);
+
+	for (int i = 0; i < s.length(); i++)
+		s[i] = toupper(s[i]);
+
+	return s;
+}
+
+void copyString(void* str1, void* str2)
+{
 	*(string*)str1 = *(string*)str2;
 }
 void* allocArrayString(const int& sz)
