@@ -18,6 +18,8 @@ void releaseListlecturers(void* listLecturers, const int& countLecturer);
 
 bool loadListLecturers(const string& filePath, Lecturer*& listLecturers, int& countLecturer);
 
+void viewScoreboardOfCourse(const string& academicYear, const string& semester, const Lecturer& lec);
+
 void editGradeStudent(const string& academicYear, const string& semester, const Lecturer& lec);
 
 void loadLecturer(ifstream& fin, Lecturer& lec);
