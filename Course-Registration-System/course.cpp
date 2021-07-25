@@ -255,6 +255,10 @@ void showListScoreboardsOfCourse(StudentCourseInformation*& listInfo, const int&
 	}
 }
 
+void copyCourse(void* lec1, void* lec2)
+{
+	*(Course*)lec1 = *(Course*)lec2;
+}
 
 void saveCourse(ofstream& fout, Course& course)
 {
