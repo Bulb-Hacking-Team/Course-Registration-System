@@ -112,6 +112,25 @@ void importStudentListFromCsv(const string& filePath)
 
 	delete[] listStudents;
 }
+bool saveListScoreboardsToCsv(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent)
+{
+	ofstream fout(filePath);
+
+	if (!fout.is_open())
+		return false;
+
+	fout << "No,Student ID,Fullname,Midterm,Final,Bonus,Total" << endl;
+	for (int i = 0; i < countStudent; i++)
+	{
+		fout << i + 1 << ",";
+		fout << listInfo[i].st.id << "," << listInfo[i].st.info.fullName << ","
+			<< listInfo[i].scoreList.midterm << "," << listInfo[i].scoreList._final << ","
+			<< listInfo[i].scoreList.bonus << "," << listInfo[i].scoreList.total << endl;
+	}
+
+	fout.close();
+	return true;
+}
 void createAccountStudent(Student& st)
 {
 	st.info.acc.username = st.id;

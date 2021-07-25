@@ -8,7 +8,7 @@ Schedule* getScheduleOfStudent(const string& academicYear, const string& semeste
 
 bool isEqualStudentIdFromCourse(void* val1, void* val2);
 bool ascendingStudentId(void* Name1, void* Name2);
-
+bool saveListScoreboardsToCsv(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent);
 void releaseListStudents(void* listStudents, const int& countStudent);
 void copyStudent(void* st1, void* st2);
 void* allocListStudents(const int& countStudent);
