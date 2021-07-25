@@ -255,6 +255,31 @@ void* resizeArray(void* arr, int& oldSize, const int& newSize, const int& sizeIt
 	return newArray;
 }
 
+void viewAttendanceListStudent(const AttendanceList& attendList)
+{
+	string status;
+
+	cout << "|" << setfill('-') << setw(28) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	cout << "|" << setw(5) << left << " No" << "| " << setw(12) << "    DATE    " << "|" << setw(8) << " STATUS " << "|" << endl;
+	cout << "|" << setfill('-') << setw(28) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	for (int i = 0; i < attendList.countDate; i++)
+	{
+		status = "";
+		cout << "| " << setw(4) << left << i + 1 << "| " << setw(12) << left << toString(attendList.dateList[i]) << "|";
+
+		if (attendList.status[i])
+			status = "X";
+
+		cout << setw(4) << right << status << setw(5) << right << "|" << endl;
+		cout << "|" << setfill('-') << setw(28) << "-" << "|" << endl;
+		cout << setfill(' ');
+	}
+}
+
 void sortArray(void* arr, const int& n, const int& sizeItem, bool (*cmp)(void*, void*))
 {
 	char* data_i, * data_pos, * data_j, * temp;
