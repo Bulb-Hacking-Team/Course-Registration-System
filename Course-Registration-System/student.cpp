@@ -139,7 +139,41 @@ void createAccountStudent(Student& st)
 		if (ch != '-')
 			st.info.acc.password += ch;
 }
+void checkIn(const string& academicYear, const string& semester, Student& st)
+{
+	string filePath;
+	Course course;
+	StudentCourseInformation* listInfo = nullptr;
+	int countStudent = 0;
 
+	if (getInputCourseOfStudent(academicYear, semester, course, st))
+	{
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, course.courseId, "txt");
+		//	cout << filePath<<"13214545646";
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			Date dt;
+			Time tm;
+			StudentCourseInformation key;
+
+			key.st = st;
+			int idx = findValue(listInfo, countStudent, sizeof(StudentCourseInformation), &key, isEqualStudentIdFromCourse);
+			getCurrentDateAndTime(dt, tm);
+
+			if (checkInImp(dt, tm, listInfo[idx].attendList))
+			{
+				cout << "Check in successful." << endl;
+				bool temp = saveStudentCourseInformationList(filePath, listInfo, countStudent);
+			}
+			else
+				cout << "Check in failed." << endl;
+
+			releaseStudentCourseInformation(listInfo, countStudent);
+		}
+		else
+			cout << "Can not open course file" << endl;
+	}
+}
 void loadStudentFromCsv(ifstream& fin, Student& st)
 {
 	string gender;

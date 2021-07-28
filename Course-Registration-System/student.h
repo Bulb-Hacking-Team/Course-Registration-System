@@ -25,4 +25,4 @@ void viewScores(const string& academicYear, const string& semester, const Studen
 bool getInputCourseOfStudent(const string& academicYear, const string& semester, Course& course, const Student& st);
 void viewStudentList(Student* listStudents, const int& countStudent);
 void viewStudentListFromCourse(StudentCourseInformation* listInfo, const int& countStudent);
-
+void checkIn(const string& academicYear, const string& semester, Student& st);
