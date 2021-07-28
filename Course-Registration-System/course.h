@@ -33,3 +33,5 @@ bool saveStudentCourseInformationList(const string& filePath, StudentCourseInfor
 
 bool ascendingStudentIdOfCourse(void* val1, void* val2);
 void saveScoreboard(ofstream& fout, const Scoreboard& scoreboard);
+
+void releaseListCourses(void* listCourses, const int& countCourse);

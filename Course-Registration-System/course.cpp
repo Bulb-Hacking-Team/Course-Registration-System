@@ -338,3 +338,12 @@ bool saveStudentCourseInformationList(const string& filePath, StudentCourseInfor
 	fout.close();
 	return true;
 }
+
+void releaseListCourses(void* listCourses, const int& countCourse)
+{
+	if (listCourses)
+	{
+		Course* arr = (Course*)listCourses;
+		delete[] arr;
+	}
+}
