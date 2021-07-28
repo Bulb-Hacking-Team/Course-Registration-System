@@ -144,6 +144,10 @@ void releaseArrayString(void* arrString, const int& sz);
 bool saveListClassName(const string& filename, string* listClassName, const int& countClassName);
 bool getInputGender();
 
+void loadStaff(ifstream& fin, Staff& s);
+bool loadListStaffs(const string& filePath, Staff*& listStaffs, int& countStaff);
+void saveStaff(ofstream& fout, const Staff& s);
+
 bool saveStudentList(const string& filePath, Student* listStudents, const int& countStudent);
 void sortArray(void* arr, const int& n, const int& sizeItem, bool (*cmp)(void*, void*));
 bool ascendingClassName(void* ClassName1, void* ClassName2);

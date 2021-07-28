@@ -308,6 +308,13 @@ void sortArray(void* arr, const int& n, const int& sizeItem, bool (*cmp)(void*, 
 
 	delete[] temp;
 }
+
+void saveStaff(ofstream& fout, const Staff& s)
+{
+	fout << s.info.acc.username << endl << s.info.acc.password << endl
+		<< s.info.fullName << endl << s.info.gender << endl;
+}
+
 string toString(const Date& dt, const char& delim)
 {
 	string m, d;
