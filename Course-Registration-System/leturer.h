@@ -20,6 +20,8 @@ bool loadListLecturers(const string& filePath, Lecturer*& listLecturers, int& co
 
 void viewScoreboardOfCourse(const string& academicYear, const string& semester, const Lecturer& lec);
 
+void viewListStudentsOfCourse(const string& academicYear, const string& semester, const Lecturer& lec);
+
 void editGradeStudent(const string& academicYear, const string& semester, const Lecturer& lec);
 
 void loadLecturer(ifstream& fin, Lecturer& lec);
