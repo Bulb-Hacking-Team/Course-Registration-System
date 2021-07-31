@@ -216,6 +216,40 @@ bool saveListCourses(const string& filePath, Course* listCourses, const int& cou
 	return true;
 }
 
+void loadCourseFromCsv(ifstream& fin, Course& course)
+{
+	Lecturer& lec = course.lecturer;
+	string gender, dayOfWeek;
+	char ignore;
+
+	getline(fin, course.courseId, ',');
+	getline(fin, course.courseName, ',');
+	getline(fin, course.ClassName, ',');
+
+	getline(fin, lec.info.acc.username, ',');
+	getline(fin, lec.info.fullName, ',');
+	getline(fin, lec.degree, ',');
+	getline(fin, gender, ',');
+
+	fin >> course.startDate.day >> ignore >> course.startDate.month >> ignore >> course.startDate.year;
+	fin >> ignore;
+
+	fin >> course.endDate.day >> ignore >> course.endDate.month >> ignore >> course.endDate.year;
+	fin >> ignore;
+
+	getline(fin, dayOfWeek, ',');
+
+	fin >> course.startTime.hour >> ignore >> course.startTime.minute >> ignore;
+	fin >> course.endTime.hour >> ignore >> course.endTime.minute >> ignore;
+
+	getline(fin, course.room);
+
+	lec.info.gender = (gender == "Male") ? (Gender::MALE) : (Gender::FEMALE);
+	course.dayOfWeek = convertWeekdayStringToNumber(dayOfWeek);
+	course.status = true;
+}
+
+
 void showAttendaceListOfCourse(StudentCourseInformation*& listInfo, const int& countStudent) {
 	int len = 59 + (15 * listInfo[0].attendList.countDate);
 	string status;

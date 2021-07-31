@@ -22,6 +22,8 @@ void initScoreboard(Scoreboard& score, const double& midterm = 0, const double& 
 void* allocListCourses(const int& countCourse);
 bool saveListCourses(const string& filePath, Course* listCourses, const int& countCourse);
 
+void loadCourseFromCsv(ifstream& fin, Course& course);
+
 void copyCourse(void* lec1, void* lec2);
 void saveCourse(ofstream& fout, Course& course);
 
