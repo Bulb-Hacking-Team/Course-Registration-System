@@ -10,6 +10,8 @@ void initAttendanceList(AttendanceList& listAttends, const int& numberOfWeeks);
 
 void loadScoreboard(ifstream& fin, Scoreboard& scoreboard, const string& FileExtension);
 void loadAttendanceList(ifstream& fin, AttendanceList& listAttends);
+void saveAttendanceList(ofstream& fout, const AttendanceList& listAttends);
+
 bool loadStudentCourseInformationList(const string& filePath, StudentCourseInformation*& listInfo, int& countStudent);
 void releaseStudentCourseInformationList(void* listInfo, const int& countStudent);
 
@@ -23,6 +25,7 @@ void* allocListCourses(const int& countCourse);
 bool saveListCourses(const string& filePath, Course* listCourses, const int& countCourse);
 
 void loadCourseFromCsv(ifstream& fin, Course& course);
+void loadStudentFromTxt(ifstream& fin, Student& st);
 
 void copyCourse(void* lec1, void* lec2);
 void saveCourse(ofstream& fout, Course& course);
