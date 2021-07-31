@@ -315,6 +315,21 @@ void saveStaff(ofstream& fout, const Staff& s)
 		<< s.info.fullName << endl << s.info.gender << endl;
 }
 
+bool saveListStaffs(const string& filePath, Staff*& listStaffs, const int& countStaff)
+{
+	ofstream fout(filePath);
+
+	if (!fout.is_open())
+		return false;
+
+	fout << countStaff << endl;
+	for (int i = 0; i < countStaff; i++)
+		saveStaff(fout, listStaffs[i]);
+
+	fout.close();
+	return true;
+}
+
 string toString(const Date& dt, const char& delim)
 {
 	string m, d;

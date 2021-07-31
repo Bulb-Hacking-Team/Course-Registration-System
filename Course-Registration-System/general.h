@@ -147,6 +147,7 @@ bool getInputGender();
 void loadStaff(ifstream& fin, Staff& s);
 bool loadListStaffs(const string& filePath, Staff*& listStaffs, int& countStaff);
 void saveStaff(ofstream& fout, const Staff& s);
+bool saveListStaffs(const string& filePath, Staff*& listStaffs, const int& countStaff);
 
 bool saveStudentList(const string& filePath, Student* listStudents, const int& countStudent);
 void sortArray(void* arr, const int& n, const int& sizeItem, bool (*cmp)(void*, void*));
