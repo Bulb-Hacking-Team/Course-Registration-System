@@ -18,6 +18,8 @@ void releaseListlecturers(void* listLecturers, const int& countLecturer);
 
 bool loadListLecturers(const string& filePath, Lecturer*& listLecturers, int& countLecturer);
 
+bool loadListScoreboardFromCsv(const string& filePath, StudentCourseInformation*& listInfo, int& countStudent);
+
 void viewScoreboardOfCourse(const string& academicYear, const string& semester, const Lecturer& lec);
 
 void viewListStudentsOfCourse(const string& academicYear, const string& semester, const Lecturer& lec);

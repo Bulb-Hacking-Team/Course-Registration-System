@@ -122,6 +122,33 @@ void viewListCourses(const string& academicYear, const string& semester, Lecture
 	else
 		cout << "Can not open file containing list of class names." << endl;
 }
+bool loadListScoreboardFromCsv(const string& filePath, StudentCourseInformation*& listInfo, int& countStudent)
+{
+	ifstream fin(filePath);
+
+	if (!fin.is_open())
+		return false;
+
+	listInfo = new StudentCourseInformation[MAX_SIZE];
+	int ignoreData;
+	string ignoreLine;
+
+	getline(fin, ignoreLine); // ignore the first line.
+
+	while (!fin.eof())
+	{
+		fin >> ignoreData;
+		fin.ignore();
+
+		loadScoreboardFromCsv(fin, listInfo[countStudent]);
+		countStudent++;
+	}
+
+	fin.close();
+	sortArray(listInfo, countStudent, sizeof(StudentCourseInformation), ascendingStudentIdOfCourse);
+
+	return true;
+}
 void viewListStudentsOfCourse(const string& academicYear, const string& semester, const Lecturer& lec)
 {
 	string filePath;
