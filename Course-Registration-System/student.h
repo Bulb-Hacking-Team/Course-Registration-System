@@ -26,3 +26,4 @@ bool getInputCourseOfStudent(const string& academicYear, const string& semester,
 void viewStudentList(Student* listStudents, const int& countStudent);
 void viewStudentListFromCourse(StudentCourseInformation* listInfo, const int& countStudent);
 void checkIn(const string& academicYear, const string& semester, Student& st);
+void viewCheckInResult(const string& academicYear, const string& semester, Student st);

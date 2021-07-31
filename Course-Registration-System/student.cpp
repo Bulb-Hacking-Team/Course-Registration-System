@@ -112,6 +112,35 @@ void importStudentListFromCsv(const string& filePath)
 
 	delete[] listStudents;
 }
+void viewCheckInResult(const string& academicYear, const string& semester, Student st)
+{
+	string filePath;
+	Course course;
+	StudentCourseInformation* listInfo = nullptr;
+	int countStudent = 0;
+
+	if (getInputCourseOfStudent(academicYear, semester, course, st))
+	{
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, course.courseId, "txt");
+
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			StudentCourseInformation key;
+			int idx;
+
+			key.st = st;
+			idx = findValue(listInfo, countStudent, sizeof(StudentCourseInformation), &key, isEqualStudentIdFromCourse);
+
+			cout << "\nAttendance list of " << listInfo[idx].st.info.fullName
+				<< " (" << listInfo[idx].st.id << "): \n" << endl;
+
+			viewAttendanceListStudent(listInfo[idx].attendList);
+			releaseStudentCourseInformation(listInfo, countStudent);
+		}
+		else
+			cout << "Can not open course file" << endl;
+	}
+}
 bool saveListScoreboardsToCsv(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent)
 {
 	ofstream fout(filePath);
