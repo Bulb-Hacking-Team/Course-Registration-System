@@ -122,6 +122,17 @@ void viewListCourses(const string& academicYear, const string& semester, Lecture
 	else
 		cout << "Can not open file containing list of class names." << endl;
 }
+void loadScoreboardFromCsv(ifstream& fin, StudentCourseInformation& scoreInfo)
+{
+	char comma;
+
+	getline(fin, scoreInfo.st.id, DELIMIT_CSV);
+	getline(fin, scoreInfo.st.info.fullName, DELIMIT_CSV);
+	fin >> scoreInfo.scoreList.midterm >> comma;
+	fin >> scoreInfo.scoreList._final >> comma;
+	fin >> scoreInfo.scoreList.bonus >> comma;
+	fin >> scoreInfo.scoreList.total;
+}
 bool loadListScoreboardFromCsv(const string& filePath, StudentCourseInformation*& listInfo, int& countStudent)
 {
 	ifstream fin(filePath);

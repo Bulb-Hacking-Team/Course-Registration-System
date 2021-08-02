@@ -9,6 +9,8 @@ void* allocListLecturers(const int& countLecturer);
 
 void copyLecturer(void* lec1, void* lec2);
 
+void loadScoreboardFromCsv(ifstream& fin, StudentCourseInformation& scoreInfo);
+
 void viewListCourses(const string& academicYear, const string& semester, Lecturer& lec);
 
 void viewAttendanceListOfCourseForLecturer(const string& academicYear,
