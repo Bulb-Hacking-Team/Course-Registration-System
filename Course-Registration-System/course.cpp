@@ -116,6 +116,17 @@ void loadAttendanceList(ifstream& fin, AttendanceList& listAttends)
 	}
 }
 
+void saveAttendanceList(ofstream& fout, const AttendanceList& listAttends)
+{
+	for (int i = 0; i < listAttends.countDate; i++)
+	{
+		fout << toString(listAttends.dateList[i], ' ') << " ";
+		fout << listAttends.startTime.hour << " " << listAttends.startTime.minute << " ";
+		fout << listAttends.endTime.hour << " " << listAttends.endTime.minute << " ";
+		fout << listAttends.status[i] << endl;
+	}
+}
+
 bool loadStudentCourseInformationList(const string& filePath, StudentCourseInformation*& listInfo, int& countStudent)
 {
 	ifstream fin(filePath);
