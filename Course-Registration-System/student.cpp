@@ -141,6 +141,28 @@ void viewCheckInResult(const string& academicYear, const string& semester, Stude
 			cout << "Can not open course file" << endl;
 	}
 }
+bool checkInImp(const Date& dt, const Time& tm, AttendanceList& attendList) {
+	string date_str = toString(dt);
+	int minute_startTime, minute_endTime, minute_realTime;
+
+	minute_startTime = (attendList.startTime.hour * 60) + attendList.startTime.minute;
+	minute_endTime = (attendList.endTime.hour * 60) + attendList.endTime.minute;
+	// cout << "Start: " << attendList.startTime.hour << " " << attendList.startTime.minute;
+	for (int i = 0; i < 11; i++) {
+		if (toString(attendList.dateList[i]) == date_str) {
+			// cout << "dateList: " << attendList.dateList[i]
+			minute_realTime = (tm.hour * 60) + tm.minute;
+			// cout << " - Real: " << tm.hour << " " << tm.minute;
+			if (minute_realTime <= minute_endTime)
+			{
+				attendList.status[i] = true;
+				return true;
+			}
+		}
+	}
+	//cout << " - End: " << minute_endTime << endl;
+	return false;
+}
 bool saveListScoreboardsToCsv(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent)
 {
 	ofstream fout(filePath);
