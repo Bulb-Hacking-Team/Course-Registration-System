@@ -181,6 +181,33 @@ void releaseStudentCourseInformationList(void* listInfo, const int& countStudent
 		releaseStudentCourseInformation(arr, countStudent);
 	}
 }
+
+bool loadListCoursesFromCsv(const string& filePath, Course*& listCourses, int& countCourse)
+{
+	ifstream fin(filePath);
+
+	if (!fin.is_open())
+		return false;
+
+	string ignoreLine, filePathToSaveData;
+	int temp;
+
+	listCourses = new Course[MAX_SIZE];
+
+	getline(fin, ignoreLine);
+	while (!fin.eof())
+	{
+		fin >> temp;
+		fin.ignore();
+
+		loadCourseFromCsv(fin, listCourses[countCourse]);
+		countCourse++;
+	}
+
+	fin.close();
+	return true;
+}
+
 bool getInputCourseFromSemester(const string& academicYear, const string& semester, string& ClassName,
 	Course& course, Course*& listCourses, int& countCourse)
 {
