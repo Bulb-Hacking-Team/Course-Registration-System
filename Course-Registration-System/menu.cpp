@@ -557,6 +557,45 @@ void showMenuOfCourse(const string& academicYear, const string& semester)
 		system("pause");
 	}
 }
+void showMenuOfAttendanceList(const string& academicYear, const string& semester)
+{
+	int choice;
+
+	while (true)
+	{
+		system("cls");
+
+		cout << "|--------------------------------------------------|" << endl;
+		cout << "|                  ATTENDANCE LIST                 |" << endl;
+		cout << "|--------------------------------------------------|" << endl;
+		cout << "| No |                    Option                   |" << endl;
+		cout << "|--------------------------------------------------|" << endl;
+		cout << "| 1  | Search and view attendance list of a course |" << endl;
+		cout << "|--------------------------------------------------|" << endl;
+		cout << "| 2  | Export a attendance list to a csv file      |" << endl;
+		cout << "|--------------------------------------------------|" << endl;
+		cout << "| 3  | Return to previous menu                     |" << endl;
+		cout << "|--------------------------------------------------|" << endl;
+
+		choice = getChoice(1, 3);
+
+		system("cls");
+
+		switch (choice)
+		{
+		case 1:
+			viewAttendanceListOfCourse(academicYear, semester);
+			break;
+		case 2:
+			ExportAttendanceListToCsv(academicYear, semester);
+			break;
+		case 3:
+			return;
+		}
+
+		system("pause");
+	}
+}
 void showMenuOfStaff(Staff& staff)
 {
 	system("cls");
