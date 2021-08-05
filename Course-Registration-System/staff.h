@@ -31,3 +31,4 @@ void editTime(Course& course);
 void editRoom(Course& course);
 void editAnExistingCourse(const string& academicYear, const string& semester);
 void viewScoreboardOfCourse(const string& academicYear, const string& semester);
+void viewAttendanceListOfCourse(const string& academicYear, const string& semester);

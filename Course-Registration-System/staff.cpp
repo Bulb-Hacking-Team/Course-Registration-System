@@ -294,6 +294,28 @@ void viewScoreboardOfCourse(const string& academicYear, const string& semester)
 			cout << "Can not open course file" << endl;
 	}
 }
+void viewAttendanceListOfCourse(const string& academicYear, const string& semester) {
+	string ClassName, filePath;
+	Course course, * listCourses = nullptr;
+	StudentCourseInformation* listInfo = nullptr;
+	int countStudent = 0, countCourse = 0;
+
+	if (getInputCourseFromSemester(academicYear, semester, ClassName, course, listCourses, countCourse))
+	{
+		delete[] listCourses;
+
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, course.courseId, "txt");
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			cout << "Attendance list of class " << ClassName << " (Course ID: " << course.courseId << "): \n" << endl;
+			showAttendaceListOfCourse(listInfo, countStudent);
+
+			releaseStudentCourseInformation(listInfo, countStudent);
+		}
+		else
+			cout << "Can not open course file" << endl;
+	}
+}
 void editCourseID(Course& course, const string academicYear, const string semester)
 {
 	int check;
