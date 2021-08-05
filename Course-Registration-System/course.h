@@ -33,6 +33,8 @@ void saveCourse(ofstream& fout, Course& course);
 
 bool isEqualCourseId(void* val1, void* val2);
 void showListScoreboardsOfCourse(StudentCourseInformation*& listInfo, const int& countStudent);
+
+bool saveAttendanceListOfCourseToCsv(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent);
 void showAttendaceListOfCourse(StudentCourseInformation*& listInfo, const int& countStudent);
 
 bool saveStudentCourseInformationList(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent);

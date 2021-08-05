@@ -208,6 +208,27 @@ bool loadListCoursesFromCsv(const string& filePath, Course*& listCourses, int& c
 	return true;
 }
 
+bool saveAttendanceListOfCourseToCsv(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent) {
+	ofstream fout(filePath);
+	string status;
+
+	if (!fout.is_open())
+		return false;
+
+	fout << "No,Student ID,Fullname";
+	for (int i = 0; i < listInfo[0].attendList.countDate; i++)
+		fout << "," << toString(listInfo[0].attendList.dateList[i]);
+	fout << endl;
+
+	for (int i = 0; i < countStudent; i++) {
+		fout << i + 1 << "," << listInfo[i].st.id << "," << listInfo[i].st.info.fullName;
+		fout << endl;
+	}
+
+	fout.close();
+	return true;
+}
+
 bool getInputCourseFromSemester(const string& academicYear, const string& semester, string& ClassName,
 	Course& course, Course*& listCourses, int& countCourse)
 {
