@@ -76,3 +76,8 @@ bool getInputCourseOfLecturer(const string& academicYear, const string& semester
 
 	return res;
 }
+
+void copyLecturer(void* lec1, void* lec2)
+{
+	*(Lecturer*)lec1 = *(Lecturer*)lec2;
+}
