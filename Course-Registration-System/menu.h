@@ -18,7 +18,7 @@ bool login(short role, Staff& s, Student& st);
 void changePassword(Account& acc);
 
 void showMenuOfAttendanceList(const string& academicYear, const string& semester);
-
+void showMenuOfLecturer(Lecturer& lec);
 void viewSchedule2(const string& academicYear, const string& semester, const Student& st);
 void viewGeneralInfo(GeneralInformation info);
 void viewStudentInfo(Student st);

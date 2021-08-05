@@ -596,6 +596,72 @@ void showMenuOfAttendanceList(const string& academicYear, const string& semester
 		system("pause");
 	}
 }
+void showMenuOfLecturer(Lecturer& lec)
+{
+	string academicYear, semester, filePath = PATH_DATA;
+	Lecturer* listLecturers = nullptr;
+	int choice, countLecturer = 0;
+
+	filePath += "Lecturer.txt";
+
+	system("cls");
+	getInputAcademicYearAndSemester(academicYear, semester);
+
+	while (true)
+	{
+		system("cls");
+
+		cout << "|----------------------------------------------------|" << endl;
+		cout << "|                      STAFF-2                       |" << endl;
+		cout << "|----------------------------------------------------|" << endl;
+		cout << "| No |                   Option                      |" << endl;
+		cout << "|----------------------------------------------------|" << endl;
+		cout << "| 1  | View list of courses in the current semester  |" << endl;
+		cout << "|----------------------------------------------------|" << endl;
+		cout << "| 2  | View attendance list of a course              |" << endl;
+		cout << "|----------------------------------------------------|" << endl;
+		cout << "| 3  | Import scoreboard of a course from a csv file |" << endl;//done
+		cout << "|----------------------------------------------------|" << endl;
+		cout << "| 4  | Edit grade of a student                       |" << endl;//done
+		cout << "|----------------------------------------------------|" << endl;
+		cout << "| 5  | View a scoreboard                             |" << endl;//done
+		cout << "|----------------------------------------------------|" << endl;
+		cout << "| 6  | View profile info                             |" << endl;//done
+		cout << "|----------------------------------------------------|" << endl;
+		cout << "| 7  | Return                                         |" << endl;
+		cout << "|----------------------------------------------------|" << endl;
+
+		choice = getChoice(1, 7);
+
+		system("cls");
+
+		switch (choice)
+		{
+		case 1:
+			viewListCourses(academicYear, semester, lec);
+			break;
+		case 2:
+			viewAttendanceListOfCourseForLecturer(academicYear, semester, lec);
+			break;
+		case 3:
+			importScoreboardsOfCourse(academicYear, semester, lec);
+			break;
+		case 4:
+			editGradeStudent(academicYear, semester, lec);
+			break;
+		case 5:
+			viewScoreboardOfCourse(academicYear, semester, lec);
+			break;
+		case 6:
+			viewLecturerInfo(lec);
+			break;
+		case 7:
+			showMenu();
+			return;
+		}
+		//system("pause");
+	}
+}
 void showMenuOfStaff(Staff& staff)
 {
 	system("cls");
