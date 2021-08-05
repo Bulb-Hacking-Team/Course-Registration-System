@@ -81,3 +81,42 @@ void copyLecturer(void* lec1, void* lec2)
 {
 	*(Lecturer*)lec1 = *(Lecturer*)lec2;
 }
+
+void releaseListlecturers(void* listLecturers, const int& countLecturer)
+{
+	if (listLecturers)
+	{
+		Lecturer* arr = (Lecturer*)listLecturers;
+		delete[] arr;
+	}
+}
+
+bool loadListLecturers(const string& filePath, Lecturer*& listLecturers, int& countLecturer)
+{
+	ifstream fin(filePath);
+
+	if (!fin.is_open())
+		return false;
+
+	fin >> countLecturer;
+	fin.ignore();
+	listLecturers = new Lecturer[countLecturer];
+
+	for (int i = 0; i < countLecturer; i++)
+	{
+		loadLecturer(fin, listLecturers[i]);
+		fin.ignore();
+	}
+
+	fin.close();
+	return true;
+}
+
+void loadLecturer(ifstream& fin, Lecturer& lec)
+{
+	getline(fin, lec.info.acc.username);
+	getline(fin, lec.info.acc.password);
+	getline(fin, lec.info.fullName);
+	getline(fin, lec.degree);
+	fin >> lec.info.gender;
+}

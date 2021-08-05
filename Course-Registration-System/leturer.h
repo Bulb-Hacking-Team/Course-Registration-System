@@ -8,3 +8,9 @@ bool getInputCourseOfLecturer(const string& academicYear, const string& semester
 void* allocListLecturers(const int& countLecturer);
 
 void copyLecturer(void* lec1, void* lec2);
+
+void releaseListlecturers(void* listLecturers, const int& countLecturer);
+
+bool loadListLecturers(const string& filePath, Lecturer*& listLecturers, int& countLecturer);
+
+void loadLecturer(ifstream& fin, Lecturer& lec);
