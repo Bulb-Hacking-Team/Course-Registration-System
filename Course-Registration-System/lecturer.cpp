@@ -120,3 +120,26 @@ void loadLecturer(ifstream& fin, Lecturer& lec)
 	getline(fin, lec.degree);
 	fin >> lec.info.gender;
 }
+
+void saveLecturer(ofstream& fout, const Lecturer& lec)
+{
+	fout << lec.info.acc.username << endl << lec.info.acc.password << endl;
+	fout << lec.info.fullName << endl << lec.degree << endl;
+	fout << lec.info.gender << endl;
+}
+
+bool saveListLecturers(const string& filePath, Lecturer*& listLecturers, int& countLecturer)
+{
+	ofstream fout(filePath);
+
+	if (!fout.is_open())
+		return false;
+
+	fout << countLecturer << endl;
+
+	for (int i = 0; i < countLecturer; i++)
+		saveLecturer(fout, listLecturers[i]);
+
+	fout.close();
+	return true;
+}

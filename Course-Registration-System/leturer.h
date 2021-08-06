@@ -14,3 +14,7 @@ void releaseListlecturers(void* listLecturers, const int& countLecturer);
 bool loadListLecturers(const string& filePath, Lecturer*& listLecturers, int& countLecturer);
 
 void loadLecturer(ifstream& fin, Lecturer& lec);
+
+void saveLecturer(ofstream& fout, const Lecturer& lec);
+
+bool saveListLecturers(const string& filePath, Lecturer*& listLecturers, int& countLecturer);
