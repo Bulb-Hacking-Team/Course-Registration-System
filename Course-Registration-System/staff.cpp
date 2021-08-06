@@ -294,6 +294,16 @@ void viewScoreboardOfCourse(const string& academicYear, const string& semester)
 			cout << "Can not open course file" << endl;
 	}
 }
+void importCourses(const string& academicYear, const string& semester) {
+	string filePath, ClassName;
+
+	cout << "Enter class name: ";
+	getline(cin, ClassName);
+	cout << "==> Path of the csv file: ";
+	getline(cin, filePath);
+
+	importListCoursesFromCsv(filePath, academicYear, semester);
+}
 void viewAttendanceListOfCourse(const string& academicYear, const string& semester) {
 	string ClassName, filePath;
 	Course course, * listCourses = nullptr;

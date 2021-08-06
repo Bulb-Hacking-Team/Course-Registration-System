@@ -8,6 +8,7 @@ void viewAcademicYearsAndSemester();
 
 void removeCourse(const string& academicYear, const string& semester);
 void viewClassList();
+void importCourses(const string& academicYear, const string& semester);
 
 void importClass();
 bool ascendingSemester(void* semester1, void* semester2);
