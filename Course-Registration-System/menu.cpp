@@ -596,6 +596,32 @@ void showMenuOfAttendanceList(const string& academicYear, const string& semester
 		system("pause");
 	}
 }
+void addNewStudent2(Student st)
+{
+	string filePathStudent, ClassName;
+	Student* listStudents = nullptr, newStudent;
+	int countStudent(0);
+
+	ClassName = getInputClassName();
+	filePathStudent = createClassDirectoryWithFileName(ClassName);
+
+	if (!loadStudentList(filePathStudent, listStudents, countStudent))
+	{
+		cout << "Can not open student file." << endl;
+		return;
+	}
+
+	newStudent = st;
+	listStudents = (Student*)pushBackArray(listStudents, countStudent, sizeof(Student),
+		&newStudent, allocListStudents, copyStudent, releaseListStudents);
+
+	if (saveStudentList(filePathStudent, listStudents, countStudent))
+		cout << "Enroll successfully." << endl;
+	else
+		cout << "Fail!!!" << endl;
+
+	delete[] listStudents;
+}
 void showMenuOfLecturer(Lecturer& lec)
 {
 	string academicYear, semester, filePath = PATH_DATA;

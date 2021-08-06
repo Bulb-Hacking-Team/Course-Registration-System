@@ -16,6 +16,7 @@ bool checkStudentForLogin(Student& st);
 void getInputAcademicYearAndSemester(string& academicYear, string& semester);
 bool login(short role, Staff& s, Student& st);
 void changePassword(Account& acc);
+void addNewStudent2(Student st);
 
 void showMenuOfAttendanceList(const string& academicYear, const string& semester);
 void showMenuOfLecturer(Lecturer& lec);
