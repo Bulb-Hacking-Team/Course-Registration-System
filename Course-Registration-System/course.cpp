@@ -57,6 +57,19 @@ bool loadListCourses(const string& filePath, Course*& listCourses, int& countCou
 	return true;
 }
 
+void initAttendanceList(AttendanceList& listAttends, const Course& course)
+{
+	listAttends.countDate = calcNumberOfWeeks(course);
+	listAttends.dateList = new Date[listAttends.countDate];
+	listAttends.status = new bool[listAttends.countDate]{ false };
+	listAttends.startTime = course.startTime;
+	listAttends.endTime = course.endTime;
+
+	listAttends.dateList[0] = course.startDate;
+	for (int i = 1; i < listAttends.countDate; i++)
+		listAttends.dateList[i] = nextWeek(listAttends.dateList[i - 1]);
+}
+
 void initAttendanceList(AttendanceList& listAttends, const int& numberOfWeeks)
 {
 	listAttends.countDate = numberOfWeeks;
@@ -84,6 +97,14 @@ void loadScoreboard(ifstream& fin, Scoreboard& scoreboard, const string& FileExt
 	fin >> scoreboard.total;
 }
 
+void initScoreboard(Scoreboard& score, const double& midterm, const double& _final, const double& bonus, const double& total)
+{
+	score.midterm = midterm;
+	score._final = _final;
+	score.bonus = bonus;
+	score.total = total;
+}
+
 void loadAttendanceList(ifstream& fin, AttendanceList& listAttends)
 {
 	for (int i = 0; i < listAttends.countDate; i++)
@@ -92,6 +113,17 @@ void loadAttendanceList(ifstream& fin, AttendanceList& listAttends)
 		fin >> listAttends.startTime.hour >> listAttends.startTime.minute;
 		fin >> listAttends.endTime.hour >> listAttends.endTime.minute;
 		fin >> listAttends.status[i];
+	}
+}
+
+void saveAttendanceList(ofstream& fout, const AttendanceList& listAttends)
+{
+	for (int i = 0; i < listAttends.countDate; i++)
+	{
+		fout << toString(listAttends.dateList[i], ' ') << " ";
+		fout << listAttends.startTime.hour << " " << listAttends.startTime.minute << " ";
+		fout << listAttends.endTime.hour << " " << listAttends.endTime.minute << " ";
+		fout << listAttends.status[i] << endl;
 	}
 }
 
@@ -149,6 +181,54 @@ void releaseStudentCourseInformationList(void* listInfo, const int& countStudent
 		releaseStudentCourseInformation(arr, countStudent);
 	}
 }
+
+bool loadListCoursesFromCsv(const string& filePath, Course*& listCourses, int& countCourse)
+{
+	ifstream fin(filePath);
+
+	if (!fin.is_open())
+		return false;
+
+	string ignoreLine, filePathToSaveData;
+	int temp;
+
+	listCourses = new Course[MAX_SIZE];
+
+	getline(fin, ignoreLine);
+	while (!fin.eof())
+	{
+		fin >> temp;
+		fin.ignore();
+
+		loadCourseFromCsv(fin, listCourses[countCourse]);
+		countCourse++;
+	}
+
+	fin.close();
+	return true;
+}
+
+bool saveAttendanceListOfCourseToCsv(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent) {
+	ofstream fout(filePath);
+	string status;
+
+	if (!fout.is_open())
+		return false;
+
+	fout << "No,Student ID,Fullname";
+	for (int i = 0; i < listInfo[0].attendList.countDate; i++)
+		fout << "," << toString(listInfo[0].attendList.dateList[i]);
+	fout << endl;
+
+	for (int i = 0; i < countStudent; i++) {
+		fout << i + 1 << "," << listInfo[i].st.id << "," << listInfo[i].st.info.fullName;
+		fout << endl;
+	}
+
+	fout.close();
+	return true;
+}
+
 bool getInputCourseFromSemester(const string& academicYear, const string& semester, string& ClassName,
 	Course& course, Course*& listCourses, int& countCourse)
 {
@@ -167,6 +247,13 @@ bool getInputCourseFromSemester(const string& academicYear, const string& semest
 
 	return true;
 }
+
+void* allocListCourses(const int& countCourse)
+{
+	Course* arr = new Course[countCourse];
+	return arr;
+}
+
 bool saveListCourses(const string& filePath, Course* listCourses, const int& countCourse)
 {
 	ofstream fout(filePath);
@@ -187,6 +274,85 @@ bool saveListCourses(const string& filePath, Course* listCourses, const int& cou
 	fout.close();
 	return true;
 }
+
+void loadCourseFromCsv(ifstream& fin, Course& course)
+{
+	Lecturer& lec = course.lecturer;
+	string gender, dayOfWeek;
+	char ignore;
+
+	getline(fin, course.courseId, ',');
+	getline(fin, course.courseName, ',');
+	getline(fin, course.ClassName, ',');
+
+	getline(fin, lec.info.acc.username, ',');
+	getline(fin, lec.info.fullName, ',');
+	getline(fin, lec.degree, ',');
+	getline(fin, gender, ',');
+
+	fin >> course.startDate.day >> ignore >> course.startDate.month >> ignore >> course.startDate.year;
+	fin >> ignore;
+
+	fin >> course.endDate.day >> ignore >> course.endDate.month >> ignore >> course.endDate.year;
+	fin >> ignore;
+
+	getline(fin, dayOfWeek, ',');
+
+	fin >> course.startTime.hour >> ignore >> course.startTime.minute >> ignore;
+	fin >> course.endTime.hour >> ignore >> course.endTime.minute >> ignore;
+
+	getline(fin, course.room);
+
+	lec.info.gender = (gender == "Male") ? (Gender::MALE) : (Gender::FEMALE);
+	course.dayOfWeek = convertWeekdayStringToNumber(dayOfWeek);
+	course.status = true;
+}
+
+
+void showAttendaceListOfCourse(StudentCourseInformation*& listInfo, const int& countStudent) {
+	int len = 59 + (15 * listInfo[0].attendList.countDate);
+	string status;
+
+	cout << "| " << setw(4) << left << "No" << " | " << setw(12) << "Student ID"
+		<< " | " << setw(35) << "Full name" << endl;
+
+	for (int i = 0; i < countStudent; i++)
+	{
+		cout << "| " << setw(4) << left << i + 1
+			<< " | " << setw(12) << left << listInfo[i].st.id
+			<< " | " << setw(35) << left << listInfo[i].st.info.fullName << endl;
+	}
+}
+
+
+void showListScoreboardsOfCourse(StudentCourseInformation*& listInfo, const int& countStudent)
+{
+	cout << "|" << setfill('-') << setw(112) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	cout << "| " << setw(5) << left << " No"
+		<< " | " << setw(12) << left << "Student ID" << " | " << setw(35) << left << "Full name"
+		<< " | " << setw(10) << left << "  Midterm" << " | " << setw(10) << left << "  Final"
+		<< " | " << setw(10) << left << "  Bonus" << " | " << setw(10) << left << "  Total" << " |" << endl;
+
+	cout << "|" << setfill('-') << setw(112) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	for (int i = 0; i < countStudent; i++)
+	{
+		cout << "| " << setw(3) << right << i + 1 << "  ";
+		viewScoreboardOfStudent(listInfo[i].st, listInfo[i].scoreList);
+
+		cout << "|" << setfill('-') << setw(112) << "-" << "|" << endl;
+		cout << setfill(' ');
+	}
+}
+
+void copyCourse(void* lec1, void* lec2)
+{
+	*(Course*)lec1 = *(Course*)lec2;
+}
+
 void saveCourse(ofstream& fout, Course& course)
 {
 	Lecturer& lec = course.lecturer;
@@ -216,4 +382,61 @@ void viewScoreboardOfStudent(const Student& st, const Scoreboard& score)
 	cout << " | " << setw(6) << right << score.midterm << "     | " << setw(6) << right << score._final
 		<< "     | " << setw(6) << right << score.bonus << "     | " << setw(6) << right << score.total
 		<< "     |" << endl;
+}
+
+bool ascendingStudentIdOfCourse(void* val1, void* val2)
+{
+	StudentCourseInformation* st1 = (StudentCourseInformation*)val1;
+	StudentCourseInformation* st2 = (StudentCourseInformation*)val2;
+
+	return ascendingString(&st1->st.id, &st2->st.id);
+}
+
+void saveScoreboard(ofstream& fout, const Scoreboard& scoreboard)
+{
+	fout << scoreboard.midterm << endl
+		<< scoreboard._final << endl
+		<< scoreboard.bonus << endl
+		<< scoreboard.total << endl;
+}
+
+bool saveStudentCourseInformationList(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent)
+{
+	ofstream fout(filePath);
+	int  nStudent = 0;
+
+	if (!fout.is_open())
+		return false;
+
+	for (int i = 0; i < countStudent; i++)
+		if (listInfo[i].status)
+			nStudent++;
+
+	fout << nStudent << endl;
+	fout << listInfo[0].attendList.countDate << endl;
+
+	sortArray(listInfo, countStudent, sizeof(StudentCourseInformation), ascendingStudentIdOfCourse);
+
+	for (int i = 0; i < countStudent; i++)
+	{
+		if (listInfo[i].status)
+		{
+			fout << listInfo[i].st.id << endl << listInfo[i].st.info.fullName << endl << listInfo[i].st.ClassName << endl;
+			saveScoreboard(fout, listInfo[i].scoreList);
+			//saveAttendanceList(fout, listInfo[i].attendList);
+			fout << listInfo[i].status << endl;
+		}
+	}
+
+	fout.close();
+	return true;
+}
+
+void releaseListCourses(void* listCourses, const int& countCourse)
+{
+	if (listCourses)
+	{
+		Course* arr = (Course*)listCourses;
+		delete[] arr;
+	}
 }
