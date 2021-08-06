@@ -21,7 +21,211 @@ bool loadListClassName(const string& filename, string*& listClassName, int& coun
 	fin.close();
 	return true;
 }
+void editCourseName(Course& course)
+{
+	int check;
 
+	cout << "\nCurrent course name: " << course.courseName << endl;
+	cout << "==> Do you want to edit this course's name? (Yes: 1, No: 0)" << endl;
+	check = getChoice(0, 1);
+
+	if (check)
+	{
+		string newName;
+
+		cout << "\nEnter new course name: ";
+		cin.ignore();
+		getline(cin, newName);
+
+		course.courseName = newName;
+	}
+}
+void editCourseLecturer(Course& course)
+{
+	int check;
+
+	cout << "\nCurrent course lecturer: " << course.lecturer.info.fullName << endl;
+	cout << "==> Do you want to edit this course's lecturer? (Yes: 1, No: 0)" << endl;
+	check = getChoice(0, 1);
+
+	if (check) {
+		cin.ignore();
+		course.lecturer = addNewLecturer();
+	}
+}
+void editDate(Course& course)
+{
+	int check;
+
+	cout << "\nCurrent course start date: " << toString(course.startDate) << endl;
+	cout << "Current course end date: " << toString(course.endDate) << endl;
+	cout << "==> Do you want to edit this course's start date and end date? (Yes: 1, No: 0)" << endl;
+	check = getChoice(0, 1);
+
+	if (check)
+	{
+		Date newStartDate, newEndDate;
+
+		cout << "\nEnter new course start date (YYYY MM DD): " << endl;
+		cin >> newStartDate.year >> newStartDate.month >> newStartDate.day;
+
+		cout << "\nEnter new course end date (YYYY MM DD): " << endl;
+		cin >> newEndDate.year >> newEndDate.month >> newEndDate.day;
+
+		course.startDate = newStartDate;
+		course.endDate = newEndDate;
+	}
+}
+void editTime(Course& course)
+{
+	int check;
+
+	cout << "\nCurrent course start time: " << course.startTime.hour << ":" << course.startTime.minute << endl;
+	cout << "Current course start time: " << course.endTime.hour << ":" << course.endTime.minute << endl;
+	cout << "==> Do you want to edit this course's start time and end time? (Yes: 1, No: 0)" << endl;
+	check = getChoice(0, 1);
+
+	if (check)
+	{
+		Time newStartTime, newEndTime;
+
+		cout << "\nEnter new course start time (HH MM): " << endl;
+		cin >> newStartTime.hour >> newStartTime.minute;
+
+		cout << "\nEnter new course end time (HH MM): " << endl;
+		cin >> newEndTime.hour >> newEndTime.minute;
+
+		course.startTime = newStartTime;
+		course.endTime = newEndTime;
+	}
+}
+void editRoom(Course& course)
+{
+	int check;
+
+	cout << "\nCurrent course room: " << course.room << endl;
+	cout << "==> Do you want to edit this course's room? (Yes: 1, No: 0)" << endl;
+	check = getChoice(0, 1);
+
+	if (check)
+	{
+		string newRoom;
+
+		cout << "\nEnter new course room: ";
+		cin.ignore();
+		getline(cin, newRoom);
+
+		course.room = newRoom;
+	}
+}
+void editDayOfWeek(Course& course)
+{
+	int check;
+
+	cout << "\nCurrent course day of week: " << course.dayOfWeek << endl;
+	cout << "==> Do you want to edit this course's day of week? (Yes: 1, No: 0)" << endl;
+	check = getChoice(0, 1);
+
+	if (check)
+	{
+		int newDayOfWeek;
+
+		cout << "\nEnter new course day of week (1: SUNDAY, 2: MONDAY,..., 7: SATURDAY): ";
+		newDayOfWeek = getChoice(1, 7);
+
+		course.dayOfWeek = newDayOfWeek;
+	}
+}
+void editAnExistingCourse(const string& academicYear, const string& semester)
+{
+	string ClassName, filePath;
+	Course* listCourses = nullptr;
+	Course key;
+	int countCourse, idx;
+
+	if (getInputCourseFromSemester(academicYear, semester, ClassName, key, listCourses, countCourse))
+	{
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, "Schedule", "txt");
+		idx = findValue(listCourses, countCourse, sizeof(Course), &key, isEqualCourseId);
+
+		if (idx != NOT_FOUND)
+		{
+			int choice;
+
+			system("cls");
+
+			do
+			{
+				cout << "|------------------------------|" << endl;
+				cout << "|          EDIT COURSE         |" << endl;
+				cout << "|------------------------------|" << endl;
+				cout << "| No |        Option           |" << endl;
+				cout << "|------------------------------|" << endl;
+				cout << "| 1  | Course ID               |" << endl;
+				cout << "|------------------------------|" << endl;
+				cout << "| 2  | Course Name             |" << endl;
+				cout << "|------------------------------|" << endl;
+				cout << "| 3  | Lecturer                |" << endl;
+				cout << "|------------------------------|" << endl;
+				cout << "| 4  | Date                    |" << endl;
+				cout << "|------------------------------|" << endl;
+				cout << "| 5  | Day of week             |" << endl;
+				cout << "|------------------------------|" << endl;
+				cout << "| 6  | Time                    |" << endl;
+				cout << "|------------------------------|" << endl;
+				cout << "| 7  | Room                    |" << endl;
+				cout << "|------------------------------|" << endl;
+				cout << "| 8  | Number of credits       |" << endl;
+				cout << "|------------------------------|" << endl;
+				cout << "| 9  | Return to previous menu |" << endl;
+				cout << "|------------------------------|" << endl;
+
+				choice = getChoice(1, 8);
+
+				switch (choice)
+				{
+				case 1:
+					editCourseID(listCourses[idx], academicYear, semester);
+					break;
+				case 2:
+					editCourseName(listCourses[idx]);
+					break;
+				case 3:
+					editCourseLecturer(listCourses[idx]);
+					break;
+				case 4:
+					editDate(listCourses[idx]);
+					break;
+				case 5:
+					editDayOfWeek(listCourses[idx]);
+					break;
+				case 6:
+					editTime(listCourses[idx]);
+					break;
+				case 7:
+					editRoom(listCourses[idx]);
+					break;
+				case 8:
+					editCredits(listCourses[idx]);
+					break;
+				case 9:
+					break;
+				}
+
+				if (choice != 9) {
+					system("pause");
+					system("cls");
+				}
+			} while (choice != 9);
+
+			saveListCourses(filePath, listCourses, countCourse);
+		}
+		else
+			cout << "This course was not found." << endl;
+
+		delete[] listCourses;
+	}
+}
 bool ascendingSemester(void* semester1, void* semester2)
 {
 	return ascendingString(semester1, semester2);
@@ -68,6 +272,40 @@ bool addAcademicYearsAndSemester(string& academicYears, string& semester)
 
 	return result;
 }
+void editCourseID(Course& course, const string academicYear, const string semester)
+{
+	int check;
+
+	cout << "\nCurrent course ID: " << course.courseId << endl;
+	cout << "==> Do you want to edit this course's ID? (Yes: 1, No: 0)" << endl;
+	check = getChoice(0, 1);
+
+	if (check)
+	{
+		string newID;
+
+		cout << "\nEnter new course ID: ";
+		cin.ignore();
+		newID = getInputCourseID();
+
+		string currentFilePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, course.courseId, "txt");
+		string newFilePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, newID, "txt");
+		StudentCourseInformation* listInfo = nullptr;
+		int countStudent = 0;
+
+		if (currentFilePath != newFilePath) {
+			if (loadStudentCourseInformationList(currentFilePath, listInfo, countStudent))
+			{
+				if (saveStudentCourseInformationList(newFilePath, listInfo, countStudent))
+					course.courseId = newID;
+				else
+					cout << "Can't open student file." << endl;
+			}
+			else
+				cout << "Can't open student file." << endl;
+		}
+	}
+}
 bool saveAcademicYearsAndSemester(const string& filePath, string* listAcademicYears, string* listSemesters, const int& countAcademicYears)
 {
 	ofstream fout(filePath);
@@ -103,6 +341,35 @@ bool saveAcademicYearsAndSemester(const string& filePath, string* listAcademicYe
 
 	fout.close();
 	return true;
+}
+void ExportScoreboardToCsv(const string& academicYear, const string& semester)
+{
+	string ClassName, filePath, destFilePath(PATH_DATA);
+	Course course, * listCourses = nullptr;
+	StudentCourseInformation* listInfo = nullptr;
+	int countStudent = 0, countCourse = 0;
+
+	if (getInputCourseFromSemester(academicYear, semester, ClassName, course, listCourses, countCourse))
+	{
+		delete[] listCourses;
+
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, course.courseId, "txt");
+
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			destFilePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName,
+				course.courseId + "-Scoreboard", "csv");
+
+			if (saveListScoreboardsToCsv(destFilePath, listInfo, countStudent))
+				cout << "Export successfully" << endl;
+			else
+				cout << "Export failed" << endl;
+
+			releaseStudentCourseInformation(listInfo, countStudent);
+		}
+		else
+			cout << "Can not open course file" << endl;
+	}
 }
 void createAcademicYearsAndSemester()
 {

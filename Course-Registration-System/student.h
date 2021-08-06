@@ -24,3 +24,4 @@ void viewScores(const string& academicYear, const string& semester, const Studen
 bool getInputCourseOfStudent(const string& academicYear, const string& semester, Course& course, const Student& st);
 void viewStudentList(Student* listStudents, const int& countStudent);
 
+void sortArray_1(Student* listInfo, int countStudent);
