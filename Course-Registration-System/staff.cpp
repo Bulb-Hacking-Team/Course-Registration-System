@@ -230,6 +230,12 @@ bool ascendingSemester(void* semester1, void* semester2)
 {
 	return ascendingString(semester1, semester2);
 }
+bool isEqualStaff(void* s1, void* s2) {
+	Staff* val1 = (Staff*)s1;
+	Staff* val2 = (Staff*)s2;
+
+	return (val1->info.fullName == val2->info.fullName && val1->info.acc.username == val2->info.acc.username);
+}
 void importListCoursesFromCsv(const string& filePath, const string& academicYear, const string& semester)
 {
 	Course* listCourses = nullptr;

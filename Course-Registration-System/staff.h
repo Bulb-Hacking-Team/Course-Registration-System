@@ -9,6 +9,7 @@ void viewAcademicYearsAndSemester();
 void removeCourse(const string& academicYear, const string& semester);
 void viewClassList();
 void importCourses(const string& academicYear, const string& semester);
+bool isEqualStaff(void* s1, void* s2);
 
 void importClass();
 bool ascendingSemester(void* semester1, void* semester2);
