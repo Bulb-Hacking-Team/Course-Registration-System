@@ -143,3 +143,15 @@ bool saveListLecturers(const string& filePath, Lecturer*& listLecturers, int& co
 	fout.close();
 	return true;
 }
+
+void loadScoreboardFromCsv(ifstream& fin, StudentCourseInformation& scoreInfo)
+{
+	char comma;
+
+	getline(fin, scoreInfo.st.id, DELIMIT_CSV);
+	getline(fin, scoreInfo.st.info.fullName, DELIMIT_CSV);
+	fin >> scoreInfo.scoreList.midterm >> comma;
+	fin >> scoreInfo.scoreList._final >> comma;
+	fin >> scoreInfo.scoreList.bonus >> comma;
+	fin >> scoreInfo.scoreList.total;
+}

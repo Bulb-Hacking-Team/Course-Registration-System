@@ -18,3 +18,5 @@ void loadLecturer(ifstream& fin, Lecturer& lec);
 void saveLecturer(ofstream& fout, const Lecturer& lec);
 
 bool saveListLecturers(const string& filePath, Lecturer*& listLecturers, int& countLecturer);
+
+void loadScoreboardFromCsv(ifstream& fin, StudentCourseInformation& scoreInfo);
