@@ -304,6 +304,97 @@ void importCourses(const string& academicYear, const string& semester) {
 
 	importListCoursesFromCsv(filePath, academicYear, semester);
 }
+bool EnrollClassToCourse(const string& filePath, const Course& course)
+{
+	StudentCourseInformation* listInfo = nullptr;
+	Student* listStudents = nullptr;
+	string fileClass;
+	int countStudent = 0;
+	bool flag = false;
+
+	fileClass = createClassDirectoryWithFileName(course.ClassName);
+
+	if (loadStudentList(fileClass, listStudents, countStudent))
+	{
+		listInfo = new StudentCourseInformation[countStudent];
+
+		for (int i = 0; i < countStudent; i++)
+		{
+			initAttendanceList(listInfo[i].attendList, course);
+			initScoreboard(listInfo[i].scoreLbool EnrollClassToCourse(const string& filePath, const Course& course)
+{
+	StudentCourseInformation* listInfo = nullptr;
+	Student* listStudents = nullptr;
+	string fileClass;
+	int countStudent = 0;
+	bool flag = false;
+
+	fileClass = createClassDirectoryWithFileName(course.ClassName);
+
+	if (loadStudentList(fileClass, listStudents, countStudent))
+	{
+		listInfo = new StudentCourseInformation[countStudent];
+
+		for (int i = 0; i < countStudent; i++)
+		{
+			initAttendanceList(listInfo[i].attendList, course);
+			initScoreboard(listInfo[i].scoreList);
+			listInfo[i].st = listStudents[i];
+			listInfo[i].status = true;
+		}
+
+		if (saveStudentCourseInformationList(filePath, listInfo, countStudent))
+			flag = true;bool EnrollClassToCourse(const string& filePath, const Course& course)
+{
+	StudentCourseInformation* listInfo = nullptr;
+	Student* listStudents = nullptr;
+	string fileClass;
+	int countStudent = 0;
+	bool flag = false;
+
+	fileClass = createClassDirectoryWithFileName(course.ClassName);
+
+	if (loadStudentList(fileClass, listStudents, countStudent))
+	{
+		listInfo = new StudentCourseInformation[countStudent];
+
+		for (int i = 0; i < countStudent; i++)
+		{
+			initAttendanceList(listInfo[i].attendList, course);
+			initScoreboard(listInfo[i].scoreList);
+			listInfo[i].st = listStudents[i];
+			listInfo[i].status = true;
+		}
+
+		if (saveStudentCourseInformationList(filePath, listInfo, countStudent))
+			flag = true;
+
+		releaseStudentCourseInformation(listInfo, countStudent);
+	}
+
+	delete[] listStudents;
+	return flag;
+}
+
+		releaseStudentCourseInformation(listInfo, countStudent);
+	}
+
+	delete[] listStudents;
+	return flag;
+}ist);
+			listInfo[i].st = listStudents[i];
+			listInfo[i].status = true;
+		}
+
+		if (saveStudentCourseInformationList(filePath, listInfo, countStudent))
+			flag = true;
+
+		releaseStudentCourseInformation(listInfo, countStudent);
+	}
+
+	delete[] listStudents;
+	return flag;
+}
 void viewAttendanceListOfCourse(const string& academicYear, const string& semester) {
 	string ClassName, filePath;
 	Course course, * listCourses = nullptr;

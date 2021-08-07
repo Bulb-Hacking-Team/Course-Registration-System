@@ -12,7 +12,7 @@ void importCourses(const string& academicYear, const string& semester);
 
 void importClass();
 bool ascendingSemester(void* semester1, void* semester2);
-
+bool EnrollClassToCourse(const string& filePath, const Course& course);
 void createAcademicYearsAndSemester();
 bool addAcademicYearsAndSemester(string& academicYears, string& semester);
 bool saveAcademicYearsAndSemester(const string& filePath, string* listAcademicYears, string* listSemesters,
