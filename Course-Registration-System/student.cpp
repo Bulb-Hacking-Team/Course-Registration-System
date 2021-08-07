@@ -18,13 +18,32 @@ void loadStudentFromTxt(ifstream& fin, Student& st)
 
 	st.info.acc.username = st.id;
 }
-void sortArray_1(Student* listInfo, int countStudent) {
-	for (int i = 0; i < countStudent - 1; i++)
-		for (int j = i + 1; j < countStudent; j++) {
-			if (strcmp(listInfo[i].id.c_str(), listInfo[j].id.c_str()) == 1) {
-				swap(listInfo[i], listInfo[j]);
-			}
-		}
+void viewStudentListFromCourse(StudentCourseInformation* listInfo, const int& countStudent)
+{
+	cout << "|" << setfill('-') << setw(74) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	cout << "| " << setw(4) << left << "No" << " | " << setw(12) << left << "ID"
+		<< " | " << setw(35) << left << "Full name"
+		<< " | " << setw(12) << left << "ClassName" << " |" << endl;
+
+	cout << "|" << setfill('-') << setw(74) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	for (int i = 0; i < countStudent; i++)
+	{
+		cout << "| " << setw(4) << left << i + 1
+			<< " | " << setw(12) << left << listInfo[i].st.id
+			<< " | " << setw(35) << left << listInfo[i].st.info.fullName
+			<< " | " << setw(12) << left << listInfo[i].st.ClassName << " |" << endl;
+
+		cout << "|" << setfill('-') << setw(74) << "-" << "|" << endl;
+		cout << setfill(' ');
+	}
+}
+bool ascendingStudentId(void* Name1, void* Name2)
+{
+	return (*(string*)Name1 > *(string*)Name2);
 }
 bool loadStudentList(const string& filePath, Student*& listStudents, int& countStudent)
 {
@@ -93,6 +112,76 @@ void importStudentListFromCsv(const string& filePath)
 
 	delete[] listStudents;
 }
+void viewCheckInResult(const string& academicYear, const string& semester, Student st)
+{
+	string filePath;
+	Course course;
+	StudentCourseInformation* listInfo = nullptr;
+	int countStudent = 0;
+
+	if (getInputCourseOfStudent(academicYear, semester, course, st))
+	{
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, course.courseId, "txt");
+
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			StudentCourseInformation key;
+			int idx;
+
+			key.st = st;
+			idx = findValue(listInfo, countStudent, sizeof(StudentCourseInformation), &key, isEqualStudentIdFromCourse);
+
+			cout << "\nAttendance list of " << listInfo[idx].st.info.fullName
+				<< " (" << listInfo[idx].st.id << "): \n" << endl;
+
+			viewAttendanceListStudent(listInfo[idx].attendList);
+			releaseStudentCourseInformation(listInfo, countStudent);
+		}
+		else
+			cout << "Can not open course file" << endl;
+	}
+}
+bool checkInImp(const Date& dt, const Time& tm, AttendanceList& attendList) {
+	string date_str = toString(dt);
+	int minute_startTime, minute_endTime, minute_realTime;
+
+	minute_startTime = (attendList.startTime.hour * 60) + attendList.startTime.minute;
+	minute_endTime = (attendList.endTime.hour * 60) + attendList.endTime.minute;
+	// cout << "Start: " << attendList.startTime.hour << " " << attendList.startTime.minute;
+	for (int i = 0; i < 11; i++) {
+		if (toString(attendList.dateList[i]) == date_str) {
+			// cout << "dateList: " << attendList.dateList[i]
+			minute_realTime = (tm.hour * 60) + tm.minute;
+			// cout << " - Real: " << tm.hour << " " << tm.minute;
+			if (minute_realTime <= minute_endTime)
+			{
+				attendList.status[i] = true;
+				return true;
+			}
+		}
+	}
+	//cout << " - End: " << minute_endTime << endl;
+	return false;
+}
+bool saveListScoreboardsToCsv(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent)
+{
+	ofstream fout(filePath);
+
+	if (!fout.is_open())
+		return false;
+
+	fout << "No,Student ID,Fullname,Midterm,Final,Bonus,Total" << endl;
+	for (int i = 0; i < countStudent; i++)
+	{
+		fout << i + 1 << ",";
+		fout << listInfo[i].st.id << "," << listInfo[i].st.info.fullName << ","
+			<< listInfo[i].scoreList.midterm << "," << listInfo[i].scoreList._final << ","
+			<< listInfo[i].scoreList.bonus << "," << listInfo[i].scoreList.total << endl;
+	}
+
+	fout.close();
+	return true;
+}
 void createAccountStudent(Student& st)
 {
 	st.info.acc.username = st.id;
@@ -101,7 +190,41 @@ void createAccountStudent(Student& st)
 		if (ch != '-')
 			st.info.acc.password += ch;
 }
+void checkIn(const string& academicYear, const string& semester, Student& st)
+{
+	string filePath;
+	Course course;
+	StudentCourseInformation* listInfo = nullptr;
+	int countStudent = 0;
 
+	if (getInputCourseOfStudent(academicYear, semester, course, st))
+	{
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, course.courseId, "txt");
+		//	cout << filePath<<"13214545646";
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			Date dt;
+			Time tm;
+			StudentCourseInformation key;
+
+			key.st = st;
+			int idx = findValue(listInfo, countStudent, sizeof(StudentCourseInformation), &key, isEqualStudentIdFromCourse);
+			getCurrentDateAndTime(dt, tm);
+
+			if (checkInImp(dt, tm, listInfo[idx].attendList))
+			{
+				cout << "Check in successful." << endl;
+				bool temp = saveStudentCourseInformationList(filePath, listInfo, countStudent);
+			}
+			else
+				cout << "Check in failed." << endl;
+
+			releaseStudentCourseInformation(listInfo, countStudent);
+		}
+		else
+			cout << "Can not open course file" << endl;
+	}
+}
 void loadStudentFromCsv(ifstream& fin, Student& st)
 {
 	string gender;
