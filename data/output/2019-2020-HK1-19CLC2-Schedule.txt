@@ -1,0 +1,57 @@
+4
+CSC10001
+Introduction to Programming
+19CLC2
+vcnam
+Van Chi Nam
+ThS
+0
+2019 10 07
+2019 12 21
+2
+13 30
+17 30
+I41
+1
+CSC00004
+Introduction to Information Technology
+19CLC2
+ltnhan
+Le Thi Nhan
+TS
+1
+2019 10 07
+2019 12 21
+2
+9 30
+11 30
+I41
+1
+CSC10101
+Soft skills
+19CLC2
+tdquang
+Tran Duy Quang
+ThS
+0
+2019 10 07
+2019 12 21
+4
+7 30
+11 30
+I44
+1
+MTH00009
+Discrete Mathematics
+19CLC2
+nvdong
+Nguyen Viet Dong
+TS
+0
+2019 10 07
+2019 12 21
+1
+7 30
+11 30
+HT I
+1

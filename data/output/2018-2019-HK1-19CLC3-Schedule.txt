@@ -1,0 +1,71 @@
+5
+BAA00102
+Kinh te chinh tri Mac-Lenin
+19CLC3
+nqhuy
+Nguyen Quang Huy
+TS
+0
+2020 04 06
+2020 06 15
+3
+7 30
+11 30
+I42
+1
+BAA00103
+Chu nghia xa hoi khoa hoc
+19CLC3
+nqhuy
+Nguyen Quang Huy
+TS
+0
+2020 04 06
+2020 06 15
+2
+13 30
+17 30
+I23
+1
+CSC10003
+Object Oriented Programming
+19CLC3
+nmhuy
+Nguyen Minh Huy
+ThS
+0
+2020 04 06
+2020 06 15
+6
+13 30
+17 30
+I42
+1
+MTH00006
+Vi tich phan 2B
+19CLC3
+nttvan
+Nguyen Thi Thu Van
+TS
+1
+2020 04 06
+2020 06 15
+4
+7 30
+11 30
+I23
+1
+MTH00030
+Linear algebra
+19CLC3
+lvhop
+Le Van Hop
+TS
+0
+2020 04 06
+2020 06 15
+3
+13 30
+17 30
+I42
+1

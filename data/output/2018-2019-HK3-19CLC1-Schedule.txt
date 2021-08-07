@@ -1,0 +1,31 @@
+2
+NMLT123
+Nhap Mon Lap Trinh
+19CLC1
+4
+nphung
+Ngo Phi HUng
+TS
+0
+2021 06 08
+2021 06 09
+2
+17 30
+19 30
+123
+1
+KTLT
+Ki Thuat Lap Trinh
+19CLC1
+4
+hungngo
+Hung
+TS
+0
+2021 08 06
+2021 09 06
+2
+15 30
+17 0
+B123
+1

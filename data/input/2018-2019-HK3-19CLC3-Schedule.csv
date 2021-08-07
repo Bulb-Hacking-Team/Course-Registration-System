@@ -1,0 +1,6 @@
+﻿No,Course ID,Course name,Class,Lecturer username,Lecturer name,Lecturer degree,Lecturer gender,Start date,End date,Day of week,Start hour,Start minutes,End hour,End minute,Room
+1,BAA00102,Kinh te chinh tri Mac-Lenin,19CLC3,nqhuy,Nguyen Quang Huy,TS,Male,06-04-2020,15-06-2020,TUE,7,30,11,30,I42
+2,BAA00103,Chu nghia xa hoi khoa hoc,19CLC3,nqhuy,Nguyen Quang Huy,TS,Male,06-04-2020,15-06-2020,MON,13,30,17,30,I23
+3,CSC10003,Object Oriented Programming,19CLC3,nmhuy,Nguyen Minh Huy,ThS,Male,06-04-2020,15-06-2020,FRI,13,30,17,30,I42
+4,MTH00006,Vi tich phan 2B,19CLC3,nttvan,Nguyen Thi Thu Van,TS,Female,06-04-2020,15-06-2020,WED,7,30,11,30,I23
+5,MTH00030,Linear algebra,19CLC3,lvhop,Le Van Hop,TS,Male,06-04-2020,15-06-2020,TUE,13,30,17,30,I42

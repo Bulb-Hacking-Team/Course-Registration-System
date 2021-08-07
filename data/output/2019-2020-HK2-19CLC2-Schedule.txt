@@ -1,0 +1,71 @@
+5
+CSC10002
+Programming Techniques
+19CLC2
+nmhuy
+Nguyen Minh Huy
+ThS
+0
+2020 03 16
+2020 05 30
+6
+13 30
+17 30
+I35
+1
+MTH00003
+Vi tich phan 1B
+19CLC2
+nttvan
+Nguyen Thi Thu Van
+TS
+1
+2020 03 16
+2020 05 30
+4
+13 30
+17 30
+I23
+1
+BAA00005
+Basic Economics
+19CLC2
+htlna
+Huynh Thi Ly Na
+ThS
+1
+2020 03 16
+2020 05 30
+5
+7 30
+11 30
+HT I
+1
+BAA00101
+Triet hoc Mac-Lenin
+19CLC2
+nqhuy
+Ngo Quang Huy
+TS
+0
+2020 03 16
+2020 05 30
+5
+13 30
+17 30
+HT I
+1
+PHY00005
+Vat ly dai cuong 1
+19CLC2
+nkquang
+Nguyen Kim Quang
+TS
+0
+2020 03 16
+2020 05 30
+2
+7 30
+11 30
+I44
+1

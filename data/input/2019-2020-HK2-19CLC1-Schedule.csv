@@ -1,0 +1,6 @@
+﻿No,Course ID,Course name,Class,Lecturer username,Lecturer name,Lecturer degree,Lecturer gender,Start date,End date,Day of week,Start hour,Start minutes,End hour,End minute,Room
+1,CSC10002,Programming Techniques,19CLC1,nmhuy,Nguyen Minh Huy,ThS,Male,16-03-2020,30-05-2020,FRI,13,30,17,30,I35
+2,MTH00003,Vi tich phan 1B,19CLC1,nttvan,Nuyen Thi Thu Van,TS,Female,16-03-2020,30-05-2020,WED,13,30,17,30,I23
+3,BAA00005,Basic Economics,19CLC1,htlna,Huynh Thi Ly Na,ThS,Female,16-03-2020,30-05-2020,THU,7,30,11,30,HT I
+4,BAA00101,Triet hoc Mac-Lenin,19CLC1,nqhuy,Ngo Quang Huy,TS,Male,16-03-2020,30-05-2020,THU,13,30,17,30,HT I
+5,PHY00005,Vat ly dai cuong 1,19CLC1,nkquang,Nguyen Kim Quang,TS,Male,16-03-2020,30-05-2020,MON,7,30,11,30,I44

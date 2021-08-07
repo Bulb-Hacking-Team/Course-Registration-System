@@ -1,0 +1,76 @@
+15
+vcnam
+12345678
+Van Chi Nam
+ThS
+0
+ltnhan
+12345678
+Le Thi Nhan
+TS
+1
+tdquang
+12345678
+Tran Duy Quang
+ThS
+0
+nvdong
+12345678
+Nguyen Viet Dong
+TS
+0
+nmhuy
+12345678
+Nguyen Minh Huy
+ThS
+0
+nttvan
+12345678
+Nguyen Thi Thu Van
+TS
+1
+htlna
+12345678
+Huynh Thi Ly Na
+ThS
+1
+nqhuy
+12345678
+Ngo Quang Huy
+TS
+0
+nkquang
+12345678
+Nguyen Kim Quang
+TS
+0
+lvhop
+12345678
+Le Van Hop
+TS
+0
+nttvan
+12345678
+Nuyen Thi Thu Van
+TS
+1
+nqhuy
+12345678
+Nguyen Quang Huy
+TS
+0
+vcnam
+12345678
+HUng
+TS
+0
+nphung
+12345678
+Ngo Phi HUng
+TS
+0
+hungngo
+12345678
+Hung
+TS
+0
