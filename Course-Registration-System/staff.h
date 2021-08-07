@@ -22,6 +22,7 @@ void addNewStudent();
 void createClass();
 void viewStudentsOfClass();
 void ExportScoreboardToCsv(const string& academicYear, const string& semester);
+void importListCoursesFromCsv(const string& filePath, const string& academicYear, const string& semester);
 
 void editCourseID(Course& course, const string academicYear, const string semester);
 void editCourseName(Course& course);

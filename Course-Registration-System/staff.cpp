@@ -230,7 +230,38 @@ bool ascendingSemester(void* semester1, void* semester2)
 {
 	return ascendingString(semester1, semester2);
 }
+void importListCoursesFromCsv(const string& filePath, const string& academicYear, const string& semester)
+{
+	Course* listCourses = nullptr;
+	int countCourse = 0;
 
+	if (loadListCoursesFromCsv(filePath, listCourses, countCourse))
+	{
+		string fileCourse, fileSchedule;
+		int countCourseImportSuccessful = countCourse;
+
+		for (int i = 0; i < countCourse; i++)
+		{
+			fileCourse = createCourseDirectoryWithFileName(academicYear, semester, listCourses[i].ClassName,
+				listCourses[i].courseId, "txt");
+
+			if (!EnrollClassToCourse(fileCourse, listCourses[i]))
+				countCourseImportSuccessful--;
+
+			addLecturer(listCourses[i].lecturer);
+		}
+
+		fileSchedule = createCourseDirectoryWithFileName(academicYear, semester, listCourses[0].ClassName, "Schedule", "txt");
+		if (saveListCourses(fileSchedule, listCourses, countCourse))
+			cout << "Import successful (" << countCourseImportSuccessful << " / " << countCourse << ")." << endl;
+		else
+			cout << "Import failed." << endl;
+
+		delete[] listCourses;
+	}
+	else
+		cout << "Can not open file." << endl;
+}
 bool isEqualAcademicYears(void* year1, void* year2)
 {
 	return isEqualString(year1, year2);
