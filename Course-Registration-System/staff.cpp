@@ -1,26 +1,39 @@
 #include "staff.h"
-
-bool loadListClassName(const string& filename, string*& listClassName, int& countClassName)
+void editCourseID(Course& course, const string academicYear, const string semester)
 {
-	ifstream fin(filename);
+	int check;
 
-	if (!fin.is_open())
-		return false;
+	cout << "\nCurrent course ID: " << course.courseId << endl;
+	cout << "==> Do you want to edit this course's ID? (Yes: 1, No: 0)" << endl;
+	check = getChoice(0, 1);
 
-	fin >> countClassName;
-	fin.ignore();
-
-	if (countClassName > 0)
+	if (check)
 	{
-		listClassName = new string[countClassName];
+		string newID;
 
-		for (int i = 0; i < countClassName; i++)
-			getline(fin, listClassName[i]);
+		cout << "\nEnter new course ID: ";
+		cin.ignore();
+		newID = getInputCourseID();
+
+		string currentFilePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, course.courseId, "txt");
+		string newFilePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, newID, "txt");
+		StudentCourseInformation* listInfo = nullptr;
+		int countStudent = 0;
+
+		if (currentFilePath != newFilePath) {
+			if (loadStudentCourseInformationList(currentFilePath, listInfo, countStudent))
+			{
+				if (saveStudentCourseInformationList(newFilePath, listInfo, countStudent))
+					course.courseId = newID;
+				else
+					cout << "Can't open student file." << endl;
+			}
+			else
+				cout << "Can't open student file." << endl;
+		}
 	}
-
-	fin.close();
-	return true;
 }
+
 void editCourseName(Course& course)
 {
 	int check;
@@ -40,6 +53,7 @@ void editCourseName(Course& course)
 		course.courseName = newName;
 	}
 }
+
 void editCourseLecturer(Course& course)
 {
 	int check;
@@ -53,6 +67,7 @@ void editCourseLecturer(Course& course)
 		course.lecturer = addNewLecturer();
 	}
 }
+
 void editDate(Course& course)
 {
 	int check;
@@ -76,6 +91,26 @@ void editDate(Course& course)
 		course.endDate = newEndDate;
 	}
 }
+
+void editDayOfWeek(Course& course)
+{
+	int check;
+
+	cout << "\nCurrent course day of week: " << course.dayOfWeek << endl;
+	cout << "==> Do you want to edit this course's day of week? (Yes: 1, No: 0)" << endl;
+	check = getChoice(0, 1);
+
+	if (check)
+	{
+		int newDayOfWeek;
+
+		cout << "\nEnter new course day of week (1: SUNDAY, 2: MONDAY,..., 7: SATURDAY): ";
+		newDayOfWeek = getChoice(1, 7);
+
+		course.dayOfWeek = newDayOfWeek;
+	}
+}
+
 void editTime(Course& course)
 {
 	int check;
@@ -99,6 +134,7 @@ void editTime(Course& course)
 		course.endTime = newEndTime;
 	}
 }
+
 void editRoom(Course& course)
 {
 	int check;
@@ -118,22 +154,19 @@ void editRoom(Course& course)
 		course.room = newRoom;
 	}
 }
-void editDayOfWeek(Course& course)
-{
+void editCredits(Course& course) {
 	int check;
 
-	cout << "\nCurrent course day of week: " << course.dayOfWeek << endl;
-	cout << "==> Do you want to edit this course's day of week? (Yes: 1, No: 0)" << endl;
+	cout << "\nCurrent number of credits: " << course.NumberOfCredits << endl;
+	cout << "==> Do you want to edit ? (Yes: 1, No: 0)" << endl;
 	check = getChoice(0, 1);
 
 	if (check)
 	{
-		int newDayOfWeek;
-
-		cout << "\nEnter new course day of week (1: SUNDAY, 2: MONDAY,..., 7: SATURDAY): ";
-		newDayOfWeek = getChoice(1, 7);
-
-		course.dayOfWeek = newDayOfWeek;
+		int credits;
+		cout << "\nEnter new number of credits: ";
+		cin >> credits;
+		course.NumberOfCredits = credits;
 	}
 }
 void editAnExistingCourse(const string& academicYear, const string& semester)
@@ -226,417 +259,55 @@ void editAnExistingCourse(const string& academicYear, const string& semester)
 		delete[] listCourses;
 	}
 }
-bool ascendingSemester(void* semester1, void* semester2)
-{
-	return ascendingString(semester1, semester2);
-}
 bool isEqualStaff(void* s1, void* s2) {
 	Staff* val1 = (Staff*)s1;
 	Staff* val2 = (Staff*)s2;
 
 	return (val1->info.fullName == val2->info.fullName && val1->info.acc.username == val2->info.acc.username);
 }
-void importListCoursesFromCsv(const string& filePath, const string& academicYear, const string& semester)
+void showListClassName(string*& listClassName, const int& countClassName)
 {
-	Course* listCourses = nullptr;
-	int countCourse = 0;
+	cout << "List of classes:" << endl;
 
-	if (loadListCoursesFromCsv(filePath, listCourses, countCourse))
+	cout << "|" << setfill('-') << setw(19) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	cout << "| " << setw(4) << left << "No" << " | " << setw(10) << "Class name" << " |" << endl;
+
+	cout << "|" << setfill('-') << setw(19) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	for (int i = 0; i < countClassName; i++)
 	{
-		string fileCourse, fileSchedule;
-		int countCourseImportSuccessful = countCourse;
+		cout << "| " << setw(4) << left << i + 1
+			<< " | " << setw(10) << left << listClassName[i] << " |" << endl;
 
-		for (int i = 0; i < countCourse; i++)
-		{
-			fileCourse = createCourseDirectoryWithFileName(academicYear, semester, listCourses[i].ClassName,
-				listCourses[i].courseId, "txt");
-
-			if (!EnrollClassToCourse(fileCourse, listCourses[i]))
-				countCourseImportSuccessful--;
-
-			addLecturer(listCourses[i].lecturer);
-		}
-
-		fileSchedule = createCourseDirectoryWithFileName(academicYear, semester, listCourses[0].ClassName, "Schedule", "txt");
-		if (saveListCourses(fileSchedule, listCourses, countCourse))
-			cout << "Import successful (" << countCourseImportSuccessful << " / " << countCourse << ")." << endl;
-		else
-			cout << "Import failed." << endl;
-
-		delete[] listCourses;
-	}
-	else
-		cout << "Can not open file." << endl;
-}
-bool isEqualAcademicYears(void* year1, void* year2)
-{
-	return isEqualString(year1, year2);
-}
-bool addAcademicYearsAndSemester(string& academicYears, string& semester)
-{
-	string* listAcademicYears = nullptr, * listSemesters = nullptr;
-	string filePath = PATH_DATA;
-	int countAcademicYears = 0;
-	bool result = false;
-
-	filePath += "SchoolYear.txt";
-	if (loadAcademicYearsAndSemester(filePath, listAcademicYears, listSemesters, countAcademicYears))
-	{
-		int idx = findValue_AcademicYear(listAcademicYears, countAcademicYears, academicYears);
-		if (idx == NOT_FOUND)
-		{
-			int count = countAcademicYears;
-
-			listAcademicYears = (string*)pushBackArray(listAcademicYears, countAcademicYears, sizeof(string),
-				&academicYears, allocArrayString, copyString, releaseArrayString);
-
-			listSemesters = (string*)pushBackArray(listSemesters, count, sizeof(string), &semester,
-				allocArrayString, copyString, releaseArrayString);
-
-			result = true;
-		}
-		else if (listSemesters[idx].find(semester) == string::npos)
-		{
-			listSemesters[idx] += "," + semester;
-			result = true;
-		}
-
-		saveAcademicYearsAndSemester(filePath, listAcademicYears, listSemesters, countAcademicYears);
-
-		delete[] listSemesters;
-		delete[] listAcademicYears;
-	}
-
-	return result;
-}
-void viewScoreboardOfCourse(const string& academicYear, const string& semester)
-{
-	string ClassName, filePath;
-	Course course, * listCourses = nullptr;
-	StudentCourseInformation* listInfo = nullptr;
-	int countStudent = 0, countCourse = 0;
-
-	if (getInputCourseFromSemester(academicYear, semester, ClassName, course, listCourses, countCourse))
-	{
-		delete[] listCourses;
-
-		filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, course.courseId, "txt");
-		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
-		{
-			cout << "Scoreboard of class " << ClassName << " (Course ID: " << course.courseId << "): \n" << endl;
-			showListScoreboardsOfCourse(listInfo, countStudent);
-			releaseStudentCourseInformation(listInfo, countStudent);
-		}
-		else
-			cout << "Can not open course file" << endl;
+		cout << "|" << setfill('-') << setw(19) << "-" << "|" << endl;
+		cout << setfill(' ');
 	}
 }
-void importCourses(const string& academicYear, const string& semester) {
-	string filePath, ClassName;
-
-	cout << "Enter class name: ";
-	getline(cin, ClassName);
-	cout << "==> Path of the csv file: ";
-	getline(cin, filePath);
-
-	importListCoursesFromCsv(filePath, academicYear, semester);
-}
-bool EnrollClassToCourse(const string& filePath, const Course& course)
+bool loadListClassName(const string& filename, string*& listClassName, int& countClassName)
 {
-	StudentCourseInformation* listInfo = nullptr;
-	Student* listStudents = nullptr;
-	string fileClass;
-	int countStudent = 0;
-	bool flag = false;
+	ifstream fin(filename);
 
-	fileClass = createClassDirectoryWithFileName(course.ClassName);
-
-	if (loadStudentList(fileClass, listStudents, countStudent))
-	{
-		listInfo = new StudentCourseInformation[countStudent];
-
-		for (int i = 0; i < countStudent; i++)
-		{
-			initAttendanceList(listInfo[i].attendList, course);
-			initScoreboard(listInfo[i].scoreLbool EnrollClassToCourse(const string& filePath, const Course& course)
-{
-	StudentCourseInformation* listInfo = nullptr;
-	Student* listStudents = nullptr;
-	string fileClass;
-	int countStudent = 0;
-	bool flag = false;
-
-	fileClass = createClassDirectoryWithFileName(course.ClassName);
-
-	if (loadStudentList(fileClass, listStudents, countStudent))
-	{
-		listInfo = new StudentCourseInformation[countStudent];
-
-		for (int i = 0; i < countStudent; i++)
-		{
-			initAttendanceList(listInfo[i].attendList, course);
-			initScoreboard(listInfo[i].scoreList);
-			listInfo[i].st = listStudents[i];
-			listInfo[i].status = true;
-		}
-
-		if (saveStudentCourseInformationList(filePath, listInfo, countStudent))
-			flag = true;bool EnrollClassToCourse(const string& filePath, const Course& course)
-{
-	StudentCourseInformation* listInfo = nullptr;
-	Student* listStudents = nullptr;
-	string fileClass;
-	int countStudent = 0;
-	bool flag = false;
-
-	fileClass = createClassDirectoryWithFileName(course.ClassName);
-
-	if (loadStudentList(fileClass, listStudents, countStudent))
-	{
-		listInfo = new StudentCourseInformation[countStudent];
-
-		for (int i = 0; i < countStudent; i++)
-		{
-			initAttendanceList(listInfo[i].attendList, course);
-			initScoreboard(listInfo[i].scoreList);
-			listInfo[i].st = listStudents[i];
-			listInfo[i].status = true;
-		}
-
-		if (saveStudentCourseInformationList(filePath, listInfo, countStudent))
-			flag = true;
-
-		releaseStudentCourseInformation(listInfo, countStudent);
-	}
-
-	delete[] listStudents;
-	return flag;
-}
-
-		releaseStudentCourseInformation(listInfo, countStudent);
-	}
-
-	delete[] listStudents;
-	return flag;
-}ist);
-			listInfo[i].st = listStudents[i];
-			listInfo[i].status = true;
-		}
-
-		if (saveStudentCourseInformationList(filePath, listInfo, countStudent))
-			flag = true;
-
-		releaseStudentCourseInformation(listInfo, countStudent);
-	}
-
-	delete[] listStudents;
-	return flag;
-}
-void viewAttendanceListOfCourse(const string& academicYear, const string& semester) {
-	string ClassName, filePath;
-	Course course, * listCourses = nullptr;
-	StudentCourseInformation* listInfo = nullptr;
-	int countStudent = 0, countCourse = 0;
-
-	if (getInputCourseFromSemester(academicYear, semester, ClassName, course, listCourses, countCourse))
-	{
-		delete[] listCourses;
-
-		filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, course.courseId, "txt");
-		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
-		{
-			cout << "Attendance list of class " << ClassName << " (Course ID: " << course.courseId << "): \n" << endl;
-			showAttendaceListOfCourse(listInfo, countStudent);
-
-			releaseStudentCourseInformation(listInfo, countStudent);
-		}
-		else
-			cout << "Can not open course file" << endl;
-	}
-}
-void editCourseID(Course& course, const string academicYear, const string semester)
-{
-	int check;
-
-	cout << "\nCurrent course ID: " << course.courseId << endl;
-	cout << "==> Do you want to edit this course's ID? (Yes: 1, No: 0)" << endl;
-	check = getChoice(0, 1);
-
-	if (check)
-	{
-		string newID;
-
-		cout << "\nEnter new course ID: ";
-		cin.ignore();
-		newID = getInputCourseID();
-
-		string currentFilePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, course.courseId, "txt");
-		string newFilePath = createCourseDirectoryWithFileName(academicYear, semester, course.ClassName, newID, "txt");
-		StudentCourseInformation* listInfo = nullptr;
-		int countStudent = 0;
-
-		if (currentFilePath != newFilePath) {
-			if (loadStudentCourseInformationList(currentFilePath, listInfo, countStudent))
-			{
-				if (saveStudentCourseInformationList(newFilePath, listInfo, countStudent))
-					course.courseId = newID;
-				else
-					cout << "Can't open student file." << endl;
-			}
-			else
-				cout << "Can't open student file." << endl;
-		}
-	}
-}
-bool saveAcademicYearsAndSemester(const string& filePath, string* listAcademicYears, string* listSemesters, const int& countAcademicYears)
-{
-	ofstream fout(filePath);
-
-	if (!fout.is_open())
+	if (!fin.is_open())
 		return false;
 
-	for (int i = 0; i < countAcademicYears - 1; i++)
-		for (int j = i + 1; j < countAcademicYears; j++)
-			if (listAcademicYears[i] > listAcademicYears[j])
-			{
-				swap(listAcademicYears[i], listAcademicYears[j]);
-				swap(listSemesters[i], listSemesters[j]);
-			}
+	fin >> countClassName;
+	fin.ignore();
 
-	for (int i = 0; i < countAcademicYears; i++)
+	if (countClassName > 0)
 	{
-		int n;
+		listClassName = new string[countClassName];
 
-		string* temp = StringToArrayString(listSemesters[i], ',', n);
-		sortArray(temp, n, sizeof(string), ascendingSemester);
-		listSemesters[i] = ArrayStringToString(temp, n, ',');
-
-		delete[] temp;
+		for (int i = 0; i < countClassName; i++)
+			getline(fin, listClassName[i]);
 	}
 
-	fout << countAcademicYears << endl;
-	for (int i = 0; i < countAcademicYears; i++)
-	{
-		fout << listAcademicYears[i] << endl;
-		fout << listSemesters[i] << endl;
-	}
-
-	fout.close();
+	fin.close();
 	return true;
 }
-void ExportScoreboardToCsv(const string& academicYear, const string& semester)
-{
-	string ClassName, filePath, destFilePath(PATH_DATA);
-	Course course, * listCourses = nullptr;
-	StudentCourseInformation* listInfo = nullptr;
-	int countStudent = 0, countCourse = 0;
-
-	if (getInputCourseFromSemester(academicYear, semester, ClassName, course, listCourses, countCourse))
-	{
-		delete[] listCourses;
-
-		filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, course.courseId, "txt");
-
-		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
-		{
-			destFilePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName,
-				course.courseId + "-Scoreboard", "csv");
-
-			if (saveListScoreboardsToCsv(destFilePath, listInfo, countStudent))
-				cout << "Export successfully" << endl;
-			else
-				cout << "Export failed" << endl;
-
-			releaseStudentCourseInformation(listInfo, countStudent);
-		}
-		else
-			cout << "Can not open course file" << endl;
-	}
-}
-void createAcademicYearsAndSemester()
-{
-	string academicYears, semester;
-
-	cout << "Enter academic years: ";
-	getline(cin, academicYears);
-
-	cout << "Enter semester: ";
-	getline(cin, semester);
-
-	if (addAcademicYearsAndSemester(academicYears, semester))
-		cout << "Successful." << endl;
-	else
-		cout << "Failed (This school year already exists)." << endl;
-
-	system("pause");
-}
-bool checkElementInArray(void* arr, const int& numOfElements, const int& sizeItem,
-	void* key, bool (*cmp)(void*, void*))
-{
-	if (arr == nullptr)
-		return false;
-
-	int index = findValue(arr, numOfElements, sizeItem, key, cmp);
-	return (index != NOT_FOUND);
-}
-
-void viewStudentsOfClass()
-{
-	string filePath = PATH_DATA, ClassName;
-	Student* listStudents = nullptr;
-	int countStudent = 0;
-
-	ClassName = getInputClassName();
-	filePath = createClassDirectoryWithFileName(ClassName);
-	loadStudentList(filePath, listStudents, countStudent);
-	viewStudentList(listStudents, countStudent);
-
-	delete[] listStudents;
-}
-
-bool addClassName(string ClassName)
-{
-	string filePath = PATH_DATA;
-	string* listClassName = nullptr;
-	int countClassName = 0;
-	bool flag = true;
-
-	filePath += "Class.txt";
-
-	if (loadListClassName(filePath, listClassName, countClassName))
-	{
-		if (!checkElementInArray(listClassName, countClassName, sizeof(string), &ClassName, isEqualString))
-		{
-			listClassName = (string*)pushBackArray(listClassName, countClassName, sizeof(string),
-				&ClassName, allocArrayString, copyString, releaseArrayString);
-
-			flag = saveListClassName(filePath, listClassName, countClassName);
-		}
-		else flag = false;
-
-		delete[] listClassName;
-	}
-	else flag = false;
-
-	return flag;
-}
-void importClass()
-{
-	string ClassName, filePath;
-
-	cout << "==> Enter class: ";
-	getline(cin, ClassName);
-	if (!addClassName(ClassName))
-	{
-		cout << "Add class name failed or this class already exists." << endl;
-		return;
-	}
-
-	cout << "==> Path of the csv file: ";
-	getline(cin, filePath);
-
-	importStudentListFromCsv(filePath);
-}
+//123
 void viewClassList()
 {
 	string* listClassName = nullptr;
@@ -654,6 +325,20 @@ void viewClassList()
 	showListClassName(listClassName, countClassName);
 	delete[] listClassName;
 }
+void viewStudentsOfClass()
+{
+	string filePath = PATH_DATA, ClassName;
+	Student* listStudents = nullptr;
+	int countStudent = 0;
+
+	ClassName = getInputClassName();
+	filePath = createClassDirectoryWithFileName(ClassName);
+	loadStudentList(filePath, listStudents, countStudent);
+	viewStudentList(listStudents, countStudent);
+
+	delete[] listStudents;
+}
+//Create Class
 void createClass() {
 	ifstream f;
 	string s = PATH_DATA;
@@ -685,7 +370,7 @@ void createClass() {
 	fout.close();
 
 }
-
+//
 void addNewStudent()
 {
 	string filePathStudent, ClassName;
@@ -730,6 +415,36 @@ void addNewStudent()
 
 	delete[] listStudents;
 }
+//Create semester
+
+bool ascendingSemester(void* semester1, void* semester2)
+{
+	return ascendingString(semester1, semester2);
+}
+
+bool isEqualAcademicYears(void* year1, void* year2)
+{
+	return isEqualString(year1, year2);
+}
+
+void createAcademicYearsAndSemester()
+{
+	string academicYears, semester;
+
+	cout << "Enter academic years: ";
+	getline(cin, academicYears);
+
+	cout << "Enter semester: ";
+	getline(cin, semester);
+
+	if (addAcademicYearsAndSemester(academicYears, semester))
+		cout << "Successful." << endl;
+	else
+		cout << "Failed (This school year already exists)." << endl;
+
+	system("pause");
+}
+//Load file academic year and semester
 bool loadAcademicYearsAndSemester(const string& filePath, string*& listAcademicYears, string*& listSemesters, int& countAcademicYears)
 {
 	ifstream fin(filePath);
@@ -755,8 +470,81 @@ bool loadAcademicYearsAndSemester(const string& filePath, string*& listAcademicY
 	fin.close();
 	return true;
 }
-void viewAcademicYearsAndSemester() 
+bool addAcademicYearsAndSemester(string& academicYears, string& semester)
 {
+	string* listAcademicYears = nullptr, * listSemesters = nullptr;
+	string filePath = PATH_DATA;
+	int countAcademicYears = 0;
+	bool result = false;
+
+	filePath += "SchoolYear.txt";
+	if (loadAcademicYearsAndSemester(filePath, listAcademicYears, listSemesters, countAcademicYears))
+	{
+		int idx = findValue_AcademicYear(listAcademicYears, countAcademicYears, academicYears);
+		if (idx == NOT_FOUND)
+		{
+			int count = countAcademicYears;
+
+			listAcademicYears = (string*)pushBackArray(listAcademicYears, countAcademicYears, sizeof(string),
+				&academicYears, allocArrayString, copyString, releaseArrayString);
+
+			listSemesters = (string*)pushBackArray(listSemesters, count, sizeof(string), &semester,
+				allocArrayString, copyString, releaseArrayString);
+
+			result = true;
+		}
+		else if (listSemesters[idx].find(semester) == string::npos)
+		{
+			listSemesters[idx] += "," + semester;
+			result = true;
+		}
+
+		saveAcademicYearsAndSemester(filePath, listAcademicYears, listSemesters, countAcademicYears);
+
+		delete[] listSemesters;
+		delete[] listAcademicYears;
+	}
+
+	return result;
+}
+
+bool saveAcademicYearsAndSemester(const string& filePath, string* listAcademicYears, string* listSemesters, const int& countAcademicYears)
+{
+	ofstream fout(filePath);
+
+	if (!fout.is_open())
+		return false;
+
+	for (int i = 0; i < countAcademicYears - 1; i++)
+		for (int j = i + 1; j < countAcademicYears; j++)
+			if (listAcademicYears[i] > listAcademicYears[j])
+			{
+				swap(listAcademicYears[i], listAcademicYears[j]);
+				swap(listSemesters[i], listSemesters[j]);
+			}
+
+	for (int i = 0; i < countAcademicYears; i++)
+	{
+		int n;
+
+		string* temp = StringToArrayString(listSemesters[i], ',', n);
+		sortArray(temp, n, sizeof(string), ascendingSemester);
+		listSemesters[i] = ArrayStringToString(temp, n, ',');
+
+		delete[] temp;
+	}
+
+	fout << countAcademicYears << endl;
+	for (int i = 0; i < countAcademicYears; i++)
+	{
+		fout << listAcademicYears[i] << endl;
+		fout << listSemesters[i] << endl;
+	}
+
+	fout.close();
+	return true;
+}
+void viewAcademicYearsAndSemester() {
 	string filePath(PATH_DATA);
 	string* listAcademicYears = nullptr, * listSemesters = nullptr;
 	int countAcademicYears = 0;
@@ -787,60 +575,120 @@ void viewAcademicYearsAndSemester()
 	else
 		cout << "Can not open file." << endl;
 }
+//
+//Add new course
+void addLecturer(Lecturer lec) {
+	string fileLecturer = PATH_DATA;
+	Lecturer* listLecturers = nullptr;
+	int countLecturer = 0, idx;
 
-void showListClassName(string*& listClassName, const int& countClassName)
-{
-	cout << "List of classes:" << endl;
-
-	cout << "|" << setfill('-') << setw(19) << "-" << "|" << endl;
-	cout << setfill(' ');
-
-	cout << "| " << setw(4) << left << "No" << " | " << setw(10) << "Class name" << " |" << endl;
-
-	cout << "|" << setfill('-') << setw(19) << "-" << "|" << endl;
-	cout << setfill(' ');
-
-	for (int i = 0; i < countClassName; i++)
+	fileLecturer += "Lecturer.txt";
+	if (loadListLecturers(fileLecturer, listLecturers, countLecturer))
 	{
-		cout << "| " << setw(4) << left << i + 1
-			<< " | " << setw(10) << left << listClassName[i] << " |" << endl;
+		idx = findValue(listLecturers, countLecturer, sizeof(Lecturer), &lec, isEqualLecturer);
 
-		cout << "|" << setfill('-') << setw(19) << "-" << "|" << endl;
-		cout << setfill(' ');
+		if (idx == NOT_FOUND)
+		{
+			if (lec.info.acc.password.empty())
+				lec.info.acc.password = DEFAULT_PASSWORD;
+
+			listLecturers = (Lecturer*)pushBackArray(listLecturers, countLecturer, sizeof(Lecturer), &lec, allocListLecturers,
+				copyLecturer, releaseListlecturers);
+			bool tmp = saveListLecturers(fileLecturer, listLecturers, countLecturer);
+		}
+
+		delete[] listLecturers;
 	}
 }
-void removeCourse(const string& academicYear, const string& semester)
+bool EnrollClassToCourse(const string& filePath, const Course& course)
 {
-	string ClassName, filePath;
-	Course* listCourses = nullptr;
-	Course key;
-	int countCourse, idx, isRemove;
+	StudentCourseInformation* listInfo = nullptr;
+	Student* listStudents = nullptr;
+	string fileClass;
+	int countStudent = 0;
+	bool flag = false;
 
-	if (getInputCourseFromSemester(academicYear, semester, ClassName, key, listCourses, countCourse))
+	fileClass = createClassDirectoryWithFileName(course.ClassName);
+
+	if (loadStudentList(fileClass, listStudents, countStudent))
 	{
-		filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, "Schedule", "txt");
-		idx = findValue(listCourses, countCourse, sizeof(Course), &key, isEqualCourseId);
+		listInfo = new StudentCourseInformation[countStudent];
 
-		if (idx != NOT_FOUND)
+		for (int i = 0; i < countStudent; i++)
 		{
-			cout << "==> Do you want to delete this course? (Yes: 1, No: 0)" << endl;
-			isRemove = getChoice(0, 1);
+			initAttendanceList(listInfo[i].attendList, course);
+			initScoreboard(listInfo[i].scoreList);
+			listInfo[i].st = listStudents[i];
+			listInfo[i].status = true;
+		}
 
-			if (isRemove)
-			{
-				listCourses[idx].status = false;
-				if (saveListCourses(filePath, listCourses, countCourse - 1))
-					cout << "==> Remove successfully." << endl;
-				else
-					cout << "==> Remove failed." << endl;
-			}
+		if (saveStudentCourseInformationList(filePath, listInfo, countStudent))
+			flag = true;
+
+		releaseStudentCourseInformation(listInfo, countStudent);
+	}
+
+	delete[] listStudents;
+	return flag;
+}
+void addNewCourse(const string& academicYear, const string& semester)
+{
+	string filePath, ClassName, newCourseFilePath;
+	Course NewCourse, * listCourses = nullptr;
+	int countCourses = 0, idx;
+
+	ClassName = getInputClassName();
+
+	cin.ignore();
+	cout << "Enter new course ID: ";
+	NewCourse.courseId = getInputCourseID();
+	cout << "Enter new course name: ";
+	getline(cin, NewCourse.courseName);
+	cout << "Enter new course start date (YYYY MM DD): ";
+	cin >> NewCourse.startDate.year >> NewCourse.startDate.month >> NewCourse.startDate.day;
+	cout << "Enter new course end date (YYYY MM DD): ";
+	cin >> NewCourse.endDate.year >> NewCourse.endDate.month >> NewCourse.endDate.day;
+	cout << "Enter new course day of week (1: SUNDAY, 2: MONDAY,..., 7: SATURDAY): ";
+	cin >> NewCourse.dayOfWeek;
+	cout << "=== S1-07h30   S2-09h30   S3-13h30   S4-15h30 ===";
+	cout << "\nEnter new course start time (HH MM): ";
+	cin >> NewCourse.startTime.hour >> NewCourse.startTime.minute;
+	cout << "Enter new course end time (HH MM): ";
+	cin >> NewCourse.endTime.hour >> NewCourse.endTime.minute;
+	cout << "Enter Number of credits: ";
+	cin >> NewCourse.NumberOfCredits;
+	cout << "Enter new course room: ";
+	cin.ignore();
+	getline(cin, NewCourse.room);
+	NewCourse.ClassName = ClassName;
+	NewCourse.lecturer = addNewLecturer();
+	NewCourse.status = true;
+	filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, "Schedule", "txt");
+	newCourseFilePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, NewCourse.courseId, "txt");
+	cout << "\nDAY NE:" << newCourseFilePath << " 123" << filePath;
+	bool flag = loadListCourses(filePath, listCourses, countCourses);
+	idx = findValue(listCourses, countCourses, sizeof(Course), &NewCourse, isEqualCourseId);
+
+	if (idx == NOT_FOUND)
+	{
+		listCourses = (Course*)pushBackArray(listCourses, countCourses, sizeof(Course), &NewCourse,
+			allocListCourses, copyCourse, releaseListCourses);
+
+		if (EnrollClassToCourse(newCourseFilePath, NewCourse))
+		{
+			cout << "Add new course successfully!" << endl;
+			saveListCourses(filePath, listCourses, countCourses);
 		}
 		else
-			cout << "This course was not found." << endl;
-
-		delete[] listCourses;
+			cout << "Add new course failed!" << endl;
 	}
+	else
+		cout << "Course exist!" << endl;
+
+	if (flag)
+		delete[] listCourses;
 }
+//view list courses
 void showListCourses(Course* listCourses, const int& countCourse, const string& ClassName)
 {
 	cout << "Courses of class " << ClassName << ":\n" << endl;
@@ -875,4 +723,308 @@ void showListCourses(Course* listCourses, const int& countCourse, const string& 
 	}
 	else
 		cout << "There are no courses available." << endl;
+}
+
+void viewListCourses(const string& academicYear, const string& semester)
+{
+	string ClassName, filePath;
+	Course* listCourses = nullptr;
+	int countCourse;
+
+	ClassName = getInputClassName();
+	filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, "Schedule", "txt");
+
+	if (loadListCourses(filePath, listCourses, countCourse))
+	{
+		showListCourses(listCourses, countCourse, ClassName);
+		delete[] listCourses;
+	}
+	else
+		cout << "Can not open course file." << endl;
+}
+//Create-Delete-View
+void showFunctionsOfAcademicYearAndSemester() {
+	int choice;
+
+	while (true)
+	{
+		system("cls");
+
+		cout << "|----------------------------------|" << endl;
+		cout << "|    ACADEMIC YEAR AND SEMESTER    |" << endl;
+		cout << "|----------------------------------|" << endl;
+		cout << "| No |            Option           |" << endl;
+		cout << "|----------------------------------|" << endl;
+		cout << "| 1  | Create                      |" << endl;
+		cout << "|----------------------------------|" << endl;
+		cout << "| 2  | View                        |" << endl;
+		cout << "|----------------------------------|" << endl;
+		cout << "| 3  | Return to previous menu     |" << endl;
+		cout << "|----------------------------------|" << endl;
+
+		choice = getChoice(1, 3);
+
+		system("cls");
+
+		switch (choice)
+		{
+		case 1:
+			cin.ignore();
+			createAcademicYearsAndSemester();
+			break;
+		case 2:
+			viewAcademicYearsAndSemester();
+			system("pause");
+			break;
+		case 3:
+			return;
+		}
+	}
+}
+//remove
+void removeCourse(const string& academicYear, const string& semester)
+{
+	string ClassName, filePath;
+	Course* listCourses = nullptr;
+	Course key;
+	int countCourse, idx, isRemove;
+
+	if (getInputCourseFromSemester(academicYear, semester, ClassName, key, listCourses, countCourse))
+	{
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, "Schedule", "txt");
+		idx = findValue(listCourses, countCourse, sizeof(Course), &key, isEqualCourseId);
+
+		if (idx != NOT_FOUND)
+		{
+			cout << "==> Do you want to delete this course? (Yes: 1, No: 0)" << endl;
+			isRemove = getChoice(0, 1);
+
+			if (isRemove)
+			{
+				listCourses[idx].status = false;
+				if (saveListCourses(filePath, listCourses, countCourse - 1))
+					cout << "==> Remove successfully." << endl;
+				else
+					cout << "==> Remove failed." << endl;
+			}
+		}
+		else
+			cout << "This course was not found." << endl;
+
+		delete[] listCourses;
+	}
+}
+//Import courses csv
+void importListCoursesFromCsv(const string& filePath, const string& academicYear, const string& semester)
+{
+	Course* listCourses = nullptr;
+	int countCourse = 0;
+
+	if (loadListCoursesFromCsv(filePath, listCourses, countCourse))
+	{
+		string fileCourse, fileSchedule;
+		int countCourseImportSuccessful = countCourse;
+
+		for (int i = 0; i < countCourse; i++)
+		{
+			fileCourse = createCourseDirectoryWithFileName(academicYear, semester, listCourses[i].ClassName,
+				listCourses[i].courseId, "txt");
+
+			if (!EnrollClassToCourse(fileCourse, listCourses[i]))
+				countCourseImportSuccessful--;
+
+			addLecturer(listCourses[i].lecturer);
+		}
+
+		fileSchedule = createCourseDirectoryWithFileName(academicYear, semester, listCourses[0].ClassName, "Schedule", "txt");
+		if (saveListCourses(fileSchedule, listCourses, countCourse))
+			cout << "Import successful (" << countCourseImportSuccessful << " / " << countCourse << ")." << endl;
+		else
+			cout << "Import failed." << endl;
+
+		delete[] listCourses;
+	}
+	else
+		cout << "Can not open file." << endl;
+}
+void importCourses(const string& academicYear, const string& semester) {
+	string filePath, ClassName;
+
+	cout << "Enter class name: ";
+	getline(cin, ClassName);
+	cout << "==> Path of the csv file: ";
+	getline(cin, filePath);
+
+	importListCoursesFromCsv(filePath, academicYear, semester);
+}
+//Import class
+bool addClassName(string ClassName)
+{
+	string filePath = PATH_DATA;
+	string* listClassName = nullptr;
+	int countClassName = 0;
+	bool flag = true;
+
+	filePath += "Class.txt";
+
+	if (loadListClassName(filePath, listClassName, countClassName))
+	{
+		if (!checkElementInArray(listClassName, countClassName, sizeof(string), &ClassName, isEqualString))
+		{
+			listClassName = (string*)pushBackArray(listClassName, countClassName, sizeof(string),
+				&ClassName, allocArrayString, copyString, releaseArrayString);
+
+			flag = saveListClassName(filePath, listClassName, countClassName);
+		}
+		else flag = false;
+
+		delete[] listClassName;
+	}
+	else flag = false;
+
+	return flag;
+}
+void importClass()
+{
+	string ClassName, filePath;
+
+	cout << "==> Enter class: ";
+	getline(cin, ClassName);
+	if (!addClassName(ClassName))
+	{
+		cout << "Add class name failed or this class already exists." << endl;
+		return;
+	}
+
+	cout << "==> Path of the csv file: ";
+	getline(cin, filePath);
+
+	importStudentListFromCsv(filePath);
+}
+//view attendance 
+void viewAttendanceListOfCourse(const string& academicYear, const string& semester) {
+	string ClassName, filePath;
+	Course course, * listCourses = nullptr;
+	StudentCourseInformation* listInfo = nullptr;
+	int countStudent = 0, countCourse = 0;
+
+	if (getInputCourseFromSemester(academicYear, semester, ClassName, course, listCourses, countCourse))
+	{
+		delete[] listCourses;
+
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, course.courseId, "txt");
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			cout << "Attendance list of class " << ClassName << " (Course ID: " << course.courseId << "): \n" << endl;
+			showAttendaceListOfCourse(listInfo, countStudent);
+
+			releaseStudentCourseInformation(listInfo, countStudent);
+		}
+		else
+			cout << "Can not open course file" << endl;
+	}
+}
+//export attendance csv
+void ExportAttendanceListToCsv(const string& academicYear, const string& semester) {
+	string ClassName, filePath, destFilePath(PATH_DATA);
+	Course course, * listCourses = nullptr;
+	StudentCourseInformation* listInfo = nullptr;
+	int countStudent = 0, countCourse = 0;
+
+	if (getInputCourseFromSemester(academicYear, semester, ClassName, course, listCourses, countCourse))
+	{
+		delete[] listCourses;
+
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, course.courseId, "txt");
+
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			destFilePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName,
+				course.courseId + "-AttendanceList", "csv");
+
+			if (saveAttendanceListOfCourseToCsv(destFilePath, listInfo, countStudent))
+				cout << "Export successfully" << endl;
+			else
+				cout << "Export failed" << endl;
+
+			releaseStudentCourseInformation(listInfo, countStudent);
+		}
+		else
+			cout << "Can not open course file" << endl;
+	}
+}
+//view scoreboard
+void viewScoreboardOfCourse(const string& academicYear, const string& semester)
+{
+	string ClassName, filePath;
+	Course course, * listCourses = nullptr;
+	StudentCourseInformation* listInfo = nullptr;
+	int countStudent = 0, countCourse = 0;
+
+	if (getInputCourseFromSemester(academicYear, semester, ClassName, course, listCourses, countCourse))
+	{
+		delete[] listCourses;
+
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, course.courseId, "txt");
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			cout << "Scoreboard of class " << ClassName << " (Course ID: " << course.courseId << "): \n" << endl;
+			showListScoreboardsOfCourse(listInfo, countStudent);
+			releaseStudentCourseInformation(listInfo, countStudent);
+		}
+		else
+			cout << "Can not open course file" << endl;
+	}
+}
+void ExportScoreboardToCsv(const string& academicYear, const string& semester)
+{
+	string ClassName, filePath, destFilePath(PATH_DATA);
+	Course course, * listCourses = nullptr;
+	StudentCourseInformation* listInfo = nullptr;
+	int countStudent = 0, countCourse = 0;
+
+	if (getInputCourseFromSemester(academicYear, semester, ClassName, course, listCourses, countCourse))
+	{
+		delete[] listCourses;
+
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, course.courseId, "txt");
+
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			destFilePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName,
+				course.courseId + "-Scoreboard", "csv");
+
+			if (saveListScoreboardsToCsv(destFilePath, listInfo, countStudent))
+				cout << "Export successfully" << endl;
+			else
+				cout << "Export failed" << endl;
+
+			releaseStudentCourseInformation(listInfo, countStudent);
+		}
+		else
+			cout << "Can not open course file" << endl;
+	}
+}
+void viewListStudentsOfCourse(const string& academicYear, const string& semester)
+{
+	string ClassName, filePath;
+	Course course, * listCourses = nullptr;
+	StudentCourseInformation* listInfo = nullptr;
+	int countStudent = 0, countCourse = 0;
+
+	if (getInputCourseFromSemester(academicYear, semester, ClassName, course, listCourses, countCourse))
+	{
+		delete[] listCourses;
+
+		filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, course.courseId, "txt");
+
+		if (loadStudentCourseInformationList(filePath, listInfo, countStudent))
+		{
+			cout << "\nList of students (Course ID: " << course.courseId << ", Class: " << ClassName << "):\n" << endl;
+			viewStudentListFromCourse(listInfo, countStudent);
+			releaseStudentCourseInformation(listInfo, countStudent);
+		}
+		else
+			cout << "Can not open course file." << endl;
+	}
 }

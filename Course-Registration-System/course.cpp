@@ -1,5 +1,4 @@
-#include"course.h"
-
+#include "course.h"
 string createCourseDirectoryWithFileName(const string& academicYear, const string& semester, const string& ClassName, const string& argLast, const string& FileExtension)
 {
 	string result = PATH_DATA;
@@ -7,7 +6,6 @@ string createCourseDirectoryWithFileName(const string& academicYear, const strin
 
 	return result;
 }
-
 void loadCourse(ifstream& fin, Course& course)
 {
 	Lecturer& lec = course.lecturer;
@@ -34,7 +32,6 @@ void loadCourse(ifstream& fin, Course& course)
 	getline(fin, course.room);
 	fin >> course.status;
 }
-
 bool loadListCourses(const string& filePath, Course*& listCourses, int& countCourse)
 {
 	ifstream fin(filePath);
@@ -56,7 +53,52 @@ bool loadListCourses(const string& filePath, Course*& listCourses, int& countCou
 	fin.close();
 	return true;
 }
+bool isEqualCourseId(void* val1, void* val2)
+{
+	Course* course1, * course2;
 
+	course1 = (Course*)val1;
+	course2 = (Course*)val2;
+
+	return (course1->courseId == course2->courseId);
+}
+// saveCourses
+void saveCourse(ofstream& fout, Course& course)
+{
+	Lecturer& lec = course.lecturer;
+
+	fout << course.courseId << endl << course.courseName << endl << course.ClassName << endl;
+	fout << course.NumberOfCredits << endl;
+	fout << lec.info.acc.username << endl << lec.info.fullName << endl << lec.degree << endl << lec.info.gender << endl;
+	fout << toString(course.startDate, ' ') << endl;
+	fout << toString(course.endDate, ' ') << endl;
+	fout << course.dayOfWeek << endl;
+	fout << course.startTime.hour << " " << course.startTime.minute << endl;
+	fout << course.endTime.hour << " " << course.endTime.minute << endl;
+	fout << course.room << endl << course.status << endl;
+}
+
+bool saveListCourses(const string& filePath, Course* listCourses, const int& countCourse)
+{
+	ofstream fout(filePath);
+	int idx = 0;
+
+	if (!fout.is_open())
+		return false;
+
+	fout << countCourse << endl;
+	for (int i = 0; i < countCourse; i++, idx++)
+	{
+		if (listCourses[idx].status)
+			saveCourse(fout, listCourses[idx]);
+		else
+			i--;
+	}
+
+	fout.close();
+	return true;
+}
+//
 void initAttendanceList(AttendanceList& listAttends, const Course& course)
 {
 	listAttends.countDate = calcNumberOfWeeks(course);
@@ -69,14 +111,126 @@ void initAttendanceList(AttendanceList& listAttends, const Course& course)
 	for (int i = 1; i < listAttends.countDate; i++)
 		listAttends.dateList[i] = nextWeek(listAttends.dateList[i - 1]);
 }
+void initScoreboard(Scoreboard& score, const double& midterm, const double& _final,
+	const double& bonus, const double& total)
+{
+	score.midterm = midterm;
+	score._final = _final;
+	score.bonus = bonus;
+	score.total = total;
+}
+//
+bool saveStudentCourseInformationList(const string& filePath, StudentCourseInformation* listInfo,
+	const int& countStudent)
+{
+	ofstream fout(filePath);
+	int  nStudent = 0;
 
+	if (!fout.is_open())
+		return false;
+
+	for (int i = 0; i < countStudent; i++)
+		if (listInfo[i].status)
+			nStudent++;
+
+	fout << nStudent << endl;
+	fout << listInfo[0].attendList.countDate << endl;
+
+	sortArray(listInfo, countStudent, sizeof(StudentCourseInformation), ascendingStudentIdOfCourse);
+
+	for (int i = 0; i < countStudent; i++)
+	{
+		if (listInfo[i].status)
+		{
+			fout << listInfo[i].st.id << endl << listInfo[i].st.info.fullName << endl << listInfo[i].st.ClassName << endl;
+			saveScoreboard(fout, listInfo[i].scoreList);
+			//saveAttendanceList(fout, listInfo[i].attendList);
+			fout << listInfo[i].status << endl;
+		}
+	}
+
+	fout.close();
+	return true;
+}
+//
+bool ascendingStudentIdOfCourse(void* val1, void* val2) {
+	StudentCourseInformation* st1 = (StudentCourseInformation*)val1;
+	StudentCourseInformation* st2 = (StudentCourseInformation*)val2;
+
+	return ascendingString(&st1->st.id, &st2->st.id);
+}
+void saveScoreboard(ofstream& fout, const Scoreboard& scoreboard)
+{
+	fout << scoreboard.midterm << endl
+		<< scoreboard._final << endl
+		<< scoreboard.bonus << endl
+		<< scoreboard.total << endl;
+}
+
+void loadAttendanceList(ifstream& fin, AttendanceList& listAttends)
+{
+	for (int i = 0; i < listAttends.countDate; i++)
+	{
+		fin >> listAttends.dateList[i].year >> listAttends.dateList[i].month >> listAttends.dateList[i].day;
+		fin >> listAttends.startTime.hour >> listAttends.startTime.minute;
+		fin >> listAttends.endTime.hour >> listAttends.endTime.minute;
+		fin >> listAttends.status[i];
+	}
+}
+void releaseListCourses(void* listCourses, const int& countCourse)
+{
+	if (listCourses)
+	{
+		Course* arr = (Course*)listCourses;
+		delete[] arr;
+	}
+}
+void* allocListCourses(const int& countCourse)
+{
+	Course* arr = new Course[countCourse];
+	return arr;
+}
+//
+void copyCourse(void* lec1, void* lec2)
+{
+	*(Course*)lec1 = *(Course*)lec2;
+}
+
+void saveAttendanceList(ofstream& fout, const AttendanceList& listAttends)
+{
+	for (int i = 0; i < listAttends.countDate; i++)
+	{
+		fout << toString(listAttends.dateList[i], ' ') << " ";
+		fout << listAttends.startTime.hour << " " << listAttends.startTime.minute << " ";
+		fout << listAttends.endTime.hour << " " << listAttends.endTime.minute << " ";
+		fout << listAttends.status[i] << endl;
+	}
+}
+//remove courses
+bool getInputCourseFromSemester(const string& academicYear, const string& semester, string& ClassName,
+	Course& course, Course*& listCourses, int& countCourse)
+{
+	string filePath;
+	int choice = 0;
+
+	ClassName = getInputClassName();
+	filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, "Schedule", "txt");
+
+	if (!loadListCourses(filePath, listCourses, countCourse))
+		return false;
+
+	showListCourses(listCourses, countCourse, ClassName);
+	choice = getChoice(1, countCourse);
+	course = listCourses[choice - 1];
+
+	return true;
+}
 void initAttendanceList(AttendanceList& listAttends, const int& numberOfWeeks)
 {
 	listAttends.countDate = numberOfWeeks;
 	listAttends.dateList = new Date[listAttends.countDate];
 	listAttends.status = new bool[listAttends.countDate]{ false };
 }
-
 void loadScoreboard(ifstream& fin, Scoreboard& scoreboard, const string& FileExtension)
 {
 	bool flag = (FileExtension == "csv") ? (true) : (false);
@@ -96,38 +250,8 @@ void loadScoreboard(ifstream& fin, Scoreboard& scoreboard, const string& FileExt
 
 	fin >> scoreboard.total;
 }
-
-void initScoreboard(Scoreboard& score, const double& midterm, const double& _final, const double& bonus, const double& total)
-{
-	score.midterm = midterm;
-	score._final = _final;
-	score.bonus = bonus;
-	score.total = total;
-}
-
-void loadAttendanceList(ifstream& fin, AttendanceList& listAttends)
-{
-	for (int i = 0; i < listAttends.countDate; i++)
-	{
-		fin >> listAttends.dateList[i].year >> listAttends.dateList[i].month >> listAttends.dateList[i].day;
-		fin >> listAttends.startTime.hour >> listAttends.startTime.minute;
-		fin >> listAttends.endTime.hour >> listAttends.endTime.minute;
-		fin >> listAttends.status[i];
-	}
-}
-
-void saveAttendanceList(ofstream& fout, const AttendanceList& listAttends)
-{
-	for (int i = 0; i < listAttends.countDate; i++)
-	{
-		fout << toString(listAttends.dateList[i], ' ') << " ";
-		fout << listAttends.startTime.hour << " " << listAttends.startTime.minute << " ";
-		fout << listAttends.endTime.hour << " " << listAttends.endTime.minute << " ";
-		fout << listAttends.status[i] << endl;
-	}
-}
-
-bool loadStudentCourseInformationList(const string& filePath, StudentCourseInformation*& listInfo, int& countStudent)
+bool loadStudentCourseInformationList(const string& filePath, StudentCourseInformation*& listInfo,
+	int& countStudent)
 {
 	ifstream fin(filePath);
 	int countWeek;
@@ -158,21 +282,48 @@ bool loadStudentCourseInformationList(const string& filePath, StudentCourseInfor
 	fin.close();
 	return true;
 }
-
-void releaseAttendanceList(AttendanceList& attendList)
+//ViewScore
+void viewScoreboardOfStudent(const Student& st, const Scoreboard& score)
 {
-	delete[] attendList.dateList;
-	delete[] attendList.status;
+	cout << " | " << setw(12) << left << st.id << " | " << setw(35) << left << st.info.fullName;
+	cout << " | " << setw(6) << right << score.midterm << "     | " << setw(6) << right << score._final
+		<< "     | " << setw(6) << right << score.bonus << "     | " << setw(6) << right << score.total
+		<< "     |" << endl;
 }
-
-void releaseStudentCourseInformation(StudentCourseInformation*& listInfo, const int& countStudent)
+void showListScoreboardsOfCourse(StudentCourseInformation*& listInfo, const int& countStudent)
 {
+	cout << "|" << setfill('-') << setw(112) << "-" << "|" << endl;
+	cout << setfill(' ');
+
+	cout << "| " << setw(5) << left << " No"
+		<< " | " << setw(12) << left << "Student ID" << " | " << setw(35) << left << "Full name"
+		<< " | " << setw(10) << left << "  Midterm" << " | " << setw(10) << left << "  Final"
+		<< " | " << setw(10) << left << "  Bonus" << " | " << setw(10) << left << "  Total" << " |" << endl;
+
+	cout << "|" << setfill('-') << setw(112) << "-" << "|" << endl;
+	cout << setfill(' ');
+
 	for (int i = 0; i < countStudent; i++)
-		releaseAttendanceList(listInfo[i].attendList);
+	{
+		cout << "| " << setw(3) << right << i + 1 << "  ";
+		viewScoreboardOfStudent(listInfo[i].st, listInfo[i].scoreList);
 
-	delete[] listInfo;
+		cout << "|" << setfill('-') << setw(112) << "-" << "|" << endl;
+		cout << setfill(' ');
+	}
 }
+//Show attendence list
+void showAttendaceListOfCourse(StudentCourseInformation*& listInfo, const int& countStudent) {
+	int len = 59 + (15 * listInfo[0].attendList.countDate);
+	string status;
 
+	for (int i = 0; i < countStudent; i++)
+	{
+		cout << "| " << setw(4) << left << i + 1
+			<< " | " << setw(12) << left << listInfo[i].st.id
+			<< " | " << setw(35) << left << listInfo[i].st.info.fullName << endl;
+	}
+}
 void releaseStudentCourseInformationList(void* listInfo, const int& countStudent)
 {
 	if (listInfo)
@@ -181,100 +332,7 @@ void releaseStudentCourseInformationList(void* listInfo, const int& countStudent
 		releaseStudentCourseInformation(arr, countStudent);
 	}
 }
-
-bool loadListCoursesFromCsv(const string& filePath, Course*& listCourses, int& countCourse)
-{
-	ifstream fin(filePath);
-
-	if (!fin.is_open())
-		return false;
-
-	string ignoreLine, filePathToSaveData;
-	int temp;
-
-	listCourses = new Course[MAX_SIZE];
-
-	getline(fin, ignoreLine);
-	while (!fin.eof())
-	{
-		fin >> temp;
-		fin.ignore();
-
-		loadCourseFromCsv(fin, listCourses[countCourse]);
-		countCourse++;
-	}
-
-	fin.close();
-	return true;
-}
-
-bool saveAttendanceListOfCourseToCsv(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent) {
-	ofstream fout(filePath);
-	string status;
-
-	if (!fout.is_open())
-		return false;
-
-	fout << "No,Student ID,Fullname";
-	for (int i = 0; i < listInfo[0].attendList.countDate; i++)
-		fout << "," << toString(listInfo[0].attendList.dateList[i]);
-	fout << endl;
-
-	for (int i = 0; i < countStudent; i++) {
-		fout << i + 1 << "," << listInfo[i].st.id << "," << listInfo[i].st.info.fullName;
-		fout << endl;
-	}
-
-	fout.close();
-	return true;
-}
-
-bool getInputCourseFromSemester(const string& academicYear, const string& semester, string& ClassName,
-	Course& course, Course*& listCourses, int& countCourse)
-{
-	string filePath;
-	int choice = 0;
-
-	ClassName = getInputClassName();
-	filePath = createCourseDirectoryWithFileName(academicYear, semester, ClassName, "Schedule", "txt");
-
-	if (!loadListCourses(filePath, listCourses, countCourse))
-		return false;
-
-	showListCourses(listCourses, countCourse, ClassName);
-	choice = getChoice(1, countCourse);
-	course = listCourses[choice - 1];
-
-	return true;
-}
-
-void* allocListCourses(const int& countCourse)
-{
-	Course* arr = new Course[countCourse];
-	return arr;
-}
-
-bool saveListCourses(const string& filePath, Course* listCourses, const int& countCourse)
-{
-	ofstream fout(filePath);
-	int idx = 0;
-
-	if (!fout.is_open())
-		return false;
-
-	fout << countCourse << endl;
-	for (int i = 0; i < countCourse; i++, idx++)
-	{
-		if (listCourses[idx].status)
-			saveCourse(fout, listCourses[idx]);
-		else
-			i--;
-	}
-
-	fout.close();
-	return true;
-}
-
+//load list course from csv
 void loadCourseFromCsv(ifstream& fin, Course& course)
 {
 	Lecturer& lec = course.lecturer;
@@ -307,136 +365,48 @@ void loadCourseFromCsv(ifstream& fin, Course& course)
 	course.dayOfWeek = convertWeekdayStringToNumber(dayOfWeek);
 	course.status = true;
 }
+bool loadListCoursesFromCsv(const string& filePath, Course*& listCourses, int& countCourse)
+{
+	ifstream fin(filePath);
 
+	if (!fin.is_open())
+		return false;
 
-void showAttendaceListOfCourse(StudentCourseInformation*& listInfo, const int& countStudent) {
-	int len = 59 + (15 * listInfo[0].attendList.countDate);
-	string status;
+	string ignoreLine, filePathToSaveData;
+	int temp;
 
-	cout << "| " << setw(4) << left << "No" << " | " << setw(12) << "Student ID"
-		<< " | " << setw(35) << "Full name" << endl;
+	listCourses = new Course[MAX_SIZE];
 
-	for (int i = 0; i < countStudent; i++)
+	getline(fin, ignoreLine);
+	while (!fin.eof())
 	{
-		cout << "| " << setw(4) << left << i + 1
-			<< " | " << setw(12) << left << listInfo[i].st.id
-			<< " | " << setw(35) << left << listInfo[i].st.info.fullName << endl;
+		fin >> temp;
+		fin.ignore();
+
+		loadCourseFromCsv(fin, listCourses[countCourse]);
+		countCourse++;
 	}
+
+	fin.close();
+	return true;
 }
-
-
-void showListScoreboardsOfCourse(StudentCourseInformation*& listInfo, const int& countStudent)
-{
-	cout << "|" << setfill('-') << setw(112) << "-" << "|" << endl;
-	cout << setfill(' ');
-
-	cout << "| " << setw(5) << left << " No"
-		<< " | " << setw(12) << left << "Student ID" << " | " << setw(35) << left << "Full name"
-		<< " | " << setw(10) << left << "  Midterm" << " | " << setw(10) << left << "  Final"
-		<< " | " << setw(10) << left << "  Bonus" << " | " << setw(10) << left << "  Total" << " |" << endl;
-
-	cout << "|" << setfill('-') << setw(112) << "-" << "|" << endl;
-	cout << setfill(' ');
-
-	for (int i = 0; i < countStudent; i++)
-	{
-		cout << "| " << setw(3) << right << i + 1 << "  ";
-		viewScoreboardOfStudent(listInfo[i].st, listInfo[i].scoreList);
-
-		cout << "|" << setfill('-') << setw(112) << "-" << "|" << endl;
-		cout << setfill(' ');
-	}
-}
-
-void copyCourse(void* lec1, void* lec2)
-{
-	*(Course*)lec1 = *(Course*)lec2;
-}
-
-void saveCourse(ofstream& fout, Course& course)
-{
-	Lecturer& lec = course.lecturer;
-
-	fout << course.courseId << endl << course.courseName << endl << course.ClassName << endl;
-	fout << course.NumberOfCredits << endl;
-	fout << lec.info.acc.username << endl << lec.info.fullName << endl << lec.degree << endl << lec.info.gender << endl;
-	fout << toString(course.startDate, ' ') << endl;
-	fout << toString(course.endDate, ' ') << endl;
-	fout << course.dayOfWeek << endl;
-	fout << course.startTime.hour << " " << course.startTime.minute << endl;
-	fout << course.endTime.hour << " " << course.endTime.minute << endl;
-	fout << course.room << endl << course.status << endl;
-}
-bool isEqualCourseId(void* val1, void* val2)
-{
-	Course* course1, * course2;
-
-	course1 = (Course*)val1;
-	course2 = (Course*)val2;
-
-	return (course1->courseId == course2->courseId);
-}
-void viewScoreboardOfStudent(const Student& st, const Scoreboard& score)
-{
-	cout << " | " << setw(12) << left << st.id << " | " << setw(35) << left << st.info.fullName;
-	cout << " | " << setw(6) << right << score.midterm << "     | " << setw(6) << right << score._final
-		<< "     | " << setw(6) << right << score.bonus << "     | " << setw(6) << right << score.total
-		<< "     |" << endl;
-}
-
-bool ascendingStudentIdOfCourse(void* val1, void* val2)
-{
-	StudentCourseInformation* st1 = (StudentCourseInformation*)val1;
-	StudentCourseInformation* st2 = (StudentCourseInformation*)val2;
-
-	return ascendingString(&st1->st.id, &st2->st.id);
-}
-
-void saveScoreboard(ofstream& fout, const Scoreboard& scoreboard)
-{
-	fout << scoreboard.midterm << endl
-		<< scoreboard._final << endl
-		<< scoreboard.bonus << endl
-		<< scoreboard.total << endl;
-}
-
-bool saveStudentCourseInformationList(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent)
-{
+bool saveAttendanceListOfCourseToCsv(const string& filePath, StudentCourseInformation* listInfo, const int& countStudent) {
 	ofstream fout(filePath);
-	int  nStudent = 0;
+	string status;
 
 	if (!fout.is_open())
 		return false;
 
-	for (int i = 0; i < countStudent; i++)
-		if (listInfo[i].status)
-			nStudent++;
+	fout << "No,Student ID,Fullname";
+	for (int i = 0; i < listInfo[0].attendList.countDate; i++)
+		fout << "," << toString(listInfo[0].attendList.dateList[i]);
+	fout << endl;
 
-	fout << nStudent << endl;
-	fout << listInfo[0].attendList.countDate << endl;
-
-	sortArray(listInfo, countStudent, sizeof(StudentCourseInformation), ascendingStudentIdOfCourse);
-
-	for (int i = 0; i < countStudent; i++)
-	{
-		if (listInfo[i].status)
-		{
-			fout << listInfo[i].st.id << endl << listInfo[i].st.info.fullName << endl << listInfo[i].st.ClassName << endl;
-			saveScoreboard(fout, listInfo[i].scoreList);
-			//saveAttendanceList(fout, listInfo[i].attendList);
-			fout << listInfo[i].status << endl;
-		}
+	for (int i = 0; i < countStudent; i++) {
+		fout << i + 1 << "," << listInfo[i].st.id << "," << listInfo[i].st.info.fullName;
+		fout << endl;
 	}
 
 	fout.close();
 	return true;
-}
-
-void releaseListCourses(void* listCourses, const int& countCourse)
-{
-	if (listCourses)
-	{
-		Course* arr = (Course*)listCourses;
-		delete[] arr;
-	}
 }

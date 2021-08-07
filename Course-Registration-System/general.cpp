@@ -1,5 +1,146 @@
 #include "general.h"
+void saveStaff(ofstream& fout, const Staff& s) {
+	fout << s.info.acc.username << endl << s.info.acc.password << endl
+		<< s.info.fullName << endl << s.info.gender << endl;
+}
 
+bool saveListStaffs(const string& filePath, Staff*& listStaffs, const int& countStaff)
+{
+	ofstream fout(filePath);
+
+	if (!fout.is_open())
+		return false;
+
+	fout << countStaff << endl;
+	for (int i = 0; i < countStaff; i++)
+		saveStaff(fout, listStaffs[i]);
+
+	fout.close();
+	return true;
+}
+
+string getInputClassName()
+{
+	string* listClassName = nullptr;
+	string filePath = PATH_DATA, result;
+	int countClassName = 0, choice;
+
+	if (!loadListClassName(filePath + "Class.txt", listClassName, countClassName))
+		return "";
+
+	showListClassName(listClassName, countClassName);
+
+	choice = getChoice(1, countClassName);
+	result = listClassName[choice - 1];
+
+	delete[] listClassName;
+	return result;
+}
+void* pushBackArray(void* arr, int& numOfElements, const int& sizeItem, void* val, void* (*alloc)(const int&), void (*copyElement)(void*, void*), void (*release)(void*, const int&))
+{
+	void* newArray = resizeArray(arr, numOfElements, numOfElements + 1, sizeItem, alloc, copyElement, release);
+	int distance = (numOfElements - 1) * sizeItem;
+
+	copyElement((char*)newArray + distance, val);
+
+	return newArray;
+}
+void* resizeArray(void* arr, int& oldSize, const int& newSize, const int& sizeItem,
+	void* (*alloc)(const int&), void (*copyElement)(void*, void*), void (*release)(void*, const int&))
+{
+	void* newArray = alloc(newSize);
+	int sz = min(oldSize, newSize), distance;
+
+	for (int i = 0; i < sz; i++)
+	{
+		distance = i * sizeItem;
+		copyElement((char*)newArray + distance, (char*)arr + distance);
+	}
+
+	release(arr, oldSize);
+	oldSize = newSize;
+
+	return newArray;
+}
+bool getInputGender()
+{
+	bool gen = FEMALE, flag;
+	string s;
+
+	do
+	{
+		flag = true;
+
+		getline(cin, s);
+		for (int i = 0; i < s.length(); i++)
+			s[i] = tolower(s[i]);
+
+		if (s != "male" && s != "female") {
+			flag = false;
+			cout << "Invalid!!. Please enter again." << endl;
+		}
+	} while (!flag);
+
+	if (s == "male")
+		gen = MALE;
+
+	return gen;
+}
+bool checkElementInArray(void* arr, const int& numOfElements, const int& sizeItem,
+	void* key, bool (*cmp)(void*, void*))
+{
+	if (arr == nullptr)
+		return false;
+
+	int index = findValue(arr, numOfElements, sizeItem, key, cmp);
+	return (index != NOT_FOUND);
+}
+int findValue(void* arr, const int& n, const int& sizeItem, void* key, bool (*cmp)(void*, void*))
+{
+	if (arr != nullptr)
+	{
+		char* temp = (char*)arr;
+
+		for (int i = 0; i < n; i++, temp += sizeItem)
+			if (cmp(temp, key))
+				return i;
+	}
+
+	return NOT_FOUND;
+}
+int findValue_AcademicYear(string* listAcademicYear, int countAY, string academicYear) {
+	for (int i = 0; i < countAY; i++)
+	{
+		if (listAcademicYear[i] == academicYear)
+		{
+			return i;
+		}
+	}
+	return NOT_FOUND;
+}
+//semester
+bool ascendingString(void* str1, void* str2)
+{
+	return (*(string*)str1 > *(string*)str2);
+}
+void* allocArrayString(const int& sz)
+{
+	string* arrString = nullptr;
+
+	if (sz > 0)
+		arrString = new string[sz];
+
+	return arrString;
+}
+
+void copyString(void* str1, void* str2) {
+	*(string*)str1 = *(string*)str2;
+}
+
+void releaseArrayString(void* arrString, const int& sz) {
+	if (arrString != nullptr)
+		delete[](string*)arrString;
+}
 bool isEqualString(void* str1, void* str2)
 {
 	return (*(string*)str1 == *(string*)str2);
@@ -31,39 +172,74 @@ string* StringToArrayString(const string& str, const char& delim, int& numOfElem
 	delete[] temp;
 	return arrString;
 }
-bool ascendingString(void* str1, void* str2)
+void sortArray(void* arr, const int& n, const int& sizeItem, bool (*cmp)(void*, void*))
 {
-	return (*(string*)str1 > *(string*)str2);
-}
-int findValue_AcademicYear(string* listAcademicYear, int countAY, string academicYear) {
-	for (int i = 0; i < countAY; i++)
+	char* data_i, * data_pos, * data_j, * temp;
+	temp = new char[sizeItem];
+
+	for (int i = 0; i < n - 1; i++)
 	{
-		if (listAcademicYear[i] == academicYear)
+		data_i = (char*)arr + (i * sizeItem);
+		data_pos = data_i;
+
+		for (int j = i + 1; j < n; j++)
 		{
-			return i;
+			data_j = (char*)arr + (j * sizeItem);
+
+			if (cmp(data_pos, data_j))
+				data_pos = data_j;
+		}
+
+		if (data_pos != data_i) {
+			memmove_s(temp, sizeItem, data_i, sizeItem);
+			memmove_s(data_i, sizeItem, data_pos, sizeItem);
+			memmove_s(data_pos, sizeItem, temp, sizeItem);
 		}
 	}
-	return NOT_FOUND;
-}
-int findValue(void* arr, const int& n, const int& sizeItem, void* key, bool (*cmp)(void*, void*))
-{
-	if (arr != nullptr)
-	{
-		char* temp = (char*)arr;
 
-		for (int i = 0; i < n; i++, temp += sizeItem)
-			if (cmp(temp, key))
-				return i;
+	delete[] temp;
+}
+string ArrayStringToString(string*& arrString, const int& numOfElements, const char& delim)
+{
+	string str = "";
+	for (int i = 0; i < numOfElements; i++)
+		str += arrString[i] + delim;
+
+	str.pop_back();
+	return str;
+}
+//
+void releaseAttendanceList(AttendanceList& attendList)
+{
+	delete[] attendList.dateList;
+	delete[] attendList.status;
+}
+void releaseStudentCourseInformation(StudentCourseInformation*& listInfo, const int& countStudent)
+{
+	for (int i = 0; i < countStudent; i++)
+		releaseAttendanceList(listInfo[i].attendList);
+
+	delete[] listInfo;
+}
+
+//
+int calcNumberOfWeeks(const Course& course)
+{
+	Date startDate = course.startDate;
+	int count = 0;
+
+	while (compareTwoDates(startDate, course.endDate) >= 0)
+	{
+		startDate = nextWeek(startDate);
+		count++;
 	}
 
-	return NOT_FOUND;
+	return count;
 }
-
 bool isLeapYear(const int& year)
 {
 	return ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0));
 }
-
 
 int getDayInMonth(const int& year, const int& month)
 {
@@ -74,7 +250,6 @@ int getDayInMonth(const int& year, const int& month)
 
 	return dayInMonth[month - 1];
 }
-
 Date nextWeek(const Date& dt)
 {
 	Date result;
@@ -98,61 +273,34 @@ Date nextWeek(const Date& dt)
 
 	return result;
 }
-
-int convertWeekdayStringToNumber(const string& dayOfWeek)
+string getInputCourseID()
 {
-	if (dayOfWeek == "MON")
-		return MONDAY;
-	else if (dayOfWeek == "TUE")
-		return TUESDAY;
-	else if (dayOfWeek == "WED")
-		return WEDNESDAY;
-	else if (dayOfWeek == "THU")
-		return THURSDAY;
-	else if (dayOfWeek == "FRI")
-		return FRIDAY;
-	else if (dayOfWeek == "SAT")
-		return SATURDAY;
-	return SUNDAY;
+	string s;
+	getline(cin, s);
+
+	for (int i = 0; i < s.length(); i++)
+		s[i] = toupper(s[i]);
+
+	return s;
 }
+//
+string getInputPassword() {
+	string password;
+	bool flag;
 
-string convertWeekdayNumberToString(const int& dayOfWeek)
-{
-	switch (dayOfWeek)
-	{
-	case MONDAY:
-		return "MONDAY";
-	case TUESDAY:
-		return "TUESDAY";
-	case WEDNESDAY:
-		return "WEDNESDAY";
-	case THURSDAY:
-		return "THURSDAY";
-	case FRIDAY:
-		return "FRIDAY";
-	case SATURDAY:
-		return "SATURDAY";
-	case SUNDAY:
-		return "SUNDAY";
-	default:
-		return "";
-	}
+	do {
+		flag = true;
+		getline(cin, password);
+
+		if (password.length() < 8 || password.length() > 40 || checkPassword(password) == false) {
+			cout << "Password lenght is invalid or contains spaces." << endl;
+			flag = false;
+			cout << "Enter again: ";
+		}
+	} while (!flag);
+
+	return password;
 }
-
-int calcNumberOfWeeks(const Course& course)
-{
-	Date startDate = course.startDate;
-	int count = 0;
-
-	while (compareTwoDates(startDate, course.endDate) >= 0)
-	{
-		startDate = nextWeek(startDate);
-		count++;
-	}
-
-	return count;
-}
-
 int compareTwoDates(const Date& dt1, const Date& dt2) {
 	int result = -1;
 
@@ -171,25 +319,24 @@ int compareTwoDates(const Date& dt1, const Date& dt2) {
 
 	return result;
 }
-
-string getInputClassName()
+string toString(const Date& dt, const char& delim)
 {
-	string* listClassName = nullptr;
-	string filePath = PATH_DATA, result;
-	int countClassName = 0, choice;
+	string m, d;
 
-	if (!loadListClassName(filePath + "Class.txt", listClassName, countClassName))
-		return "";
+	m = to_string(dt.month);
+	m = (m.length() == 2) ? (m) : ("0" + m);
 
-	showListClassName(listClassName, countClassName);
+	d = to_string(dt.day);
+	d = (d.length() == 2) ? (d) : ("0" + d);
 
-	choice = getChoice(1, countClassName);
-	result = listClassName[choice - 1];
-
-	delete[] listClassName;
-	return result;
+	return to_string(dt.year) + delim + m + delim + d;
 }
-
+bool checkPassword(const string& password) {
+	for (int i = 0; i < password.length(); i++)
+		if (password[i] == ' ')
+			return false;
+	return true;
+}
 void getCurrentDateAndTime(Date& dt, Time& t)
 {
 	time_t realTime = time(nullptr);
@@ -202,59 +349,6 @@ void getCurrentDateAndTime(Date& dt, Time& t)
 	cout << dt.day << " " << dt.month << " " << dt.year << " " << t.hour << " " << t.minute;
 	delete dateAndTime;
 }
-
-void* pushBackArray(void* arr, int& numOfElements, const int& sizeItem, void* val, void* (*alloc)(const int&), void (*copyElement)(void*, void*), void (*release)(void*, const int&))
-{
-	void* newArray = resizeArray(arr, numOfElements, numOfElements + 1, sizeItem, alloc, copyElement, release);
-	int distance = (numOfElements - 1) * sizeItem;
-
-	copyElement((char*)newArray + distance, val);
-
-	return newArray;
-}
-
-string getInputCourseID()
-{
-	string s;
-	getline(cin, s);
-
-	for (int i = 0; i < s.length(); i++)
-		s[i] = toupper(s[i]);
-
-	return s;
-}
-
-void copyString(void* str1, void* str2)
-{
-	*(string*)str1 = *(string*)str2;
-}
-void* allocArrayString(const int& sz)
-{
-	string* arrString = nullptr;
-
-	if (sz > 0)
-		arrString = new string[sz];
-
-	return arrString;
-}
-void* resizeArray(void* arr, int& oldSize, const int& newSize, const int& sizeItem,
-	void* (*alloc)(const int&), void (*copyElement)(void*, void*), void (*release)(void*, const int&))
-{
-	void* newArray = alloc(newSize);
-	int sz = min(oldSize, newSize), distance;
-
-	for (int i = 0; i < sz; i++)
-	{
-		distance = i * sizeItem;
-		copyElement((char*)newArray + distance, (char*)arr + distance);
-	}
-
-	release(arr, oldSize);
-	oldSize = newSize;
-
-	return newArray;
-}
-
 void viewAttendanceListStudent(const AttendanceList& attendList)
 {
 	string status;
@@ -279,110 +373,26 @@ void viewAttendanceListStudent(const AttendanceList& attendList)
 		cout << setfill(' ');
 	}
 }
-
-void sortArray(void* arr, const int& n, const int& sizeItem, bool (*cmp)(void*, void*))
+int convertWeekdayStringToNumber(const string& dayOfWeek)
 {
-	char* data_i, * data_pos, * data_j, * temp;
-	temp = new char[sizeItem];
-
-	for (int i = 0; i < n - 1; i++)
-	{
-		data_i = (char*)arr + (i * sizeItem);
-		data_pos = data_i;
-
-		for (int j = i + 1; j < n; j++)
-		{
-			data_j = (char*)arr + (j * sizeItem);
-
-			if (cmp(data_pos, data_j))
-				data_pos = data_j;
-		}
-
-		// Swap the value of two variables.
-		if (data_pos != data_i) {
-			memmove_s(temp, sizeItem, data_i, sizeItem);
-			memmove_s(data_i, sizeItem, data_pos, sizeItem);
-			memmove_s(data_pos, sizeItem, temp, sizeItem);
-		}
-	}
-
-	delete[] temp;
+	if (dayOfWeek == "MON")
+		return MONDAY;
+	else if (dayOfWeek == "TUE")
+		return TUESDAY;
+	else if (dayOfWeek == "WED")
+		return WEDNESDAY;
+	else if (dayOfWeek == "THU")
+		return THURSDAY;
+	else if (dayOfWeek == "FRI")
+		return FRIDAY;
+	else if (dayOfWeek == "SAT")
+		return SATURDAY;
+	return SUNDAY;
 }
-
-void saveStaff(ofstream& fout, const Staff& s)
-{
-	fout << s.info.acc.username << endl << s.info.acc.password << endl
-		<< s.info.fullName << endl << s.info.gender << endl;
-}
-
-bool saveListStaffs(const string& filePath, Staff*& listStaffs, const int& countStaff)
-{
-	ofstream fout(filePath);
-
-	if (!fout.is_open())
-		return false;
-
-	fout << countStaff << endl;
-	for (int i = 0; i < countStaff; i++)
-		saveStaff(fout, listStaffs[i]);
-
-	fout.close();
-	return true;
-}
-
-string toString(const Date& dt, const char& delim)
-{
-	string m, d;
-
-	m = to_string(dt.month);
-	m = (m.length() == 2) ? (m) : ("0" + m);
-
-	d = to_string(dt.day);
-	d = (d.length() == 2) ? (d) : ("0" + d);
-
-	return to_string(dt.year) + delim + m + delim + d;
-}
-void releaseArrayString(void* arrString, const int& sz) {
-	if (arrString != nullptr)
-		delete[](string*)arrString;
-}
-string ArrayStringToString(string*& arrString, const int& numOfElements, const char& delim)
-{
-	string str = "";
-	for (int i = 0; i < numOfElements; i++)
-		str += arrString[i] + delim;
-
-	str.pop_back();
-	return str;
-}
-bool getInputGender()
-{
-	bool gen = FEMALE, flag;
-	string s;
-
-	do
-	{
-		flag = true;
-
-		getline(cin, s);
-		for (int i = 0; i < s.length(); i++)
-			s[i] = tolower(s[i]);
-
-		if (s != "male" && s != "female") {
-			flag = false;
-			cout << "Invalid!!. Please enter again." << endl;
-		}
-	} while (!flag);
-
-	if (s == "male")
-		gen = MALE;
-
-	return gen;
-}
-
+//import class 
 bool ascendingClassName(void* ClassName1, void* ClassName2)
 {
-	return (*(string*)ClassName1 > * (string*)ClassName2);
+	return (*(string*)ClassName1 > *(string*)ClassName2);
 }
 
 bool saveListClassName(const string& filename, string* listClassName, const int& countClassName)
@@ -402,28 +412,25 @@ bool saveListClassName(const string& filename, string* listClassName, const int&
 	fout.close();
 	return true;
 }
-string getInputPassword() {
-	string password;
-	bool flag;
-
-	do {
-		flag = true;
-		getline(cin, password);
-
-		if (password.length() < 8 || password.length() > 40 || checkPassword(password) == false) {
-			cout << "Password lenght is invalid or contains spaces." << endl;
-			flag = false;
-			cout << "Enter again: ";
-		}
-	} while (!flag);
-
-	return password;
-}
-
-bool checkPassword(const string& password)
+string convertWeekdayNumberToString(const int& dayOfWeek)
 {
-	for (int i = 0; i < password.length(); i++)
-		if (password[i] == ' ')
-			return false;
-	return true;
+	switch (dayOfWeek)
+	{
+	case MONDAY:
+		return "MONDAY";
+	case TUESDAY:
+		return "TUESDAY";
+	case WEDNESDAY:
+		return "WEDNESDAY";
+	case THURSDAY:
+		return "THURSDAY";
+	case FRIDAY:
+		return "FRIDAY";
+	case SATURDAY:
+		return "SATURDAY";
+	case SUNDAY:
+		return "SUNDAY";
+	default:
+		return "";
+	}
 }
